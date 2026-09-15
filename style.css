@@ -3373,31 +3373,43 @@ footer {
   border-color: #ef4444;
 }
 
-/* Shelf Scroll Tracks */
+/* Shelf Scroll Tracks (Horizontal Left-to-Right Flow) */
 .lib-shelf-track-container {
   overflow-x: auto;
   padding: 0.8rem 0.4rem 1.4rem;
   margin: 0 -0.4rem;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.lib-shelf-track-container:active {
+  cursor: grabbing;
 }
 
 .lib-shelf-track-container::-webkit-scrollbar {
-  height: 6px;
+  height: 7px;
+}
+
+.lib-shelf-track-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 9999px;
 }
 
 .lib-shelf-track-container::-webkit-scrollbar-thumb {
-  background: rgba(230, 184, 0, 0.25);
+  background: linear-gradient(90deg, rgba(230, 184, 0, 0.4), rgba(230, 184, 0, 0.8));
   border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(230, 184, 0, 0.4);
 }
 
 .lib-shelf-track {
   display: flex;
   gap: 1.4rem;
   width: max-content;
+  align-items: stretch;
 }
 
-/* Shelf Card */
+/* Shelf Card with Left-to-Right Cascade Animation */
 .lib-card-shelf {
   width: 260px;
   background: var(--bg-card);
@@ -3410,12 +3422,24 @@ footer {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   flex-shrink: 0;
+  animation: shelfCardSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes shelfCardSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
 }
 
 .lib-card-shelf:hover {
   transform: translateY(-6px);
-  border-color: rgba(230, 184, 0, 0.45);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(230, 184, 0, 0.12);
+  border-color: rgba(230, 184, 0, 0.55);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 25px rgba(230, 184, 0, 0.2);
 }
 
 /* ==========================================================================

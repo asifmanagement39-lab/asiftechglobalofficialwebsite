@@ -350,31 +350,43 @@
               </span>
             </div>
 
-            <!-- PDF Upload & Auto-Thumbnail -->
+            <!-- PDF Upload & Auto-Thumbnail (Single or Batch Unlimited) -->
             <div class="bot-field-box">
-              <label class="bot-field-label">Select PDF Document *</label>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label class="bot-field-label">Select PDF Document(s) *</label>
+                <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
+              </div>
               <div class="lib-file-dropzone" id="libFileDropzone">
-                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" required>
+                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" multiple required>
                 <div class="dropzone-content">
                   <div class="dropzone-icon">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                   </div>
-                  <p class="dropzone-title" id="dropzoneSelectedText">Click to choose PDF from device</p>
-                  <p class="dropzone-subtitle" id="dropzoneSubText">or Drag &amp; Drop your PDF file here</p>
+                  <p class="dropzone-title" id="dropzoneSelectedText">Click to choose PDF(s) from device</p>
+                  <p class="dropzone-subtitle" id="dropzoneSubText">or Drag &amp; Drop single or multiple PDF files here</p>
                 </div>
               </div>
             </div>
 
-            <!-- Title & Author -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- Batch Files List Preview -->
+            <div id="batchFilesPreviewBox" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.85rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span id="batchFilesCountBadge" style="font-size: 0.78rem; font-weight: 700; color: #10b981;">0 Files Selected</span>
+                <span style="font-size: 0.72rem; color: var(--text-dim);">Auto-titled and routed</span>
+              </div>
+              <div id="batchFilesList" style="max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.78rem; color: var(--text-muted);"></div>
+            </div>
+
+            <!-- Title & Author (Used for single file, or default author for batch) -->
+            <div id="singleMetaFields" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
               <div class="bot-field-box">
-                <label class="bot-field-label" for="uploadBookTitle">Document Title *</label>
-                <input type="text" id="uploadBookTitle" class="bot-text-input" placeholder="e.g. Master Financial Valuation" required>
+                <label class="bot-field-label" for="uploadBookTitle">Document Title</label>
+                <input type="text" id="uploadBookTitle" class="bot-text-input" placeholder="Auto-filled from file name">
               </div>
 
               <div class="bot-field-box">
-                <label class="bot-field-label" for="uploadBookAuthor">Author / Publisher *</label>
-                <input type="text" id="uploadBookAuthor" class="bot-text-input" placeholder="e.g. AsifTechGlobal Edition" required>
+                <label class="bot-field-label" for="uploadBookAuthor">Author / Publisher</label>
+                <input type="text" id="uploadBookAuthor" class="bot-text-input" placeholder="e.g. AsifTechGlobal Edition">
               </div>
             </div>
 

@@ -1115,7 +1115,7 @@ function initLibraryModule() {
 
   // Active in-memory Object URLs for live reader & downloads
   const activeBlobUrls = new Map();
-  let selectedPdfFile = null;
+  let selectedPdfFiles = []; // Array of File objects for single or batch uploads
   let generatedCoverDataUrl = '';
 
   // Configure PDF.js worker
@@ -1196,15 +1196,55 @@ function initLibraryModule() {
       .replace(/'/g, '&#039;');
   }
 
-  // 2. Shelf Carousel Scrolling
+  // 2. Shelf Carousel Scrolling (Horizontal Left-to-Right Flow, Buttons, Drag & Mouse Wheel)
   document.querySelectorAll('.btn-shelf-nav').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-target');
       const track = document.getElementById(targetId);
       if (!track) return;
-      const scrollAmount = btn.classList.contains('prev') ? -320 : 320;
+      const scrollAmount = btn.classList.contains('prev') ? -340 : 340;
       track.parentElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     });
+  });
+
+  // Smooth Horizontal Drag & Mouse Wheel Scroll for all shelves
+  document.querySelectorAll('.lib-shelf-track-container').forEach(slider => {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.style.cursor = 'grabbing';
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      slider.scrollLeft = scrollLeft - walk;
+    });
+
+    // Horizontal wheel scroll when hovered
+    slider.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        slider.scrollBy({ left: e.deltaY * 1.2, behavior: 'smooth' });
+      }
+    }, { passive: false });
   });
 
   // 3. Global Unified Search
@@ -1458,73 +1498,118 @@ function initLibraryModule() {
     });
   }
 
-  // PDF File Selection & Dropzone Handling
+  // PDF File Selection & Dropzone Handling (Single or Unlimited Multi-File)
   const libFileDropzone = document.getElementById('libFileDropzone');
   const dropzoneSelectedText = document.getElementById('dropzoneSelectedText');
   const dropzoneSubText = document.getElementById('dropzoneSubText');
+  const batchFilesPreviewBox = document.getElementById('batchFilesPreviewBox');
+  const batchFilesCountBadge = document.getElementById('batchFilesCountBadge');
+  const batchFilesList = document.getElementById('batchFilesList');
 
-  function handleFilePicked(file) {
-    if (!file) {
-      selectedPdfFile = null;
+  async function generatePdfThumbnail(file) {
+    if (typeof window.pdfjsLib === 'undefined' || !file) return '';
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = pdfOffscreenCanvas || document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      await page.render({ canvasContext: context, viewport: viewport }).promise;
+      return canvas.toDataURL('image/jpeg', 0.85);
+    } catch (err) {
+      console.warn('PDF thumbnail generation fallback for ' + (file.name || 'document'), err);
+      return '';
+    }
+  }
+
+  function handleFilesPicked(fileList) {
+    const rawFiles = Array.from(fileList || []);
+    const files = rawFiles.filter(f => f.type === 'application/pdf' || (f.name && f.name.toLowerCase().endsWith('.pdf')));
+
+    if (files.length === 0) {
+      selectedPdfFiles = [];
       generatedCoverDataUrl = '';
       if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
-      if (dropzoneSelectedText) dropzoneSelectedText.textContent = 'Click to choose PDF from device';
-      if (dropzoneSubText) dropzoneSubText.textContent = 'or Drag & Drop your PDF file here';
+      if (batchFilesPreviewBox) batchFilesPreviewBox.style.display = 'none';
+      if (dropzoneSelectedText) dropzoneSelectedText.textContent = 'Click to choose PDF(s) from device';
+      if (dropzoneSubText) dropzoneSubText.textContent = 'or Drag & Drop single or multiple PDF files here';
       return;
     }
 
-    selectedPdfFile = file;
+    selectedPdfFiles = files;
 
-    // Update Dropzone UI
-    if (dropzoneSelectedText) {
-      dropzoneSelectedText.innerHTML = `✓ <span style="color: #10b981;">${escapeHtml(file.name)}</span>`;
-    }
-    if (dropzoneSubText) {
-      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-      dropzoneSubText.textContent = `${sizeMb} MB • File attached & ready`;
-    }
+    if (files.length === 1) {
+      // Single Document Mode
+      const file = files[0];
+      if (dropzoneSelectedText) {
+        dropzoneSelectedText.innerHTML = `✓ <span style="color: #10b981; font-weight: 700;">${escapeHtml(file.name)}</span>`;
+      }
+      if (dropzoneSubText) {
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        dropzoneSubText.textContent = `${sizeMb} MB • File ready for publication`;
+      }
+      if (batchFilesPreviewBox) batchFilesPreviewBox.style.display = 'none';
 
-    // Auto-populate document title if empty
-    const titleInput = document.getElementById('uploadBookTitle');
-    const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-    if (titleInput && !titleInput.value.trim()) {
-      titleInput.value = cleanFileName;
-    }
-    applyAutoRouting(cleanFileName);
+      // Auto-populate document title if empty
+      const titleInput = document.getElementById('uploadBookTitle');
+      const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      if (titleInput && !titleInput.value.trim()) {
+        titleInput.value = cleanFileName;
+      }
+      applyAutoRouting(cleanFileName);
 
-    // Render cover thumbnail using PDF.js
-    if (typeof window.pdfjsLib !== 'undefined') {
-      file.arrayBuffer().then(arrayBuffer => {
-        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-        return loadingTask.promise;
-      }).then(pdf => {
-        return pdf.getPage(1);
-      }).then(page => {
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = pdfOffscreenCanvas || document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        return page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
-          generatedCoverDataUrl = canvas.toDataURL('image/jpeg', 0.85);
-          if (imgAutoThumbnail && thumbPreviewBox) {
-            imgAutoThumbnail.src = generatedCoverDataUrl;
+      // Render single preview
+      generatePdfThumbnail(file).then(dataUrl => {
+        generatedCoverDataUrl = dataUrl;
+        if (imgAutoThumbnail && thumbPreviewBox) {
+          if (dataUrl) {
+            imgAutoThumbnail.src = dataUrl;
             thumbPreviewBox.style.display = 'block';
+          } else {
+            thumbPreviewBox.style.display = 'none';
           }
-        });
-      }).catch(err => {
-        console.warn('PDF thumbnail generation fallback:', err);
-        generatedCoverDataUrl = '';
-        if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+        }
       });
+
+    } else {
+      // Batch Multi-Document Mode (Unlimited)
+      if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+      generatedCoverDataUrl = '';
+
+      if (dropzoneSelectedText) {
+        dropzoneSelectedText.innerHTML = `✓ <span style="color: #10b981; font-weight: 800;">${files.length} PDF Documents Selected</span>`;
+      }
+      const totalMb = (files.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2);
+      if (dropzoneSubText) {
+        dropzoneSubText.textContent = `Total ${totalMb} MB • All documents will appear horizontally on your shelves`;
+      }
+
+      if (batchFilesPreviewBox && batchFilesList && batchFilesCountBadge) {
+        batchFilesCountBadge.textContent = `${files.length} Documents in Queue`;
+        batchFilesList.innerHTML = files.map((f, i) => {
+          const sizeMb = (f.size / (1024 * 1024)).toFixed(2);
+          const detected = detectShelfCategory(f.name);
+          return `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.3rem 0.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 4px;">
+              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 65%; color: var(--text-main); font-weight: 600;">
+                ${i + 1}. ${escapeHtml(f.name)}
+              </span>
+              <span style="font-size: 0.72rem; color: var(--gold); font-family: var(--font-mono);">${detected.category.toUpperCase()} &bull; ${sizeMb} MB</span>
+            </div>
+          `;
+        }).join('');
+        batchFilesPreviewBox.style.display = 'block';
+      }
     }
   }
 
   if (uploadPdfFile) {
     uploadPdfFile.addEventListener('change', (e) => {
-      const file = e.target.files && e.target.files[0];
-      handleFilePicked(file);
+      handleFilesPicked(e.target.files);
     });
   }
 
@@ -1547,14 +1632,14 @@ function initLibraryModule() {
 
     libFileDropzone.addEventListener('drop', (e) => {
       const dt = e.dataTransfer;
-      const file = dt && dt.files && dt.files[0];
-      if (file && (file.type === 'application/pdf' || file.name.endsWith('.pdf'))) {
+      const files = dt && dt.files;
+      if (files && files.length > 0) {
         if (uploadPdfFile) {
-          uploadPdfFile.files = dt.files;
+          uploadPdfFile.files = files;
         }
-        handleFilePicked(file);
+        handleFilesPicked(files);
       } else {
-        alert('Please drop a valid PDF file.');
+        alert('Please drop valid PDF files.');
       }
     });
   }
@@ -1635,7 +1720,7 @@ function initLibraryModule() {
   async function renderAllShelves() {
     try {
       allCachedDocs = await getAllDocumentsDB();
-      // Sort newest first
+      // Sort newest first so new uploads appear on the left and flow rightwards
       allCachedDocs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
       const shelves = [
@@ -1730,63 +1815,106 @@ function initLibraryModule() {
     });
   }
 
-  // 9. Form Submit: Publish Book
+  // 9. Form Submit: Publish Document(s) (Single or Unlimited Batch)
   if (formUploadBook) {
     formUploadBook.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!selectedPdfFile && (!uploadPdfFile.files || !uploadPdfFile.files[0])) {
-        alert('Please select a PDF file to upload.');
+      const filesToUpload = selectedPdfFiles.length > 0 ? selectedPdfFiles : (uploadPdfFile && uploadPdfFile.files ? Array.from(uploadPdfFile.files) : []);
+
+      if (filesToUpload.length === 0) {
+        alert('Please select at least one PDF file to upload.');
         return;
       }
 
-      const file = selectedPdfFile || uploadPdfFile.files[0];
-      const category = document.getElementById('uploadShelfCategory')?.value || 'books';
-      const title = document.getElementById('uploadBookTitle')?.value.trim() || file.name.replace(/\.[^/.]+$/, '');
-      const author = document.getElementById('uploadBookAuthor')?.value.trim() || 'AsifTechGlobal Edition';
+      const defaultCategory = document.getElementById('uploadShelfCategory')?.value || 'books';
+      const singleTitle = document.getElementById('uploadBookTitle')?.value.trim();
+      const defaultAuthor = document.getElementById('uploadBookAuthor')?.value.trim() || 'AsifTechGlobal Edition';
       const ribbon = document.getElementById('uploadBookRibbon')?.value || 'popular';
 
       if (btnSubmitBookUpload) {
         btnSubmitBookUpload.disabled = true;
-        btnSubmitBookUpload.textContent = 'Saving to Library...';
       }
 
-      const item = {
-        id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
-        category: category,
-        title: title,
-        author: author,
-        ribbon: ribbon,
-        coverDataUrl: generatedCoverDataUrl,
-        pdfBlob: file,
-        fileName: file.name,
-        fileSize: file.size,
-        timestamp: new Date().toISOString()
-      };
+      let lastCategory = defaultCategory;
 
       try {
-        await saveDocumentDB(item);
+        for (let i = 0; i < filesToUpload.length; i++) {
+          const file = filesToUpload[i];
+          if (btnSubmitBookUpload) {
+            btnSubmitBookUpload.textContent = `Publishing ${i + 1} of ${filesToUpload.length}...`;
+          }
+
+          let fileCategory = defaultCategory;
+          // In batch mode, auto route per file unless specifically requested
+          if (filesToUpload.length > 1) {
+            const detected = detectShelfCategory(file.name);
+            fileCategory = detected.category;
+          }
+
+          lastCategory = fileCategory;
+
+          let fileTitle = '';
+          if (filesToUpload.length === 1 && singleTitle) {
+            fileTitle = singleTitle;
+          } else {
+            fileTitle = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+          }
+
+          let coverUrl = '';
+          if (filesToUpload.length === 1 && generatedCoverDataUrl) {
+            coverUrl = generatedCoverDataUrl;
+          } else {
+            coverUrl = await generatePdfThumbnail(file);
+          }
+
+          const item = {
+            id: 'doc_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substring(2, 7),
+            category: fileCategory,
+            title: fileTitle,
+            author: defaultAuthor,
+            ribbon: ribbon,
+            coverDataUrl: coverUrl,
+            pdfBlob: file,
+            fileName: file.name,
+            fileSize: file.size,
+            // Sequential timestamps so items cascade neatly from left to right
+            timestamp: new Date(Date.now() + (filesToUpload.length - i) * 100).toISOString()
+          };
+
+          await saveDocumentDB(item);
+        }
+
         await renderAllShelves();
 
         closeAdminModal();
         formUploadBook.reset();
-        selectedPdfFile = null;
+        selectedPdfFiles = [];
         generatedCoverDataUrl = '';
         if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+        if (batchFilesPreviewBox) batchFilesPreviewBox.style.display = 'none';
+        if (dropzoneSelectedText) dropzoneSelectedText.textContent = 'Click to choose PDF(s) from device';
+        if (dropzoneSubText) dropzoneSubText.textContent = 'or Drag & Drop single or multiple PDF files here';
 
-        // Scroll to the shelf where the document was published
+        // Scroll to the shelf where documents were published
         let targetShelf = 'shelfBooks';
-        if (category === 'news') targetShelf = 'shelfNews';
-        else if (category === 'magazine') targetShelf = 'shelfMagazines';
-        else if (category === 'study') targetShelf = 'shelfStudy';
-        else if (category === 'free') targetShelf = 'shelfFree';
+        if (lastCategory === 'news') targetShelf = 'shelfNews';
+        else if (lastCategory === 'magazine') targetShelf = 'shelfMagazines';
+        else if (lastCategory === 'study') targetShelf = 'shelfStudy';
+        else if (lastCategory === 'free') targetShelf = 'shelfFree';
 
         const shelfEl = document.getElementById(targetShelf);
-        if (shelfEl) shelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (shelfEl) {
+          shelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const trackContainer = shelfEl.querySelector('.lib-shelf-track-container');
+          if (trackContainer) {
+            trackContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          }
+        }
 
       } catch (err) {
-        console.error('Failed to save document to IndexedDB:', err);
-        alert('Could not save PDF document: ' + err.message);
+        console.error('Failed to save documents to IndexedDB:', err);
+        alert('Could not save PDF documents: ' + err.message);
       } finally {
         if (btnSubmitBookUpload) {
           btnSubmitBookUpload.disabled = false;
