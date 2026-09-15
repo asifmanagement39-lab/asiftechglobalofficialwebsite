@@ -1313,12 +1313,20 @@ function initLibraryModule() {
     }
   });
 
-  // 5. Upload Modal
+  // 5. Upload Modal with Secure Master Password Protection
+  const MASTER_ADMIN_PASSWORD = 'Asif@#69#@';
   const btnOpenAdminModal = document.getElementById('btnOpenAdminModal');
   const libAdminModal = document.getElementById('libAdminModal');
   const adminModalClose = document.getElementById('adminModalClose');
   const adminModalBackdrop = document.getElementById('adminModalBackdrop');
   const heroAdminUploadBtn = document.getElementById('btnHeroAdminUpload');
+  const adminPasswordGate = document.getElementById('adminPasswordGate');
+  const adminUploadFormSection = document.getElementById('adminUploadFormSection');
+  const formAdminAuth = document.getElementById('formAdminAuth');
+  const adminAuthPassword = document.getElementById('adminAuthPassword');
+  const adminAuthError = document.getElementById('adminAuthError');
+  const btnToggleAdminPw = document.getElementById('btnToggleAdminPw');
+  const btnAdminLogout = document.getElementById('btnAdminLogout');
   const uploadPdfFile = document.getElementById('uploadPdfFile');
   const thumbPreviewBox = document.getElementById('thumbPreviewBox');
   const imgAutoThumbnail = document.getElementById('imgAutoThumbnail');
@@ -1326,12 +1334,63 @@ function initLibraryModule() {
   const formUploadBook = document.getElementById('formUploadBook');
   const btnSubmitBookUpload = document.getElementById('btnSubmitBookUpload');
 
+  // Toggle Password Visibility
+  if (btnToggleAdminPw && adminAuthPassword) {
+    btnToggleAdminPw.addEventListener('click', () => {
+      const type = adminAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      adminAuthPassword.setAttribute('type', type);
+    });
+  }
+
+  // Admin Password Verification
+  if (formAdminAuth) {
+    formAdminAuth.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = adminAuthPassword ? adminAuthPassword.value.trim() : '';
+      if (entered === MASTER_ADMIN_PASSWORD) {
+        sessionStorage.setItem('atg_admin_unlocked', 'true');
+        if (adminAuthError) adminAuthError.style.display = 'none';
+        if (adminPasswordGate) adminPasswordGate.style.display = 'none';
+        if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
+        if (adminAuthPassword) adminAuthPassword.value = '';
+      } else {
+        if (adminAuthError) adminAuthError.style.display = 'block';
+        if (adminAuthPassword) {
+          adminAuthPassword.value = '';
+          adminAuthPassword.focus();
+        }
+      }
+    });
+  }
+
+  // Admin Logout / Lock
+  if (btnAdminLogout) {
+    btnAdminLogout.addEventListener('click', () => {
+      sessionStorage.removeItem('atg_admin_unlocked');
+      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
+      if (adminAuthPassword) adminAuthPassword.value = '';
+    });
+  }
+
   function openAdminModal(targetShelf) {
     if (!libAdminModal) return;
     
     if (targetShelf && typeof targetShelf === 'string') {
       const shelfSelect = document.getElementById('uploadShelfCategory');
       if (shelfSelect) shelfSelect.value = targetShelf;
+    }
+
+    const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+    if (isUnlocked) {
+      if (adminPasswordGate) adminPasswordGate.style.display = 'none';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
+    } else {
+      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
+      if (adminAuthPassword) adminAuthPassword.value = '';
+      if (adminAuthError) adminAuthError.style.display = 'none';
+      setTimeout(() => adminAuthPassword && adminAuthPassword.focus(), 150);
     }
 
     libAdminModal.classList.add('open');
@@ -1620,13 +1679,26 @@ function initLibraryModule() {
       };
     });
 
-    // Delete button
+    // Delete button (Protected by Administrator Password)
     document.querySelectorAll('.btn-del-shelf').forEach(btn => {
       btn.onclick = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         const id = btn.getAttribute('data-id');
         const title = btn.getAttribute('data-title') || 'this document';
+
+        // Check if admin is currently authenticated
+        const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+        if (!isUnlocked) {
+          const enteredPw = prompt('Administrator Verification: Enter master password to delete this document:');
+          if (enteredPw === null) return; // User cancelled
+          if (enteredPw === MASTER_ADMIN_PASSWORD) {
+            sessionStorage.setItem('atg_admin_unlocked', 'true');
+          } else {
+            alert('Incorrect administrator password! Delete access denied.');
+            return;
+          }
+        }
         
         if (confirm(`Are you sure you want to delete "${title}"?`)) {
           try {
