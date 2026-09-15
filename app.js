@@ -1042,18 +1042,26 @@ function initFinancePdfModule() {
   // PDF File Dropzone & Thumbnail Generator
   async function generateThumbnail(file) {
     if (typeof window.pdfjsLib === 'undefined' || !file) return '';
+    if (window.pdfjsLib && !window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+    }
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-      const pdf = await loadingTask.promise;
-      const page = await pdf.getPage(1);
-      const viewport = page.getViewport({ scale: 1.5 });
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      await page.render({ canvasContext: context, viewport: viewport }).promise;
-      return canvas.toDataURL('image/jpeg', 0.85);
+      const renderPromise = (async () => {
+        const arrayBuffer = await file.arrayBuffer();
+        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        return canvas.toDataURL('image/jpeg', 0.85);
+      })();
+
+      const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(''), 2500));
+      return await Promise.race([renderPromise, timeoutPromise]);
     } catch (err) {
       console.warn('Finance PDF thumbnail generation error:', err);
       return '';
@@ -1831,18 +1839,26 @@ function initLibraryModule() {
 
   async function generatePdfThumbnail(file) {
     if (typeof window.pdfjsLib === 'undefined' || !file) return '';
+    if (window.pdfjsLib && !window.pdfjsLib.GlobalWorkerOptions.workerSrc) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+    }
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-      const pdf = await loadingTask.promise;
-      const page = await pdf.getPage(1);
-      const viewport = page.getViewport({ scale: 1.5 });
-      const canvas = pdfOffscreenCanvas || document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-      await page.render({ canvasContext: context, viewport: viewport }).promise;
-      return canvas.toDataURL('image/jpeg', 0.85);
+      const renderPromise = (async () => {
+        const arrayBuffer = await file.arrayBuffer();
+        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = pdfOffscreenCanvas || document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        return canvas.toDataURL('image/jpeg', 0.85);
+      })();
+
+      const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(''), 2500));
+      return await Promise.race([renderPromise, timeoutPromise]);
     } catch (err) {
       console.warn('PDF thumbnail generation fallback for ' + (file.name || 'document'), err);
       return '';
