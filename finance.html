@@ -109,34 +109,31 @@
   <section class="section" style="padding-top: 1rem;">
     <div class="container">
       <!-- ==========================================================================
-           Finance PDF Vault & Automated Thumbnail Generator (TOP PROMINENT POSITION)
+           MBA Finance Assignment PDF Vault & Document Repository (TOP PROMINENT POSITION)
            ========================================================================== -->
       <div class="finance-pdf-panel" id="financePdfVault">
-        <div class="pdf-panel-header">
-          <div class="suite-badge" style="margin-bottom: 0.5rem;">Document Engine // Automated Thumbnailing</div>
-          <h3>Financial Publications & Document Repository</h3>
-          <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 680px;">
-            Upload any financial book, publication, or audit statement. Our integrated client-side engine automatically renders Page 1 into a crisp visual cover thumbnail on the fly.
-          </p>
+        <div class="pdf-panel-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div class="suite-badge" style="margin-bottom: 0.5rem;">MBA FINANCE // ASSIGNMENTS &amp; CASE REPOSITORY</div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem;">MBA Finance <span class="gradient-gold-text">Assignment Vault</span></h2>
+            <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 680px;">
+              Upload, preview, and download your MBA Finance assignments, case studies, project reports, and financial models with automated Page 1 cover thumbnails.
+            </p>
+          </div>
+          <button type="button" class="btn-gold" id="btnOpenFinanceUpload" style="padding: 0.65rem 1.4rem; font-size: 0.85rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <span>+ Upload Assignment PDF</span>
+          </button>
         </div>
 
-        <!-- Active Financial Documents Grid (Preloaded Money Book) -->
-        <div class="pdf-documents-header">
-          <h4>Active Financial Documents</h4>
-          <span class="pdf-count-badge" id="pdfDocCount">1 Document Available</span>
+        <!-- Active Financial Documents Grid -->
+        <div class="pdf-documents-header" style="margin-top: 1.5rem;">
+          <h4>Active Finance Assignments &amp; Papers</h4>
+          <span class="pdf-count-badge" id="pdfDocCount">0 Assignments Available</span>
         </div>
 
         <div class="pdf-documents-grid" id="financePdfGrid" style="margin-bottom: 2.5rem;">
           <!-- Dynamic Document Cards populated here with live Page 1 thumbnails -->
-        </div>
-
-        <!-- Hidden File Input for Navbar Upload Button -->
-        <input type="file" id="pdfFileInput" accept="application/pdf" style="display: none;">
-
-        <!-- Progress / Status Indicator -->
-        <div class="pdf-process-status" id="pdfProcessStatus" style="display: none;">
-          <div class="status-spinner"></div>
-          <span id="pdfStatusText">Rendering PDF Page 1 into cover thumbnail...</span>
         </div>
       </div>
 
@@ -283,11 +280,83 @@
         </div>
       </div>
 
-      <div class="footer-bottom">
-        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+  <!-- ==========================================================================
+       MBA Finance Assignment Upload Modal
+       ========================================================================== -->
+  <div class="pdf-modal" id="financeUploadModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="pdf-modal-backdrop" id="financeUploadModalBackdrop"></div>
+    <div class="pdf-modal-container" style="max-width: 620px; height: auto; max-height: 90vh;">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title" style="display: flex; align-items: center; gap: 0.6rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Upload MBA Finance Assignment</span>
+        </div>
+        <button type="button" class="btn-pdf-close" id="financeUploadModalClose" aria-label="Close Modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdf-modal-body" style="padding: 1.8rem; overflow-y: auto; background: var(--bg-card, #0f1424);">
+        <form id="formUploadFinanceAssignment" style="display: flex; flex-direction: column; gap: 1.1rem;">
+          
+          <!-- PDF File Dropzone -->
+          <div class="bot-field-box">
+            <label class="bot-field-label">Select Assignment PDF *</label>
+            <div class="lib-file-dropzone" id="financeFileDropzone" style="border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
+              <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" required>
+              <div class="dropzone-content">
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </div>
+                <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose Assignment PDF</p>
+                <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop your PDF document here</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Assignment Title -->
+          <div class="bot-field-box">
+            <label class="bot-field-label" for="financeDocTitle">Assignment Title *</label>
+            <input type="text" id="financeDocTitle" class="bot-text-input" placeholder="e.g. Corporate Valuation &amp; DCF Model Assignment" required>
+          </div>
+
+          <!-- Subject & Author -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="financeDocSubject">Finance Subject / Module *</label>
+              <select id="financeDocSubject" class="bot-select-input" required>
+                <option value="Corporate Finance" selected>Corporate Finance</option>
+                <option value="Valuation &amp; DCF">Valuation &amp; DCF Models</option>
+                <option value="Portfolio Management">Portfolio &amp; Security Analysis</option>
+                <option value="Financial Markets">Financial Markets &amp; Banking</option>
+                <option value="GST &amp; Taxation">Corporate Tax &amp; GST</option>
+                <option value="Working Capital">Working Capital Management</option>
+                <option value="International Finance">International Finance</option>
+                <option value="Case Study Solution">Case Study Solution</option>
+              </select>
+            </div>
+
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="financeDocAuthor">Author / Student / Batch</label>
+              <input type="text" id="financeDocAuthor" class="bot-text-input" placeholder="e.g. MBA Finance 2026">
+            </div>
+          </div>
+
+          <!-- Live Thumbnail Preview -->
+          <div id="financeThumbPreviewBox" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.9rem; text-align: center;">
+            <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold); display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
+              Auto-Generated Cover Thumbnail
+            </span>
+            <img id="financeImgThumbnail" src="" alt="Thumbnail Preview" style="max-height: 150px; max-width: 100%; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+          </div>
+
+          <button type="submit" id="btnSubmitFinanceAssignment" class="btn-gold" style="padding: 0.85rem; font-weight: 800; font-size: 0.95rem; justify-content: center; width: 100%; margin-top: 0.4rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
+            Publish Assignment to Vault
+          </button>
+        </form>
       </div>
     </div>
-  </footer>
+  </div>
 
   <!-- In-Page PDF Reader Modal -->
   <div class="pdf-modal" id="pdfModal" aria-hidden="true">

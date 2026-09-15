@@ -1104,6 +1104,475 @@ function initBotConsoleModule() {
 }
 
 // --------------------------------------------------------------------------
+// MBA Finance Assignment & Document Repository Module
+// --------------------------------------------------------------------------
+function initFinancePdfModule() {
+  const financePdfGrid = document.getElementById('financePdfGrid');
+  if (!financePdfGrid) return;
+
+  const DB_NAME = 'ATG_Finance_Assignments_DB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'finance_assignments';
+
+  const financeActiveBlobUrls = new Map();
+  let financeSelectedFile = null;
+  let financeCoverDataUrl = '';
+
+  const btnOpenFinanceUpload = document.getElementById('btnOpenFinanceUpload');
+  const navUploadPdfBtn = document.getElementById('navUploadPdfBtn');
+  const financeUploadModal = document.getElementById('financeUploadModal');
+  const financeUploadModalClose = document.getElementById('financeUploadModalClose');
+  const financeUploadModalBackdrop = document.getElementById('financeUploadModalBackdrop');
+  const financeFileDropzone = document.getElementById('financeFileDropzone');
+  const financePdfInput = document.getElementById('financePdfInput');
+  const financeDropText = document.getElementById('financeDropText');
+  const financeDropSubText = document.getElementById('financeDropSubText');
+  const financeThumbPreviewBox = document.getElementById('financeThumbPreviewBox');
+  const financeImgThumbnail = document.getElementById('financeImgThumbnail');
+  const formUploadFinanceAssignment = document.getElementById('formUploadFinanceAssignment');
+  const btnSubmitFinanceAssignment = document.getElementById('btnSubmitFinanceAssignment');
+  const pdfDocCount = document.getElementById('pdfDocCount');
+
+  // Reader modal elements
+  const pdfModal = document.getElementById('pdfModal');
+  const pdfModalBackdrop = document.getElementById('pdfModalBackdrop');
+  const closePdfModal = document.getElementById('closePdfModal');
+  const pdfModalTitle = document.getElementById('pdfModalTitle');
+  const pdfModalFrame = document.getElementById('pdfModalFrame');
+  const pdfModalDownload = document.getElementById('pdfModalDownload');
+
+  // IndexedDB Helpers
+  function openFinanceDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function getFinanceAssignmentsDB() {
+    const db = await openFinanceDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function saveFinanceAssignmentDB(item) {
+    const db = await openFinanceDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.put(item);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function deleteFinanceAssignmentDB(id) {
+    const db = await openFinanceDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  // Reader Modal Handlers
+  function openReader(url, title, filename) {
+    if (!pdfModal || !pdfModalFrame) return;
+    if (pdfModalTitle) pdfModalTitle.textContent = title || 'Assignment Viewer';
+    pdfModalFrame.src = url;
+    if (pdfModalDownload) {
+      pdfModalDownload.href = url;
+      pdfModalDownload.download = filename || `${(title || 'Assignment').replace(/\s+/g, '_')}.pdf`;
+    }
+    pdfModal.classList.add('open');
+    pdfModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeReader() {
+    if (!pdfModal || !pdfModalFrame) return;
+    pdfModal.classList.remove('open');
+    pdfModal.setAttribute('aria-hidden', 'true');
+    pdfModalFrame.src = '';
+    document.body.style.overflow = '';
+  }
+
+  if (closePdfModal) closePdfModal.addEventListener('click', closeReader);
+  if (pdfModalBackdrop) pdfModalBackdrop.addEventListener('click', closeReader);
+
+  // Upload Modal Handlers
+  function openUploadModal() {
+    if (!financeUploadModal) return;
+    financeUploadModal.classList.add('open');
+    financeUploadModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeUploadModal() {
+    if (!financeUploadModal) return;
+    financeUploadModal.classList.remove('open');
+    financeUploadModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (btnOpenFinanceUpload) btnOpenFinanceUpload.addEventListener('click', openUploadModal);
+  if (navUploadPdfBtn) navUploadPdfBtn.addEventListener('click', openUploadModal);
+  if (financeUploadModalClose) financeUploadModalClose.addEventListener('click', closeUploadModal);
+  if (financeUploadModalBackdrop) financeUploadModalBackdrop.addEventListener('click', closeUploadModal);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (pdfModal && pdfModal.classList.contains('open')) closeReader();
+      if (financeUploadModal && financeUploadModal.classList.contains('open')) closeUploadModal();
+    }
+  });
+
+  // PDF File Dropzone & Thumbnail Generator
+  async function generateThumbnail(file) {
+    if (typeof window.pdfjsLib === 'undefined' || !file) return '';
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      await page.render({ canvasContext: context, viewport: viewport }).promise;
+      return canvas.toDataURL('image/jpeg', 0.85);
+    } catch (err) {
+      console.warn('Finance PDF thumbnail generation error:', err);
+      return '';
+    }
+  }
+
+  function handleFileSelected(file) {
+    if (!file) {
+      financeSelectedFile = null;
+      financeCoverDataUrl = '';
+      if (financeThumbPreviewBox) financeThumbPreviewBox.style.display = 'none';
+      if (financeDropText) financeDropText.textContent = 'Click to choose Assignment PDF';
+      if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document here';
+      return;
+    }
+
+    financeSelectedFile = file;
+
+    if (financeDropText) {
+      financeDropText.innerHTML = `✓ <span style="color: #10b981;">${escapeHtml(file.name)}</span>`;
+    }
+    if (financeDropSubText) {
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+      financeDropSubText.textContent = `${sizeMb} MB • Assignment ready for upload`;
+    }
+
+    const titleInput = document.getElementById('financeDocTitle');
+    if (titleInput && !titleInput.value.trim()) {
+      titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+    }
+
+    generateThumbnail(file).then(dataUrl => {
+      financeCoverDataUrl = dataUrl;
+      if (financeImgThumbnail && financeThumbPreviewBox) {
+        if (dataUrl) {
+          financeImgThumbnail.src = dataUrl;
+          financeThumbPreviewBox.style.display = 'block';
+        } else {
+          financeThumbPreviewBox.style.display = 'none';
+        }
+      }
+    });
+  }
+
+  if (financeFileDropzone) {
+    financeFileDropzone.addEventListener('click', () => {
+      if (financePdfInput) financePdfInput.click();
+    });
+
+    ['dragenter', 'dragover'].forEach(name => {
+      financeFileDropzone.addEventListener(name, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        financeFileDropzone.style.borderColor = 'var(--gold)';
+        financeFileDropzone.style.background = 'rgba(230, 184, 0, 0.08)';
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(name => {
+      financeFileDropzone.addEventListener(name, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        financeFileDropzone.style.borderColor = 'rgba(230, 184, 0, 0.4)';
+        financeFileDropzone.style.background = 'rgba(0,0,0,0.25)';
+      });
+    });
+
+    financeFileDropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const file = dt && dt.files && dt.files[0];
+      if (file && (file.type === 'application/pdf' || file.name.endsWith('.pdf'))) {
+        handleFileSelected(file);
+      } else {
+        alert('Please drop a valid PDF file.');
+      }
+    });
+  }
+
+  if (financePdfInput) {
+    financePdfInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      handleFileSelected(file);
+    });
+  }
+
+  // Card HTML Builder
+  function createAssignmentCard(item) {
+    let thumbHtml = '';
+    if (item.coverDataUrl) {
+      thumbHtml = `
+        <div class="pdf-thumb-wrapper">
+          <img src="${item.coverDataUrl}" alt="${escapeHtml(item.title)}" class="pdf-thumb-img">
+        </div>
+      `;
+    } else {
+      thumbHtml = `
+        <div class="pdf-thumb-wrapper">
+          <div class="pdf-thumb-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 0.3rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>FINANCE</span>
+          </div>
+        </div>
+      `;
+    }
+
+    let blobUrl = '#';
+    if (financeActiveBlobUrls.has(item.id)) {
+      blobUrl = financeActiveBlobUrls.get(item.id);
+    } else if (item.pdfBlob) {
+      blobUrl = URL.createObjectURL(item.pdfBlob);
+      financeActiveBlobUrls.set(item.id, blobUrl);
+    }
+
+    const downloadName = item.fileName || `${(item.title || 'Assignment').replace(/\s+/g, '_')}.pdf`;
+    const sizeMb = item.fileSize ? (item.fileSize / (1024 * 1024)).toFixed(2) + ' MB' : 'PDF Document';
+
+    return `
+      <div class="pdf-doc-card" data-id="${item.id}">
+        ${thumbHtml}
+        <div class="pdf-doc-meta">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+              <span style="font-size: 0.68rem; font-weight: 800; color: var(--gold); background: rgba(230, 184, 0, 0.12); border: 1px solid rgba(230, 184, 0, 0.3); padding: 0.15rem 0.55rem; border-radius: 9999px; text-transform: uppercase;">
+                ${escapeHtml(item.subject || 'Corporate Finance')}
+              </span>
+            </div>
+            <h3 class="pdf-doc-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</h3>
+            <p class="pdf-doc-sub">${escapeHtml(item.author || 'MBA Finance 2026')}</p>
+          </div>
+
+          <div class="pdf-doc-stats">
+            <span>${sizeMb}</span>
+            <span>${item.dateStr || 'Active Assignment'}</span>
+          </div>
+
+          <div class="pdf-doc-actions">
+            <button type="button" class="btn-pdf-view btn-read-assignment" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-filename="${escapeHtml(downloadName)}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              <span>Read</span>
+            </button>
+            <a href="${blobUrl}" download="${escapeHtml(downloadName)}" class="btn-pdf-download" title="Download PDF">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>PDF</span>
+            </a>
+            <button type="button" class="btn-del-shelf btn-del-assignment" data-id="${item.id}" data-title="${escapeHtml(item.title)}" title="Delete Assignment" style="margin-left: auto;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  let cachedAssignments = [];
+
+  async function renderFinanceAssignments() {
+    try {
+      cachedAssignments = await getFinanceAssignmentsDB();
+      cachedAssignments.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+      if (pdfDocCount) {
+        pdfDocCount.textContent = `${cachedAssignments.length} Assignment${cachedAssignments.length === 1 ? '' : 's'} Available`;
+      }
+
+      if (cachedAssignments.length === 0) {
+        financePdfGrid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1.5rem; background: rgba(255,255,255,0.02); border: 1px dashed rgba(230, 184, 0, 0.35); border-radius: var(--radius-md);">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;">No MBA Finance Assignments Uploaded Yet</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 480px; margin: 0 auto 1.2rem;">
+              Click the upload button to publish your first MBA Finance assignment or research paper.
+            </p>
+            <button type="button" class="btn-gold" id="btnUploadFirstAssignment" style="padding: 0.6rem 1.4rem; font-weight: 800; font-size: 0.85rem;">
+              + Upload Assignment PDF
+            </button>
+          </div>
+        `;
+
+        const btnFirst = document.getElementById('btnUploadFirstAssignment');
+        if (btnFirst) btnFirst.addEventListener('click', openUploadModal);
+        return;
+      }
+
+      financePdfGrid.innerHTML = cachedAssignments.map(createAssignmentCard).join('');
+
+      // Bind Read buttons
+      document.querySelectorAll('.btn-read-assignment').forEach(btn => {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute('data-id');
+          const title = btn.getAttribute('data-title') || 'Assignment';
+          const filename = btn.getAttribute('data-filename') || 'Assignment.pdf';
+          const item = cachedAssignments.find(a => a.id === id);
+          if (item) {
+            let url = financeActiveBlobUrls.get(id);
+            if (!url && item.pdfBlob) {
+              url = URL.createObjectURL(item.pdfBlob);
+              financeActiveBlobUrls.set(id, url);
+            }
+            openReader(url, title, filename);
+          }
+        };
+      });
+
+      // Bind Delete buttons (Protected with confirmation / master password)
+      document.querySelectorAll('.btn-del-assignment').forEach(btn => {
+        btn.onclick = async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          const title = btn.getAttribute('data-title') || 'this assignment';
+
+          const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+          if (!isUnlocked) {
+            const enteredPw = prompt('Administrator Verification: Enter master password to delete this assignment:');
+            if (enteredPw === null) return;
+            if (enteredPw === 'Asif@#69#@') {
+              sessionStorage.setItem('atg_admin_unlocked', 'true');
+            } else {
+              alert('Incorrect administrator password! Delete access denied.');
+              return;
+            }
+          }
+
+          if (confirm(`Are you sure you want to delete "${title}"?`)) {
+            try {
+              await deleteFinanceAssignmentDB(id);
+              if (financeActiveBlobUrls.has(id)) {
+                URL.revokeObjectURL(financeActiveBlobUrls.get(id));
+                financeActiveBlobUrls.delete(id);
+              }
+              await renderFinanceAssignments();
+            } catch (err) {
+              console.error('Failed to delete assignment:', err);
+              alert('Could not delete assignment: ' + err.message);
+            }
+          }
+        };
+      });
+
+    } catch (err) {
+      console.error('Failed to render finance assignments:', err);
+    }
+  }
+
+  // Form Submit Handler
+  if (formUploadFinanceAssignment) {
+    formUploadFinanceAssignment.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!financeSelectedFile && (!financePdfInput.files || !financePdfInput.files[0])) {
+        alert('Please select an Assignment PDF file to upload.');
+        return;
+      }
+
+      const file = financeSelectedFile || financePdfInput.files[0];
+      const title = document.getElementById('financeDocTitle')?.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+      const subject = document.getElementById('financeDocSubject')?.value || 'Corporate Finance';
+      const author = document.getElementById('financeDocAuthor')?.value.trim() || 'MBA Finance 2026';
+
+      if (btnSubmitFinanceAssignment) {
+        btnSubmitFinanceAssignment.disabled = true;
+        btnSubmitFinanceAssignment.textContent = 'Publishing Assignment...';
+      }
+
+      let coverUrl = financeCoverDataUrl;
+      if (!coverUrl) {
+        coverUrl = await generateThumbnail(file);
+      }
+
+      const item = {
+        id: 'fin_asgn_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+        title: title,
+        subject: subject,
+        author: author,
+        coverDataUrl: coverUrl,
+        pdfBlob: file,
+        fileName: file.name,
+        fileSize: file.size,
+        dateStr: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        await saveFinanceAssignmentDB(item);
+        await renderFinanceAssignments();
+
+        closeUploadModal();
+        formUploadFinanceAssignment.reset();
+        financeSelectedFile = null;
+        financeCoverDataUrl = '';
+        if (financeThumbPreviewBox) financeThumbPreviewBox.style.display = 'none';
+        if (financeDropText) financeDropText.textContent = 'Click to choose Assignment PDF';
+        if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document here';
+
+        const vaultEl = document.getElementById('financePdfVault');
+        if (vaultEl) vaultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      } catch (err) {
+        console.error('Failed to save assignment:', err);
+        alert('Could not save assignment: ' + err.message);
+      } finally {
+        if (btnSubmitFinanceAssignment) {
+          btnSubmitFinanceAssignment.disabled = false;
+          btnSubmitFinanceAssignment.textContent = 'Publish Assignment to Vault';
+        }
+      }
+    });
+  }
+
+  // Initial Load
+  renderFinanceAssignments();
+}
+
+// --------------------------------------------------------------------------
 // ATG Digital Knowledge Library Module
 // High-Capacity IndexedDB Persistence, Real PDF Uploads, PDF.js Auto Thumbnails,
 // Instant Reader Modal, Direct File Downloads, and User File Management.
