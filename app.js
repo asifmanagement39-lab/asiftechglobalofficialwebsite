@@ -1106,7 +1106,6 @@ function initBotConsoleModule() {
 // --------------------------------------------------------------------------
 // ATG Digital Knowledge Library Module
 // Multi-shelf Carousels, Global Search, Password-Protected Admin Upload & PDF.js Auto Thumbnail
-// Master Admin Password: Asif@#69#@
 // --------------------------------------------------------------------------
 function initLibraryModule() {
   const MASTER_ADMIN_PASSWORD = 'Asif@#69#@';
