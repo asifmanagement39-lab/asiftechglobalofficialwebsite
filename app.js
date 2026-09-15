@@ -1105,12 +1105,98 @@ function initBotConsoleModule() {
 
 // --------------------------------------------------------------------------
 // ATG Digital Knowledge Library Module
-// Multi-shelf Carousels, Global Search, Password-Protected Admin Upload & PDF.js Auto Thumbnail
+// High-Capacity IndexedDB Persistence, Real PDF Uploads, PDF.js Auto Thumbnails,
+// Instant Reader Modal, Direct File Downloads, and User File Management.
 // --------------------------------------------------------------------------
 function initLibraryModule() {
-  const MASTER_ADMIN_PASSWORD = 'Asif@#69#@';
+  const DB_NAME = 'ATG_Library_DB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'library_documents';
 
-  // 1. Shelf Carousel Scrolling
+  // Active in-memory Object URLs for live reader & downloads
+  const activeBlobUrls = new Map();
+  let selectedPdfFile = null;
+  let generatedCoverDataUrl = '';
+
+  // Configure PDF.js worker
+  if (typeof window.pdfjsLib !== 'undefined') {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+  }
+
+  // 1. IndexedDB Helper Functions
+  function openLibraryDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          store.createIndex('category', 'category', { unique: false });
+          store.createIndex('timestamp', 'timestamp', { unique: false });
+        }
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async function saveDocumentDB(item) {
+    const db = await openLibraryDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.put(item);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function getAllDocumentsDB() {
+    const db = await openLibraryDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function deleteDocumentDB(id) {
+    const db = await openLibraryDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function getDocBlobUrl(doc) {
+    if (!doc) return '#';
+    if (activeBlobUrls.has(doc.id)) {
+      return activeBlobUrls.get(doc.id);
+    }
+    if (doc.pdfBlob) {
+      const url = URL.createObjectURL(doc.pdfBlob);
+      activeBlobUrls.set(doc.id, url);
+      return url;
+    }
+    return doc.pdfPath || '#';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // 2. Shelf Carousel Scrolling
   document.querySelectorAll('.btn-shelf-nav').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-target');
@@ -1121,7 +1207,7 @@ function initLibraryModule() {
     });
   });
 
-  // 2. Global Unified Search
+  // 3. Global Unified Search
   const searchInput = document.getElementById('libSearchInput');
   const searchSubmitBtn = document.getElementById('btnLibSearchSubmit');
   const searchResultsContainer = document.getElementById('libSearchResultsContainer');
@@ -1136,7 +1222,7 @@ function initLibraryModule() {
       return;
     }
 
-    const allCards = document.querySelectorAll('.lib-card-shelf');
+    const allCards = document.querySelectorAll('.lib-shelf-track .lib-card-shelf');
     const matched = [];
 
     allCards.forEach(card => {
@@ -1159,16 +1245,16 @@ function initLibraryModule() {
         if (searchResultsTitle) searchResultsTitle.textContent = `Found ${matched.length} Publication${matched.length === 1 ? '' : 's'} matching "${query.toUpperCase()}"`;
       } else {
         searchResultsGrid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
+          <div style="grid-column: 1/-1; text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
             <p style="font-size: 1.1rem; color: var(--text-main); font-weight: 700; margin-bottom: 0.4rem;">No matching documents found</p>
-            <p style="font-size: 0.85rem;">Try searching for different keywords, topics, or authors.</p>
+            <p style="font-size: 0.85rem;">Try searching for different keywords or author names.</p>
           </div>
         `;
         if (searchResultsTitle) searchResultsTitle.textContent = `Search results for "${query.toUpperCase()}"`;
       }
       searchResultsContainer.style.display = 'block';
       searchResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      bindReaderButtons();
+      bindShelfCardEvents();
     }
   }
 
@@ -1179,9 +1265,7 @@ function initLibraryModule() {
     });
   }
 
-  if (searchSubmitBtn) {
-    searchSubmitBtn.addEventListener('click', performSearch);
-  }
+  if (searchSubmitBtn) searchSubmitBtn.addEventListener('click', performSearch);
 
   if (resetSearchBtn && searchInput) {
     resetSearchBtn.addEventListener('click', () => {
@@ -1191,7 +1275,7 @@ function initLibraryModule() {
     });
   }
 
-  // 3. Interactive Reading Modal
+  // 4. Interactive Reading Modal
   const readerModal = document.getElementById('libReaderModal');
   const modalBackdrop = document.getElementById('libModalBackdrop');
   const modalClose = document.getElementById('libModalClose');
@@ -1199,13 +1283,13 @@ function initLibraryModule() {
   const modalFrame = document.getElementById('libModalFrame');
   const modalDownload = document.getElementById('libModalDownload');
 
-  function openReader(pdfPath, title) {
+  function openReader(pdfUrl, title, filename) {
     if (!readerModal || !modalFrame) return;
     if (modalTitle) modalTitle.textContent = `${title} - Reading Mode`;
-    modalFrame.src = pdfPath;
+    modalFrame.src = pdfUrl;
     if (modalDownload) {
-      modalDownload.href = pdfPath;
-      modalDownload.download = `${title.replace(/\s+/g, '_')}.pdf`;
+      modalDownload.href = pdfUrl;
+      modalDownload.download = filename || `${title.replace(/\s+/g, '_')}.pdf`;
     }
     readerModal.classList.add('open');
     readerModal.setAttribute('aria-hidden', 'false');
@@ -1220,17 +1304,6 @@ function initLibraryModule() {
     document.body.style.overflow = '';
   }
 
-  function bindReaderButtons() {
-    document.querySelectorAll('.btn-read-shelf').forEach(btn => {
-      btn.onclick = (e) => {
-        e.preventDefault();
-        const pdfPath = btn.getAttribute('data-pdf-path') || 'documents/money-by-dadashri.pdf';
-        const title = btn.getAttribute('data-pdf-title') || 'Document';
-        openReader(pdfPath, title);
-      };
-    });
-  }
-
   if (modalClose) modalClose.addEventListener('click', closeReader);
   if (modalBackdrop) modalBackdrop.addEventListener('click', closeReader);
 
@@ -1240,49 +1313,27 @@ function initLibraryModule() {
     }
   });
 
-  // 4. Admin Upload Modal & Automatic PDF.js Thumbnail Generator
+  // 5. Upload Modal
   const btnOpenAdminModal = document.getElementById('btnOpenAdminModal');
   const libAdminModal = document.getElementById('libAdminModal');
   const adminModalClose = document.getElementById('adminModalClose');
   const adminModalBackdrop = document.getElementById('adminModalBackdrop');
-  const adminPasswordGate = document.getElementById('adminPasswordGate');
-  const adminUploadFormSection = document.getElementById('adminUploadFormSection');
-  const formAdminAuth = document.getElementById('formAdminAuth');
-  const adminAuthPassword = document.getElementById('adminAuthPassword');
-  const adminAuthError = document.getElementById('adminAuthError');
-  const btnToggleAdminPw = document.getElementById('btnToggleAdminPw');
-  const btnAdminLogout = document.getElementById('btnAdminLogout');
+  const heroAdminUploadBtn = document.getElementById('btnHeroAdminUpload');
   const uploadPdfFile = document.getElementById('uploadPdfFile');
   const thumbPreviewBox = document.getElementById('thumbPreviewBox');
   const imgAutoThumbnail = document.getElementById('imgAutoThumbnail');
   const pdfOffscreenCanvas = document.getElementById('pdfOffscreenCanvas');
   const formUploadBook = document.getElementById('formUploadBook');
-
-  let generatedCoverDataUrl = '';
-  let uploadedPdfBlobUrl = '';
+  const btnSubmitBookUpload = document.getElementById('btnSubmitBookUpload');
 
   function openAdminModal(targetShelf) {
     if (!libAdminModal) return;
     
-    // If target shelf passed, pre-select it
     if (targetShelf && typeof targetShelf === 'string') {
       const shelfSelect = document.getElementById('uploadShelfCategory');
       if (shelfSelect) shelfSelect.value = targetShelf;
     }
 
-    const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
-    if (isUnlocked) {
-      if (adminPasswordGate) adminPasswordGate.style.display = 'none';
-      if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
-    } else {
-      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
-      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
-      if (adminAuthPassword) {
-        adminAuthPassword.value = '';
-        setTimeout(() => adminAuthPassword.focus(), 150);
-      }
-      if (adminAuthError) adminAuthError.style.display = 'none';
-    }
     libAdminModal.classList.add('open');
     libAdminModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -1295,87 +1346,33 @@ function initLibraryModule() {
     document.body.style.overflow = '';
   }
 
-  // Bind all Admin Upload buttons
   if (btnOpenAdminModal) btnOpenAdminModal.addEventListener('click', () => openAdminModal());
-  
-  const heroAdminUploadBtn = document.getElementById('btnHeroAdminUpload');
   if (heroAdminUploadBtn) heroAdminUploadBtn.addEventListener('click', () => openAdminModal());
-
-  document.querySelectorAll('.btn-chip-upload, .btn-shelf-upload').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const shelf = btn.getAttribute('data-shelf') || 'books';
-      openAdminModal(shelf);
-    });
-  });
-
   if (adminModalClose) adminModalClose.addEventListener('click', closeAdminModal);
   if (adminModalBackdrop) adminModalBackdrop.addEventListener('click', closeAdminModal);
 
-  // Toggle password visibility
-  if (btnToggleAdminPw && adminAuthPassword) {
-    btnToggleAdminPw.addEventListener('click', () => {
-      const type = adminAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-      adminAuthPassword.setAttribute('type', type);
-    });
-  }
-
-  // Admin Authentication Check
-  if (formAdminAuth) {
-    formAdminAuth.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const entered = adminAuthPassword ? adminAuthPassword.value.trim() : '';
-      if (entered === MASTER_ADMIN_PASSWORD) {
-        sessionStorage.setItem('atg_admin_unlocked', 'true');
-        if (adminAuthError) adminAuthError.style.display = 'none';
-        if (adminPasswordGate) adminPasswordGate.style.display = 'none';
-        if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
-      } else {
-        if (adminAuthError) adminAuthError.style.display = 'block';
-        if (adminAuthPassword) {
-          adminAuthPassword.value = '';
-          adminAuthPassword.focus();
-        }
-      }
-    });
-  }
-
-  // Admin Logout / Lock
-  if (btnAdminLogout) {
-    btnAdminLogout.addEventListener('click', () => {
-      sessionStorage.removeItem('atg_admin_unlocked');
-      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
-      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
-      if (adminAuthPassword) adminAuthPassword.value = '';
-    });
-  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && libAdminModal && libAdminModal.classList.contains('open')) {
+      closeAdminModal();
+    }
+  });
 
   // Smart Shelf Auto-Routing Engine
   function detectShelfCategory(text) {
     const str = (text || '').toLowerCase();
 
-    // 1. News Keywords
     if (/news|newspaper|times|express|chronicle|standard|dainik|patrika|tribune|daily|edition|editorial|headline|samachar|gazette|journal/i.test(str)) {
       return { category: 'news', name: 'Latest News & Newspapers', ribbon: 'popular' };
     }
-
-    // 2. Magazine Keywords
     if (/magazine|mag|vogue|lifestyle|soccer|sports|fabulous|life|forbes|fortune|cosmopolitan|glamour|cinema|entertainment|monthly|weekly|fashion|reader|digest/i.test(str)) {
       return { category: 'magazine', name: 'Latest Magazines', ribbon: 'popular' };
     }
-
-    // 3. Study Material Keywords
     if (/study|case|syllabus|lecture|notes|analytics|research|paper|assignment|exam|question|banking|hdfc|operations|framework|formula|data science|quantitative|methodology|module|curriculum|treatise|whitepaper|analysis/i.test(str)) {
       return { category: 'study', name: 'Study Material & Case Studies', ribbon: 'featured' };
     }
-
-    // 4. Free Content Keywords
     if (/free|budget|handbook|guide|cheat|tutorial|beginner|basics|manual|open access|handouts|cheatsheet|notes for/i.test(str)) {
       return { category: 'free', name: 'Free Content & Notes', ribbon: 'trending' };
     }
-
-    // 5. Default Books
     return { category: 'books', name: 'Latest Books', ribbon: 'popular' };
   }
 
@@ -1385,12 +1382,8 @@ function initLibraryModule() {
     const ribbonSelect = document.getElementById('uploadBookRibbon');
     const autoDetectHint = document.getElementById('autoDetectHint');
 
-    if (shelfSelect) {
-      shelfSelect.value = detected.category;
-    }
-    if (ribbonSelect && ribbonSelect.value === 'popular') {
-      ribbonSelect.value = detected.ribbon;
-    }
+    if (shelfSelect) shelfSelect.value = detected.category;
+    if (ribbonSelect && ribbonSelect.value === 'popular') ribbonSelect.value = detected.ribbon;
     if (autoDetectHint) {
       autoDetectHint.textContent = `✓ Auto-routed to: ${detected.name}`;
       autoDetectHint.style.display = 'block';
@@ -1410,24 +1403,27 @@ function initLibraryModule() {
   if (uploadPdfFile) {
     uploadPdfFile.addEventListener('change', async (e) => {
       const file = e.target.files && e.target.files[0];
-      if (!file) return;
-
-      uploadedPdfBlobUrl = URL.createObjectURL(file);
-
-      // Auto-extract title and auto-route category based on filename
-      const titleInput = document.getElementById('uploadBookTitle');
-      const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-      
-      if (titleInput) {
-        if (!titleInput.value) {
-          titleInput.value = cleanFileName;
-        }
-        applyAutoRouting(cleanFileName);
+      if (!file) {
+        selectedPdfFile = null;
+        generatedCoverDataUrl = '';
+        if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+        return;
       }
 
+      selectedPdfFile = file;
+
+      // Auto-populate document title if empty
+      const titleInput = document.getElementById('uploadBookTitle');
+      const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      if (titleInput && !titleInput.value.trim()) {
+        titleInput.value = cleanFileName;
+      }
+      applyAutoRouting(cleanFileName);
+
+      // Render cover thumbnail using PDF.js
       try {
         if (typeof window.pdfjsLib === 'undefined') {
-          console.warn('PDF.js not loaded, using fallback thumbnail');
+          console.warn('PDF.js not available for rendering thumbnail');
           return;
         }
 
@@ -1442,12 +1438,7 @@ function initLibraryModule() {
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-
-        await page.render(renderContext).promise;
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
         generatedCoverDataUrl = canvas.toDataURL('image/jpeg', 0.85);
 
         if (imgAutoThumbnail && thumbPreviewBox) {
@@ -1455,12 +1446,14 @@ function initLibraryModule() {
           thumbPreviewBox.style.display = 'block';
         }
       } catch (err) {
-        console.error('Error generating PDF thumbnail:', err);
+        console.warn('Could not generate PDF thumbnail, using styled cover instead:', err);
+        generatedCoverDataUrl = '';
+        if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
       }
     });
   }
 
-  // Add Uploaded Book to DOM & Storage
+  // 6. Shelf Card HTML Generator
   function createShelfCardHtml(item) {
     let ribbonHtml = '';
     if (item.ribbon && item.ribbon !== 'none') {
@@ -1472,114 +1465,221 @@ function initLibraryModule() {
     if (item.coverDataUrl) {
       thumbHtml = `
         <div class="lib-shelf-thumb-wrap">
-          <img src="${item.coverDataUrl}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
+          <img src="${item.coverDataUrl}" alt="${escapeHtml(item.title)}" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
       `;
     } else {
+      let gradClass = 'gold-black-grad';
+      if (item.category === 'news') gradClass = 'blue-grad';
+      else if (item.category === 'magazine') gradClass = 'violet-grad';
+      else if (item.category === 'study') gradClass = 'emerald-grad';
+      else if (item.category === 'free') gradClass = 'warm-grad';
+
       thumbHtml = `
         <div class="lib-shelf-thumb-wrap">
-          <div class="shelf-thumb-gradient gold-black-grad">
-            <div class="news-masthead">${item.title}</div>
-            <div class="news-lead">${item.author || 'AsifTechGlobal Edition'}</div>
+          <div class="shelf-thumb-gradient ${gradClass}">
+            <div class="news-masthead">${escapeHtml(item.title)}</div>
+            <div class="news-lead">${escapeHtml(item.author || 'AsifTechGlobal Edition')}</div>
             <div class="news-sub-banner">Digital Publication</div>
           </div>
         </div>
       `;
     }
 
+    const blobUrl = getDocBlobUrl(item);
+    const downloadName = item.fileName || `${item.title.replace(/\s+/g, '_')}.pdf`;
+
     return `
-      <div class="lib-card-shelf" data-category="${item.category}" data-title="${item.title}" data-author="${item.author}">
+      <div class="lib-card-shelf" data-id="${item.id}" data-category="${item.category}" data-title="${escapeHtml(item.title)}" data-author="${escapeHtml(item.author)}">
         ${ribbonHtml}
         ${thumbHtml}
         <div class="lib-shelf-card-info">
-          <h3 class="shelf-card-name">${item.title}</h3>
-          <p class="shelf-card-publisher">${item.author}</p>
+          <h3 class="shelf-card-name" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</h3>
+          <p class="shelf-card-publisher" title="${escapeHtml(item.author)}">${escapeHtml(item.author)}</p>
           <div class="shelf-card-actions">
-            <button type="button" class="btn-read-shelf" data-pdf-path="${item.pdfPath}" data-pdf-title="${item.title}">Read</button>
-            <a href="${item.pdfPath}" download="${item.title.replace(/\s+/g, '_')}.pdf" class="btn-dl-shelf" title="Download">PDF</a>
+            <button type="button" class="btn-read-shelf" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-filename="${escapeHtml(downloadName)}">Read</button>
+            <a href="${blobUrl}" download="${escapeHtml(downloadName)}" class="btn-dl-shelf" title="Download Document">PDF</a>
+            <button type="button" class="btn-del-shelf" data-id="${item.id}" data-title="${escapeHtml(item.title)}" title="Delete Document">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
           </div>
         </div>
       </div>
     `;
   }
 
-  function appendCustomBook(item) {
-    let trackId = 'booksTrack';
-    if (item.category === 'news') trackId = 'newsTrack';
-    else if (item.category === 'magazine') trackId = 'magTrack';
-    else if (item.category === 'study') trackId = 'studyTrack';
-    else if (item.category === 'free') trackId = 'freeTrack';
-
-    const track = document.getElementById(trackId);
-    if (track) {
-      const tempWrapper = document.createElement('div');
-      tempWrapper.innerHTML = createShelfCardHtml(item);
-      const cardEl = tempWrapper.firstElementChild;
-      track.prepend(cardEl);
-      bindReaderButtons();
-    }
+  function getEmptyShelfHtml(category) {
+    return `
+      <div class="lib-shelf-empty" data-shelf="${category}">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        </div>
+        <div class="empty-text">
+          <h4>No documents uploaded yet</h4>
+          <p>Upload your own PDF document to this shelf.</p>
+        </div>
+        <button type="button" class="btn-shelf-upload-empty" data-shelf="${category}">+ Upload PDF</button>
+      </div>
+    `;
   }
 
-  // Load saved custom uploads
-  function loadCustomUploads() {
+  // 7. Render All Shelves from IndexedDB
+  let allCachedDocs = [];
+
+  async function renderAllShelves() {
     try {
-      const saved = JSON.parse(localStorage.getItem('atg_custom_library_items') || '[]');
-      saved.forEach(item => appendCustomBook(item));
-    } catch (e) {
-      console.error('Failed to load custom uploads:', e);
+      allCachedDocs = await getAllDocumentsDB();
+      // Sort newest first
+      allCachedDocs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+
+      const shelves = [
+        { key: 'news', trackId: 'newsTrack' },
+        { key: 'magazine', trackId: 'magTrack' },
+        { key: 'books', trackId: 'booksTrack' },
+        { key: 'study', trackId: 'studyTrack' },
+        { key: 'free', trackId: 'freeTrack' }
+      ];
+
+      shelves.forEach(({ key, trackId }) => {
+        const track = document.getElementById(trackId);
+        if (!track) return;
+
+        const items = allCachedDocs.filter(d => d.category === key);
+        if (items.length === 0) {
+          track.innerHTML = getEmptyShelfHtml(key);
+        } else {
+          track.innerHTML = items.map(item => createShelfCardHtml(item)).join('');
+        }
+      });
+
+      bindShelfCardEvents();
+    } catch (err) {
+      console.error('Failed to render shelves from IndexedDB:', err);
     }
   }
 
-  // Form Submit: Publish Book
+  // 8. Bind Actions to Dynamic Cards & Empty Buttons
+  function bindShelfCardEvents() {
+    // Read button
+    document.querySelectorAll('.btn-read-shelf').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title') || 'Document';
+        const filename = btn.getAttribute('data-filename') || 'Document.pdf';
+        const doc = allCachedDocs.find(d => d.id === id);
+        const url = getDocBlobUrl(doc);
+        openReader(url, title, filename);
+      };
+    });
+
+    // Delete button
+    document.querySelectorAll('.btn-del-shelf').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title') || 'this document';
+        
+        if (confirm(`Are you sure you want to delete "${title}"?`)) {
+          try {
+            await deleteDocumentDB(id);
+            if (activeBlobUrls.has(id)) {
+              URL.revokeObjectURL(activeBlobUrls.get(id));
+              activeBlobUrls.delete(id);
+            }
+            await renderAllShelves();
+            if (searchResultsContainer && searchResultsContainer.style.display !== 'none') {
+              performSearch();
+            }
+          } catch (delErr) {
+            console.error('Failed to delete document:', delErr);
+            alert('Failed to delete document: ' + delErr.message);
+          }
+        }
+      };
+    });
+
+    // Shelf & Empty state upload buttons
+    document.querySelectorAll('.btn-chip-upload, .btn-shelf-upload, .btn-shelf-upload-empty').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const shelf = btn.getAttribute('data-shelf') || 'books';
+        openAdminModal(shelf);
+      };
+    });
+  }
+
+  // 9. Form Submit: Publish Book
   if (formUploadBook) {
-    formUploadBook.addEventListener('submit', (e) => {
+    formUploadBook.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      if (!selectedPdfFile && (!uploadPdfFile.files || !uploadPdfFile.files[0])) {
+        alert('Please select a PDF file to upload.');
+        return;
+      }
+
+      const file = selectedPdfFile || uploadPdfFile.files[0];
       const category = document.getElementById('uploadShelfCategory')?.value || 'books';
-      const title = document.getElementById('uploadBookTitle')?.value.trim() || 'Untitled Publication';
-      const author = document.getElementById('uploadBookAuthor')?.value.trim() || 'AsifTechGlobal Author';
+      const title = document.getElementById('uploadBookTitle')?.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+      const author = document.getElementById('uploadBookAuthor')?.value.trim() || 'AsifTechGlobal Edition';
       const ribbon = document.getElementById('uploadBookRibbon')?.value || 'popular';
 
+      if (btnSubmitBookUpload) {
+        btnSubmitBookUpload.disabled = true;
+        btnSubmitBookUpload.textContent = 'Saving to Library...';
+      }
+
       const item = {
-        id: 'book_' + Date.now(),
+        id: 'doc_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
         category: category,
         title: title,
         author: author,
         ribbon: ribbon,
         coverDataUrl: generatedCoverDataUrl,
-        pdfPath: uploadedPdfBlobUrl || 'documents/money-by-dadashri.pdf',
+        pdfBlob: file,
+        fileName: file.name,
+        fileSize: file.size,
         timestamp: new Date().toISOString()
       };
 
       try {
-        const existing = JSON.parse(localStorage.getItem('atg_custom_library_items') || '[]');
-        existing.unshift(item);
-        localStorage.setItem('atg_custom_library_items', JSON.stringify(existing));
+        await saveDocumentDB(item);
+        await renderAllShelves();
+
+        closeAdminModal();
+        formUploadBook.reset();
+        selectedPdfFile = null;
+        generatedCoverDataUrl = '';
+        if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+
+        // Scroll to the shelf where the document was published
+        let targetShelf = 'shelfBooks';
+        if (category === 'news') targetShelf = 'shelfNews';
+        else if (category === 'magazine') targetShelf = 'shelfMagazines';
+        else if (category === 'study') targetShelf = 'shelfStudy';
+        else if (category === 'free') targetShelf = 'shelfFree';
+
+        const shelfEl = document.getElementById(targetShelf);
+        if (shelfEl) shelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
       } catch (err) {
-        console.warn('Storage limit reached, displaying in current session:', err);
+        console.error('Failed to save document to IndexedDB:', err);
+        alert('Could not save PDF document: ' + err.message);
+      } finally {
+        if (btnSubmitBookUpload) {
+          btnSubmitBookUpload.disabled = false;
+          btnSubmitBookUpload.textContent = 'Publish to Digital Library';
+        }
       }
-
-      appendCustomBook(item);
-      closeAdminModal();
-      formUploadBook.reset();
-      generatedCoverDataUrl = '';
-      if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
-
-      // Scroll to target shelf
-      let targetShelf = 'shelfBooks';
-      if (category === 'news') targetShelf = 'shelfNews';
-      else if (category === 'magazine') targetShelf = 'shelfMagazines';
-      else if (category === 'study') targetShelf = 'shelfStudy';
-      else if (category === 'free') targetShelf = 'shelfFree';
-
-      const shelfEl = document.getElementById(targetShelf);
-      if (shelfEl) shelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 
-  // Initial bindings & load custom uploads
-  bindReaderButtons();
-  loadCustomUploads();
+  // Initial render of all shelves from IndexedDB
+  renderAllShelves();
 }
+
 
 

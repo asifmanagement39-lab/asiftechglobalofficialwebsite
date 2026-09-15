@@ -3569,6 +3569,97 @@ footer {
   color: var(--gold);
 }
 
+.btn-del-shelf {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.btn-del-shelf:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Empty Shelf State Placeholder */
+.lib-shelf-empty {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(230, 184, 0, 0.35);
+  border-radius: var(--radius-md);
+  padding: 1.8rem 2.2rem;
+  width: 100%;
+  min-width: 320px;
+  max-width: 650px;
+  transition: var(--transition);
+}
+
+.lib-shelf-empty:hover {
+  border-color: var(--gold);
+  background: rgba(230, 184, 0, 0.03);
+}
+
+.lib-shelf-empty .empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: rgba(230, 184, 0, 0.12);
+  border: 1px solid rgba(230, 184, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.lib-shelf-empty .empty-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.lib-shelf-empty .empty-text h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.lib-shelf-empty .empty-text p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.btn-shelf-upload-empty {
+  margin-left: auto;
+  background: var(--gold-gradient);
+  color: #000000;
+  border: none;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(230, 184, 0, 0.25);
+}
+
+.btn-shelf-upload-empty:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(230, 184, 0, 0.45);
+}
+
 /* Shelf Search Grid */
 .lib-shelf-grid {
   display: grid;
@@ -3583,6 +3674,17 @@ footer {
   .lib-shelf-thumb-wrap {
     height: 250px;
   }
+  .lib-shelf-empty {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.4rem;
+  }
+  .btn-shelf-upload-empty {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
 }
+
 
 
