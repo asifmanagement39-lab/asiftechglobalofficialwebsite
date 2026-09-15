@@ -1202,10 +1202,27 @@ function initLibraryModule() {
     });
   });
 
-  // Search Input
+  // Search Input & Action Button
+  const searchSubmitBtn = document.getElementById('btnLibSearchSubmit');
+
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       filterBooks();
+    });
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        filterBooks();
+        const catalogSection = document.getElementById('libCatalogSection') || document.querySelector('.lib-filter-bar');
+        if (catalogSection) catalogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  if (searchSubmitBtn) {
+    searchSubmitBtn.addEventListener('click', () => {
+      filterBooks();
+      const catalogSection = document.getElementById('libCatalogSection') || document.querySelector('.lib-filter-bar');
+      if (catalogSection) catalogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 

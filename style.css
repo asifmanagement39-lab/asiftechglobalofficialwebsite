@@ -3018,60 +3018,90 @@ footer {
    ATG Digital Knowledge Library Styles
    Zero emojis. Luxury dark & gold aesthetic.
    ========================================================================== */
-.lib-hero-search {
-  max-width: 650px;
-  margin: 2rem auto 0;
+.lib-hero-banner {
+  background: radial-gradient(circle at 50% 30%, rgba(30, 25, 10, 0.6) 0%, rgba(10, 10, 15, 0.95) 75%), #0a0a0f;
   position: relative;
 }
 
-.lib-search-input-wrap {
+.lib-hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(230, 184, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.85));
+  background-size: 24px 24px, 100% 100%;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.lib-hero-search-box {
+  max-width: 780px;
+  margin: 1.5rem auto 0;
+  position: relative;
+  z-index: 3;
+}
+
+.lib-search-bar-unified {
   display: flex;
-  align-items: center;
-  background: rgba(18, 18, 24, 0.95);
-  border: 1px solid rgba(230, 184, 0, 0.4);
-  border-radius: var(--radius-pill);
-  padding: 0.4rem 0.6rem 0.4rem 1.4rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 184, 0, 0.1);
-  transition: var(--transition);
+  align-items: stretch;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(230, 184, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
-.lib-search-input-wrap:focus-within {
-  border-color: var(--gold);
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(230, 184, 0, 0.25);
+.lib-search-bar-unified:focus-within {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(230, 184, 0, 0.35);
+  transform: translateY(-2px);
 }
 
-.lib-search-input {
+.lib-search-text-field {
   flex: 1;
-  background: transparent;
+  background: #ffffff;
   border: none;
   outline: none;
-  color: var(--text-main);
-  font-size: 1rem;
-  font-family: inherit;
+  color: #1a1a24;
+  font-size: 1.05rem;
+  font-weight: 500;
+  font-family: var(--font-main, 'Inter', sans-serif);
+  padding: 1.1rem 1.4rem;
 }
 
-.lib-search-input::placeholder {
-  color: var(--text-dim);
+.lib-search-text-field::placeholder {
+  color: #64748b;
+  font-weight: 400;
 }
 
-.btn-lib-search {
-  background: var(--gold-gradient);
-  color: #000;
+.btn-lib-search-submit {
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+  color: #ffffff;
   border: none;
-  border-radius: var(--radius-pill);
-  padding: 0.65rem 1.4rem;
-  font-weight: 700;
-  font-size: 0.9rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  padding: 0 2.2rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: var(--transition);
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.btn-lib-search:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(230, 184, 0, 0.4);
+.btn-lib-search-submit:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #0891b2 100%);
+  filter: brightness(1.1);
+}
+
+@media (max-width: 640px) {
+  .lib-search-bar-unified {
+    flex-direction: column;
+  }
+  .btn-lib-search-submit {
+    padding: 0.9rem 1.5rem;
+  }
 }
 
 /* Category Grid (8 Mozo-Hunt inspired categories in dark/gold) */
