@@ -4,16 +4,24 @@
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  initNavbarScroll();
-  initMbaDropdown();
-  initScrollTop();
-  initAnimatedStats();
-  initPayrollCalculator();
-  initFinancePdfModule();
-  initYouTubeModule();
-  initBotConsoleModule();
-  initLibraryModule();
+  const safeRun = (fn, name) => {
+    try {
+      if (typeof fn === 'function') fn();
+    } catch (err) {
+      console.warn(`[ATG Init] Module ${name} warning:`, err);
+    }
+  };
+
+  safeRun(initTheme, 'Theme');
+  safeRun(initNavbarScroll, 'NavbarScroll');
+  safeRun(initMbaDropdown, 'MbaDropdown');
+  safeRun(initScrollTop, 'ScrollTop');
+  safeRun(initAnimatedStats, 'AnimatedStats');
+  safeRun(initPayrollCalculator, 'PayrollCalculator');
+  safeRun(initFinancePdfModule, 'FinancePdfModule');
+  safeRun(initYouTubeModule, 'YouTubeModule');
+  safeRun(initBotConsoleModule, 'BotConsoleModule');
+  safeRun(initLibraryModule, 'LibraryModule');
 });
 
 // --------------------------------------------------------------------------
@@ -321,343 +329,6 @@ function initPayrollCalculator() {
   calculate(numInput.value);
 }
 
-// --------------------------------------------------------------------------
-// Finance PDF Vault & Real-Time Auto-Thumbnail Engine
-// --------------------------------------------------------------------------
-function initFinancePdfModule() {
-  const dropzone = document.getElementById('pdfDropzone');
-  const fileInput = document.getElementById('pdfFileInput');
-  const browseBtn = document.getElementById('browsePdfBtn');
-  const grid = document.getElementById('financePdfGrid');
-  const statusEl = document.getElementById('pdfProcessStatus');
-  const statusText = document.getElementById('pdfStatusText');
-  const countBadge = document.getElementById('pdfDocCount');
-
-  const modal = document.getElementById('pdfModal');
-  const modalTitle = document.getElementById('pdfModalTitle');
-  const modalFrame = document.getElementById('pdfModalFrame');
-  const modalDownload = document.getElementById('pdfModalDownload');
-  const modalBackdrop = document.getElementById('pdfModalBackdrop');
-  const closeBtn = document.getElementById('closePdfModal');
-
-  if (!grid) return;
-
-  // Initialize PDF.js worker
-  if (window.pdfjsLib) {
-    try {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
-    } catch (e) {
-      console.warn('PDF worker setup:', e);
-    }
-  }
-
-  // Active documents array
-  let documents = [
-    {
-      id: 'doc-money-dadashri',
-      title: 'Money: The World of Money',
-      subtitle: 'According to Gnani Purush Dadashri',
-      filePath: 'documents/money-by-dadashri.pdf',
-      fileName: 'money-by-dadashri.pdf',
-      fileSize: '431 KB',
-      totalPages: 111,
-      thumbnailUrl: null
-    }
-  ];
-
-  function updateDocCount() {
-    if (countBadge) {
-      countBadge.textContent = `${documents.length} Document${documents.length === 1 ? '' : 's'} Available`;
-    }
-  }
-
-  // Render Page 1 to HTML5 Canvas -> DataURL
-  async function generateThumbnailFromSource(source) {
-    if (!window.pdfjsLib) {
-      return null;
-    }
-    try {
-      const loadingTask = window.pdfjsLib.getDocument(source);
-      const pdf = await loadingTask.promise;
-      const totalPages = pdf.numPages;
-      const page = await pdf.getPage(1);
-
-      // Render at sharp scale (width around 340px)
-      const unscaledViewport = page.getViewport({ scale: 1 });
-      const scale = 340 / unscaledViewport.width;
-      const viewport = page.getViewport({ scale });
-
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = Math.floor(viewport.width);
-      canvas.height = Math.floor(viewport.height);
-
-      const renderContext = {
-        canvasContext: ctx,
-        viewport: viewport
-      };
-
-      await page.render(renderContext).promise;
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.90);
-
-      return {
-        thumbnailUrl: dataUrl,
-        totalPages: totalPages
-      };
-    } catch (err) {
-      console.error('Thumbnail generation error:', err);
-      return null;
-    }
-  }
-
-  // Create or Update Document Card DOM
-  function createDocumentCard(doc) {
-    const card = document.createElement('div');
-    card.className = 'pdf-doc-card';
-    card.id = doc.id;
-
-    // Thumbnail container
-    const thumbWrapper = document.createElement('div');
-    thumbWrapper.className = 'pdf-thumb-wrapper';
-
-    if (doc.thumbnailUrl) {
-      const img = document.createElement('img');
-      img.className = 'pdf-thumb-img';
-      img.src = doc.thumbnailUrl;
-      img.alt = doc.title;
-      thumbWrapper.appendChild(img);
-    } else {
-      const placeholder = document.createElement('div');
-      placeholder.className = 'pdf-thumb-placeholder';
-      placeholder.innerHTML = `<span>PAGE 1</span><div class="status-spinner" style="margin-top:0.4rem;"></div>`;
-      thumbWrapper.appendChild(placeholder);
-    }
-
-    // Meta container
-    const meta = document.createElement('div');
-    meta.className = 'pdf-doc-meta';
-    meta.innerHTML = `
-      <div>
-        <div class="pdf-doc-title">${escapeHtml(doc.title)}</div>
-        <div class="pdf-doc-sub">${escapeHtml(doc.subtitle || 'Financial Document')}</div>
-        <div class="pdf-doc-stats">
-          <span>${doc.totalPages || 1} Pages</span>
-          <span>${doc.fileSize || 'PDF'}</span>
-          <span>Verified</span>
-        </div>
-      </div>
-      <div class="pdf-doc-actions">
-        <button type="button" class="btn-pdf-view" data-view-id="${doc.id}">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          <span>Read PDF</span>
-        </button>
-        <a href="${doc.filePath}" download="${doc.fileName}" class="btn-pdf-download">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          <span>Download</span>
-        </a>
-      </div>
-    `;
-
-    card.appendChild(thumbWrapper);
-    card.appendChild(meta);
-
-    // Attach View click
-    const viewBtn = meta.querySelector('.btn-pdf-view');
-    if (viewBtn) {
-      viewBtn.addEventListener('click', () => {
-        openPdfViewer(doc);
-      });
-    }
-
-    return card;
-  }
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>"']/g, (m) => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[m]));
-  }
-
-  // Render all documents into grid
-  function renderAllDocs() {
-    grid.innerHTML = '';
-    documents.forEach(doc => {
-      grid.appendChild(createDocumentCard(doc));
-    });
-    updateDocCount();
-  }
-
-  // Open in-page PDF Viewer Modal
-  function openPdfViewer(doc) {
-    if (!modal) return;
-    if (modalTitle) modalTitle.textContent = `${doc.title} - Reading Mode`;
-    if (modalFrame) modalFrame.src = doc.filePath;
-    if (modalDownload) {
-      modalDownload.href = doc.filePath;
-      modalDownload.download = doc.fileName;
-    }
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closePdfViewer() {
-    if (!modal) return;
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    if (modalFrame) modalFrame.src = '';
-    document.body.style.overflow = '';
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', closePdfViewer);
-  if (modalBackdrop) modalBackdrop.addEventListener('click', closePdfViewer);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && modal.classList.contains('open')) {
-      closePdfViewer();
-    }
-  });
-
-  // Handle uploaded file
-  async function handleFileUpload(file) {
-    if (!file || file.type !== 'application/pdf') {
-      alert('Please select a valid PDF file.');
-      return;
-    }
-
-    if (statusEl) {
-      statusEl.style.display = 'flex';
-      if (statusText) statusText.textContent = `Reading ${file.name} and generating cover thumbnail...`;
-    }
-
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const blobUrl = URL.createObjectURL(file);
-      const sizeKB = Math.round(file.size / 1024);
-      const sizeStr = sizeKB > 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB} KB`;
-
-      // Extract title from filename (strip .pdf)
-      const cleanTitle = file.name.replace(/\.pdf$/i, '').replace(/[-_]/g, ' ');
-
-      // Generate live thumbnail
-      const result = await generateThumbnailFromSource({ data: arrayBuffer });
-
-      const newDoc = {
-        id: 'doc-' + Date.now(),
-        title: cleanTitle.charAt(0).toUpperCase() + cleanTitle.slice(1),
-        subtitle: 'Uploaded Financial Document',
-        filePath: blobUrl,
-        fileName: file.name,
-        fileSize: sizeStr,
-        totalPages: result ? result.totalPages : 1,
-        thumbnailUrl: result ? result.thumbnailUrl : null
-      };
-
-      documents.unshift(newDoc);
-      renderAllDocs();
-
-      if (statusEl) {
-        if (statusText) statusText.textContent = 'Thumbnail generated successfully!';
-        setTimeout(() => {
-          statusEl.style.display = 'none';
-        }, 1800);
-      }
-
-      // Scroll to newly added card
-      const newCard = document.getElementById(newDoc.id);
-      if (newCard) {
-        newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    } catch (err) {
-      console.error('File upload processing failed:', err);
-      if (statusEl) {
-        if (statusText) statusText.textContent = 'Error rendering PDF thumbnail.';
-        setTimeout(() => {
-          statusEl.style.display = 'none';
-        }, 2500);
-      }
-    }
-  }
-
-  // File Input and Browse Button Listeners
-  if (browseBtn && fileInput) {
-    browseBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      fileInput.click();
-    });
-  }
-
-  const navUploadBtn = document.getElementById('navUploadPdfBtn');
-  if (navUploadBtn && fileInput) {
-    navUploadBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const vault = document.getElementById('financePdfVault');
-      if (vault) {
-        vault.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      fileInput.click();
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files.length > 0) {
-        handleFileUpload(e.target.files[0]);
-      }
-    });
-  }
-
-  if (dropzone && fileInput) {
-    dropzone.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    dropzone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropzone.classList.add('drag-over');
-    });
-
-    dropzone.addEventListener('dragleave', () => {
-      dropzone.classList.remove('drag-over');
-    });
-
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('drag-over');
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleFileUpload(e.dataTransfer.files[0]);
-      }
-    });
-  }
-
-  // Initial render with placeholder
-  renderAllDocs();
-
-  // Generate thumbnail for default Money PDF
-  (async () => {
-    try {
-      const defaultDoc = documents[0];
-      const res = await fetch(defaultDoc.filePath);
-      if (res.ok) {
-        const buf = await res.arrayBuffer();
-        const result = await generateThumbnailFromSource({ data: buf });
-        if (result && result.thumbnailUrl) {
-          defaultDoc.thumbnailUrl = result.thumbnailUrl;
-          if (result.totalPages) defaultDoc.totalPages = result.totalPages;
-          renderAllDocs();
-        }
-      }
-    } catch (e) {
-      console.warn('Default PDF load:', e);
-    }
-  })();
-}
-
-// --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // YouTube Video Hub Module
 // Clean, standards-compliant YouTube player & stream controller. Zero emojis.
@@ -1340,7 +1011,23 @@ function initFinancePdfModule() {
     document.body.style.overflow = '';
   }
 
-  if (navUploadPdfBtn) navUploadPdfBtn.addEventListener('click', () => openUploadModal('assignments'));
+  // Bind all trigger buttons on Finance page
+  if (navUploadPdfBtn) {
+    navUploadPdfBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openUploadModal('assignments');
+    });
+  }
+
+  document.querySelectorAll('#shelfFinanceAssignments .btn-shelf-upload, #shelfFinanceCaseStudies .btn-shelf-upload, .btn-shelf-upload[data-shelf], .btn-shelf-upload-empty[data-shelf]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const shelf = btn.getAttribute('data-shelf') || 'assignments';
+      openUploadModal(shelf);
+    });
+  });
+
   if (financeUploadModalClose) financeUploadModalClose.addEventListener('click', closeUploadModal);
   if (financeUploadModalBackdrop) financeUploadModalBackdrop.addEventListener('click', closeUploadModal);
 
