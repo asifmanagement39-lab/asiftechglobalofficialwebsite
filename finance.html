@@ -6,7 +6,7 @@
   <title>Corporate Finance & Treasury Systems | ASIF TECH GLOBAL</title>
   <meta name="description" content="Enterprise Corporate Finance and Treasury platform by Asif Tech Global. Real-time ledgers, GST invoicing, cash flow forecasting, and automated PDF document vault.">
   
-  <link rel="stylesheet" href="style.css?v=3.5">
+  <link rel="stylesheet" href="style.css?v=4.0">
   <script src="pdf.min.js"></script>
 </head>
 <body id="finance-portal">
@@ -404,7 +404,7 @@
                 <label class="bot-field-label">Select Document PDF(s) *</label>
                 <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
               </div>
-              <div class="lib-file-dropzone" id="financeFileDropzone" style="border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
+              <label class="lib-file-dropzone" id="financeFileDropzone" for="financePdfInput" style="display: block; border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
                 <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" multiple>
                 <div class="dropzone-content">
                   <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
@@ -413,7 +413,7 @@
                   <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose PDF(s)</p>
                   <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop single or multiple PDF files here</p>
                 </div>
-              </div>
+              </label>
             </div>
 
             <!-- Document Title -->
@@ -507,6 +507,6 @@
     &uarr;
   </button>
 
-  <script src="app.js?v=3.5"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>

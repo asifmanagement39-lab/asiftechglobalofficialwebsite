@@ -3,6 +3,16 @@
 // Clean, standards-compliant JavaScript. Zero emojis.
 // ==========================================================================
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const safeRun = (fn, name) => {
     try {
@@ -1123,12 +1133,6 @@ function initFinancePdfModule() {
   }
 
   if (financeFileDropzone) {
-    financeFileDropzone.addEventListener('click', (e) => {
-      if (e.target !== financePdfInput && financePdfInput) {
-        financePdfInput.click();
-      }
-    });
-
     ['dragenter', 'dragover'].forEach(name => {
       financeFileDropzone.addEventListener(name, (e) => {
         e.preventDefault();
@@ -1953,12 +1957,6 @@ function initLibraryModule() {
   }
 
   if (libFileDropzone) {
-    libFileDropzone.addEventListener('click', (e) => {
-      if (e.target !== uploadPdfFile && uploadPdfFile) {
-        uploadPdfFile.click();
-      }
-    });
-
     ['dragenter', 'dragover'].forEach(eventName => {
       libFileDropzone.addEventListener(eventName, (e) => {
         e.preventDefault();

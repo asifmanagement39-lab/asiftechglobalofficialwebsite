@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3.5">
+  <link rel="stylesheet" href="style.css?v=4.0">
   <!-- PDF.js Engine for In-Browser Reader and Automatic Page-1 Thumbnail Generator -->
   <script src="pdf.min.js"></script>
 </head>
@@ -356,8 +356,8 @@
                 <label class="bot-field-label">Select PDF Document(s) *</label>
                 <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
               </div>
-              <div class="lib-file-dropzone" id="libFileDropzone">
-                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" multiple>
+              <label class="lib-file-dropzone" id="libFileDropzone" for="uploadPdfFile" style="display: block; cursor: pointer;">
+                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" multiple style="display: none;">
                 <div class="dropzone-content">
                   <div class="dropzone-icon">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
@@ -365,7 +365,7 @@
                   <p class="dropzone-title" id="dropzoneSelectedText">Click to choose PDF(s) from device</p>
                   <p class="dropzone-subtitle" id="dropzoneSubText">or Drag &amp; Drop single or multiple PDF files here</p>
                 </div>
-              </div>
+              </label>
             </div>
 
             <!-- Batch Files List Preview -->
@@ -500,6 +500,6 @@
     &uarr;
   </button>
 
-  <script src="app.js?v=3.5"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>
