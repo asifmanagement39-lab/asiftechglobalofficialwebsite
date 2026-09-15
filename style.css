@@ -3177,60 +3177,35 @@ footer {
   transform: translateY(-1px);
 }
 
-/* Quick Shelves Navigation Chips & Instant Upload Buttons */
+/* Quick Shelves Navigation Chips */
 .lib-quick-shelves-nav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 1.6rem;
-}
-
-.quick-nav-group {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 2px 4px 2px 2px;
-  transition: var(--transition);
-}
-
-.quick-nav-group:hover {
-  border-color: var(--gold);
-  box-shadow: 0 0 15px rgba(230, 184, 0, 0.15);
+  margin-top: 1.8rem;
 }
 
 .quick-shelf-chip {
   color: var(--text-main);
-  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 0.35rem 0.85rem;
+  padding: 0.5rem 1.2rem;
   text-decoration: none;
   transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
 }
 
 .quick-shelf-chip:hover {
+  border-color: var(--gold);
   color: var(--gold);
-}
-
-.btn-chip-upload {
-  background: rgba(230, 184, 0, 0.15);
-  border: 1px solid var(--gold);
-  color: var(--gold);
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: var(--transition);
-  margin-left: 0.2rem;
-}
-
-.btn-chip-upload:hover {
-  background: var(--gold);
-  color: #000000;
-  box-shadow: 0 0 10px rgba(230, 184, 0, 0.4);
+  background: rgba(230, 184, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(230, 184, 0, 0.2);
 }
 
 /* Prominent Admin Upload Action Dock in Hero */
