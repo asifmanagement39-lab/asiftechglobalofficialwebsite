@@ -1104,21 +1104,21 @@ function initBotConsoleModule() {
 }
 
 // --------------------------------------------------------------------------
-// MBA Finance Assignment & Document Repository Module
+// MBA Finance Assignment & Case Studies Multi-Shelf Module
 // --------------------------------------------------------------------------
 function initFinancePdfModule() {
-  const financePdfGrid = document.getElementById('financePdfGrid');
-  if (!financePdfGrid) return;
+  const shelfAssignments = document.getElementById('shelfFinanceAssignments');
+  const shelfCaseStudies = document.getElementById('shelfFinanceCaseStudies');
+  if (!shelfAssignments && !shelfCaseStudies) return;
 
   const DB_NAME = 'ATG_Finance_Assignments_DB';
   const DB_VERSION = 1;
   const STORE_NAME = 'finance_assignments';
 
   const financeActiveBlobUrls = new Map();
-  let financeSelectedFile = null;
+  let financeSelectedFiles = [];
   let financeCoverDataUrl = '';
 
-  const btnOpenFinanceUpload = document.getElementById('btnOpenFinanceUpload');
   const navUploadPdfBtn = document.getElementById('navUploadPdfBtn');
   const financeUploadModal = document.getElementById('financeUploadModal');
   const financeUploadModalClose = document.getElementById('financeUploadModalClose');
@@ -1131,7 +1131,6 @@ function initFinancePdfModule() {
   const financeImgThumbnail = document.getElementById('financeImgThumbnail');
   const formUploadFinanceAssignment = document.getElementById('formUploadFinanceAssignment');
   const btnSubmitFinanceAssignment = document.getElementById('btnSubmitFinanceAssignment');
-  const pdfDocCount = document.getElementById('pdfDocCount');
 
   // Reader modal elements
   const pdfModal = document.getElementById('pdfModal');
@@ -1141,6 +1140,56 @@ function initFinancePdfModule() {
   const pdfModalFrame = document.getElementById('pdfModalFrame');
   const pdfModalDownload = document.getElementById('pdfModalDownload');
 
+  // Carousel navigation buttons on Finance shelves
+  document.querySelectorAll('#shelfFinanceAssignments .btn-shelf-nav, #shelfFinanceCaseStudies .btn-shelf-nav').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const track = document.getElementById(targetId);
+      if (!track) return;
+      const scrollAmount = btn.classList.contains('prev') ? -340 : 340;
+      track.parentElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+
+  // Smooth Horizontal Drag & Mouse Wheel Scroll for Finance shelf containers
+  document.querySelectorAll('#shelfFinanceAssignments .lib-shelf-track-container, #shelfFinanceCaseStudies .lib-shelf-track-container').forEach(slider => {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.style.cursor = 'grabbing';
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.style.cursor = 'grab';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      slider.scrollLeft = scrollLeft - walk;
+    });
+
+    slider.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        slider.scrollBy({ left: e.deltaY * 1.2, behavior: 'smooth' });
+      }
+    }, { passive: false });
+  });
+
   // IndexedDB Helpers
   function openFinanceDB() {
     return new Promise((resolve, reject) => {
@@ -1148,7 +1197,8 @@ function initFinancePdfModule() {
       request.onupgradeneeded = (e) => {
         const db = e.target.result;
         if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          store.createIndex('category', 'category', { unique: false });
         }
       };
       request.onsuccess = () => resolve(request.result);
@@ -1192,11 +1242,11 @@ function initFinancePdfModule() {
   // Reader Modal Handlers
   function openReader(url, title, filename) {
     if (!pdfModal || !pdfModalFrame) return;
-    if (pdfModalTitle) pdfModalTitle.textContent = title || 'Assignment Viewer';
+    if (pdfModalTitle) pdfModalTitle.textContent = title || 'Document Viewer';
     pdfModalFrame.src = url;
     if (pdfModalDownload) {
       pdfModalDownload.href = url;
-      pdfModalDownload.download = filename || `${(title || 'Assignment').replace(/\s+/g, '_')}.pdf`;
+      pdfModalDownload.download = filename || `${(title || 'Document').replace(/\s+/g, '_')}.pdf`;
     }
     pdfModal.classList.add('open');
     pdfModal.setAttribute('aria-hidden', 'false');
@@ -1215,8 +1265,12 @@ function initFinancePdfModule() {
   if (pdfModalBackdrop) pdfModalBackdrop.addEventListener('click', closeReader);
 
   // Upload Modal Handlers
-  function openUploadModal() {
+  function openUploadModal(shelfCategory) {
     if (!financeUploadModal) return;
+    if (shelfCategory && typeof shelfCategory === 'string') {
+      const catSelect = document.getElementById('financeDocCategory');
+      if (catSelect) catSelect.value = shelfCategory === 'casestudies' ? 'casestudies' : 'assignments';
+    }
     financeUploadModal.classList.add('open');
     financeUploadModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -1229,8 +1283,7 @@ function initFinancePdfModule() {
     document.body.style.overflow = '';
   }
 
-  if (btnOpenFinanceUpload) btnOpenFinanceUpload.addEventListener('click', openUploadModal);
-  if (navUploadPdfBtn) navUploadPdfBtn.addEventListener('click', openUploadModal);
+  if (navUploadPdfBtn) navUploadPdfBtn.addEventListener('click', () => openUploadModal('assignments'));
   if (financeUploadModalClose) financeUploadModalClose.addEventListener('click', closeUploadModal);
   if (financeUploadModalBackdrop) financeUploadModalBackdrop.addEventListener('click', closeUploadModal);
 
@@ -1262,42 +1315,58 @@ function initFinancePdfModule() {
     }
   }
 
-  function handleFileSelected(file) {
-    if (!file) {
-      financeSelectedFile = null;
+  function handleFilesSelected(fileList) {
+    const rawFiles = Array.from(fileList || []);
+    const files = rawFiles.filter(f => f.type === 'application/pdf' || (f.name && f.name.toLowerCase().endsWith('.pdf')));
+
+    if (files.length === 0) {
+      financeSelectedFiles = [];
       financeCoverDataUrl = '';
       if (financeThumbPreviewBox) financeThumbPreviewBox.style.display = 'none';
-      if (financeDropText) financeDropText.textContent = 'Click to choose Assignment PDF';
-      if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document here';
+      if (financeDropText) financeDropText.textContent = 'Click to choose PDF(s)';
+      if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document(s) here';
       return;
     }
 
-    financeSelectedFile = file;
+    financeSelectedFiles = files;
 
-    if (financeDropText) {
-      financeDropText.innerHTML = `✓ <span style="color: #10b981;">${escapeHtml(file.name)}</span>`;
-    }
-    if (financeDropSubText) {
-      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-      financeDropSubText.textContent = `${sizeMb} MB • Assignment ready for upload`;
-    }
-
-    const titleInput = document.getElementById('financeDocTitle');
-    if (titleInput && !titleInput.value.trim()) {
-      titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-    }
-
-    generateThumbnail(file).then(dataUrl => {
-      financeCoverDataUrl = dataUrl;
-      if (financeImgThumbnail && financeThumbPreviewBox) {
-        if (dataUrl) {
-          financeImgThumbnail.src = dataUrl;
-          financeThumbPreviewBox.style.display = 'block';
-        } else {
-          financeThumbPreviewBox.style.display = 'none';
-        }
+    if (files.length === 1) {
+      const file = files[0];
+      if (financeDropText) {
+        financeDropText.innerHTML = `✓ <span style="color: #10b981; font-weight: 700;">${escapeHtml(file.name)}</span>`;
       }
-    });
+      if (financeDropSubText) {
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        financeDropSubText.textContent = `${sizeMb} MB • Ready for publication`;
+      }
+
+      const titleInput = document.getElementById('financeDocTitle');
+      if (titleInput && !titleInput.value.trim()) {
+        titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      }
+
+      generateThumbnail(file).then(dataUrl => {
+        financeCoverDataUrl = dataUrl;
+        if (financeImgThumbnail && financeThumbPreviewBox) {
+          if (dataUrl) {
+            financeImgThumbnail.src = dataUrl;
+            financeThumbPreviewBox.style.display = 'block';
+          } else {
+            financeThumbPreviewBox.style.display = 'none';
+          }
+        }
+      });
+    } else {
+      if (financeThumbPreviewBox) financeThumbPreviewBox.style.display = 'none';
+      financeCoverDataUrl = '';
+      if (financeDropText) {
+        financeDropText.innerHTML = `✓ <span style="color: #10b981; font-weight: 800;">${files.length} PDF Documents Selected</span>`;
+      }
+      const totalMb = (files.reduce((acc, f) => acc + f.size, 0) / (1024 * 1024)).toFixed(2);
+      if (financeDropSubText) {
+        financeDropSubText.textContent = `Total ${totalMb} MB • All documents will appear on the selected shelf`;
+      }
+    }
   }
 
   if (financeFileDropzone) {
@@ -1325,37 +1394,61 @@ function initFinancePdfModule() {
 
     financeFileDropzone.addEventListener('drop', (e) => {
       const dt = e.dataTransfer;
-      const file = dt && dt.files && dt.files[0];
-      if (file && (file.type === 'application/pdf' || file.name.endsWith('.pdf'))) {
-        handleFileSelected(file);
+      const files = dt && dt.files;
+      if (files && files.length > 0) {
+        if (financePdfInput) financePdfInput.files = files;
+        handleFilesSelected(files);
       } else {
-        alert('Please drop a valid PDF file.');
+        alert('Please drop valid PDF files.');
       }
     });
   }
 
   if (financePdfInput) {
     financePdfInput.addEventListener('change', (e) => {
-      const file = e.target.files && e.target.files[0];
-      handleFileSelected(file);
+      handleFilesSelected(e.target.files);
     });
   }
 
-  // Card HTML Builder
-  function createAssignmentCard(item) {
+  // Exact Dashed Empty State HTML Generator (Matching User's Screenshot)
+  function getEmptyShelfHtml(category) {
+    return `
+      <div class="lib-shelf-empty" data-shelf="${category}">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        </div>
+        <div class="empty-text">
+          <h4>No documents uploaded yet</h4>
+          <p>Upload your own PDF document to this shelf.</p>
+        </div>
+        <button type="button" class="btn-shelf-upload-empty" data-shelf="${category}">+ Upload PDF</button>
+      </div>
+    `;
+  }
+
+  // Shelf Card HTML Generator
+  function createShelfCardHtml(item) {
+    let ribbonHtml = '';
+    if (item.ribbon && item.ribbon !== 'none') {
+      const ribbonClass = item.ribbon === 'souvenir' ? 'ribbon-souvenir' : `ribbon-${item.ribbon}`;
+      ribbonHtml = `<div class="card-ribbon ${ribbonClass}">${item.ribbon.toUpperCase()}</div>`;
+    }
+
     let thumbHtml = '';
     if (item.coverDataUrl) {
       thumbHtml = `
-        <div class="pdf-thumb-wrapper">
-          <img src="${item.coverDataUrl}" alt="${escapeHtml(item.title)}" class="pdf-thumb-img">
+        <div class="lib-shelf-thumb-wrap">
+          <img src="${item.coverDataUrl}" alt="${escapeHtml(item.title)}" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
       `;
     } else {
+      let gradClass = item.category === 'casestudies' ? 'emerald-grad' : 'money-dada-grad';
       thumbHtml = `
-        <div class="pdf-thumb-wrapper">
-          <div class="pdf-thumb-placeholder">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 0.3rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>FINANCE</span>
+        <div class="lib-shelf-thumb-wrap">
+          <div class="shelf-thumb-gradient ${gradClass}">
+            <div class="news-masthead">${escapeHtml(item.subject || 'MBA FINANCE')}</div>
+            <div class="news-lead">${escapeHtml(item.title)}</div>
+            <div class="news-sub-banner">${escapeHtml(item.author || 'AsifTechGlobal Edition')}</div>
           </div>
         </div>
       `;
@@ -1369,38 +1462,19 @@ function initFinancePdfModule() {
       financeActiveBlobUrls.set(item.id, blobUrl);
     }
 
-    const downloadName = item.fileName || `${(item.title || 'Assignment').replace(/\s+/g, '_')}.pdf`;
-    const sizeMb = item.fileSize ? (item.fileSize / (1024 * 1024)).toFixed(2) + ' MB' : 'PDF Document';
+    const downloadName = item.fileName || `${(item.title || 'Document').replace(/\s+/g, '_')}.pdf`;
 
     return `
-      <div class="pdf-doc-card" data-id="${item.id}">
+      <div class="lib-card-shelf" data-id="${item.id}" data-category="${item.category}" data-title="${escapeHtml(item.title)}">
+        ${ribbonHtml}
         ${thumbHtml}
-        <div class="pdf-doc-meta">
-          <div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-              <span style="font-size: 0.68rem; font-weight: 800; color: var(--gold); background: rgba(230, 184, 0, 0.12); border: 1px solid rgba(230, 184, 0, 0.3); padding: 0.15rem 0.55rem; border-radius: 9999px; text-transform: uppercase;">
-                ${escapeHtml(item.subject || 'Corporate Finance')}
-              </span>
-            </div>
-            <h3 class="pdf-doc-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</h3>
-            <p class="pdf-doc-sub">${escapeHtml(item.author || 'MBA Finance 2026')}</p>
-          </div>
-
-          <div class="pdf-doc-stats">
-            <span>${sizeMb}</span>
-            <span>${item.dateStr || 'Active Assignment'}</span>
-          </div>
-
-          <div class="pdf-doc-actions">
-            <button type="button" class="btn-pdf-view btn-read-assignment" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-filename="${escapeHtml(downloadName)}">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-              <span>Read</span>
-            </button>
-            <a href="${blobUrl}" download="${escapeHtml(downloadName)}" class="btn-pdf-download" title="Download PDF">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>PDF</span>
-            </a>
-            <button type="button" class="btn-del-shelf btn-del-assignment" data-id="${item.id}" data-title="${escapeHtml(item.title)}" title="Delete Assignment" style="margin-left: auto;">
+        <div class="lib-shelf-card-info">
+          <h3 class="shelf-card-name" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</h3>
+          <p class="shelf-card-publisher" title="${escapeHtml(item.author)}">${escapeHtml(item.author || 'MBA Finance 2026')}</p>
+          <div class="shelf-card-actions">
+            <button type="button" class="btn-read-shelf btn-read-fin-card" data-id="${item.id}" data-title="${escapeHtml(item.title)}" data-filename="${escapeHtml(downloadName)}">Read</button>
+            <a href="${blobUrl}" download="${escapeHtml(downloadName)}" class="btn-dl-shelf" title="Download Document">PDF</a>
+            <button type="button" class="btn-del-shelf btn-del-fin-card" data-id="${item.id}" data-title="${escapeHtml(item.title)}" title="Delete Document">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -1409,167 +1483,198 @@ function initFinancePdfModule() {
     `;
   }
 
-  let cachedAssignments = [];
+  let cachedFinanceDocs = [];
 
-  async function renderFinanceAssignments() {
+  async function renderFinanceShelves() {
     try {
-      cachedAssignments = await getFinanceAssignmentsDB();
-      cachedAssignments.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+      cachedFinanceDocs = await getFinanceAssignmentsDB();
+      cachedFinanceDocs.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
-      if (pdfDocCount) {
-        pdfDocCount.textContent = `${cachedAssignments.length} Assignment${cachedAssignments.length === 1 ? '' : 's'} Available`;
-      }
+      const shelves = [
+        { key: 'assignments', trackId: 'financeAssignmentsTrack' },
+        { key: 'casestudies', trackId: 'financeCaseStudiesTrack' }
+      ];
 
-      if (cachedAssignments.length === 0) {
-        financePdfGrid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1.5rem; background: rgba(255,255,255,0.02); border: 1px dashed rgba(230, 184, 0, 0.35); border-radius: var(--radius-md);">
-            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            </div>
-            <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.3rem;">No MBA Finance Assignments Uploaded Yet</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 480px; margin: 0 auto 1.2rem;">
-              Click the upload button to publish your first MBA Finance assignment or research paper.
-            </p>
-            <button type="button" class="btn-gold" id="btnUploadFirstAssignment" style="padding: 0.6rem 1.4rem; font-weight: 800; font-size: 0.85rem;">
-              + Upload Assignment PDF
-            </button>
-          </div>
-        `;
+      shelves.forEach(({ key, trackId }) => {
+        const track = document.getElementById(trackId);
+        if (!track) return;
 
-        const btnFirst = document.getElementById('btnUploadFirstAssignment');
-        if (btnFirst) btnFirst.addEventListener('click', openUploadModal);
-        return;
-      }
-
-      financePdfGrid.innerHTML = cachedAssignments.map(createAssignmentCard).join('');
-
-      // Bind Read buttons
-      document.querySelectorAll('.btn-read-assignment').forEach(btn => {
-        btn.onclick = (e) => {
-          e.preventDefault();
-          const id = btn.getAttribute('data-id');
-          const title = btn.getAttribute('data-title') || 'Assignment';
-          const filename = btn.getAttribute('data-filename') || 'Assignment.pdf';
-          const item = cachedAssignments.find(a => a.id === id);
-          if (item) {
-            let url = financeActiveBlobUrls.get(id);
-            if (!url && item.pdfBlob) {
-              url = URL.createObjectURL(item.pdfBlob);
-              financeActiveBlobUrls.set(id, url);
-            }
-            openReader(url, title, filename);
-          }
-        };
+        const items = cachedFinanceDocs.filter(d => (d.category || 'assignments') === key);
+        if (items.length === 0) {
+          track.innerHTML = getEmptyShelfHtml(key);
+        } else {
+          track.innerHTML = items.map(item => createShelfCardHtml(item)).join('');
+        }
       });
 
-      // Bind Delete buttons (Protected with confirmation / master password)
-      document.querySelectorAll('.btn-del-assignment').forEach(btn => {
-        btn.onclick = async (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const id = btn.getAttribute('data-id');
-          const title = btn.getAttribute('data-title') || 'this assignment';
-
-          const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
-          if (!isUnlocked) {
-            const enteredPw = prompt('Administrator Verification: Enter master password to delete this assignment:');
-            if (enteredPw === null) return;
-            if (enteredPw === 'Asif@#69#@') {
-              sessionStorage.setItem('atg_admin_unlocked', 'true');
-            } else {
-              alert('Incorrect administrator password! Delete access denied.');
-              return;
-            }
-          }
-
-          if (confirm(`Are you sure you want to delete "${title}"?`)) {
-            try {
-              await deleteFinanceAssignmentDB(id);
-              if (financeActiveBlobUrls.has(id)) {
-                URL.revokeObjectURL(financeActiveBlobUrls.get(id));
-                financeActiveBlobUrls.delete(id);
-              }
-              await renderFinanceAssignments();
-            } catch (err) {
-              console.error('Failed to delete assignment:', err);
-              alert('Could not delete assignment: ' + err.message);
-            }
-          }
-        };
-      });
-
+      bindFinanceShelfEvents();
     } catch (err) {
-      console.error('Failed to render finance assignments:', err);
+      console.error('Failed to render finance shelves:', err);
     }
   }
 
-  // Form Submit Handler
+  function bindFinanceShelfEvents() {
+    // Read button
+    document.querySelectorAll('.btn-read-fin-card').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title') || 'Document';
+        const filename = btn.getAttribute('data-filename') || 'Document.pdf';
+        const item = cachedFinanceDocs.find(a => a.id === id);
+        if (item) {
+          let url = financeActiveBlobUrls.get(id);
+          if (!url && item.pdfBlob) {
+            url = URL.createObjectURL(item.pdfBlob);
+            financeActiveBlobUrls.set(id, url);
+          }
+          openReader(url, title, filename);
+        }
+      };
+    });
+
+    // Delete button (Protected by Administrator Password)
+    document.querySelectorAll('.btn-del-fin-card').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const title = btn.getAttribute('data-title') || 'this document';
+
+        const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+        if (!isUnlocked) {
+          const enteredPw = prompt('Administrator Verification: Enter master password to delete this document:');
+          if (enteredPw === null) return;
+          if (enteredPw === 'Asif@#69#@') {
+            sessionStorage.setItem('atg_admin_unlocked', 'true');
+          } else {
+            alert('Incorrect administrator password! Delete access denied.');
+            return;
+          }
+        }
+
+        if (confirm(`Are you sure you want to delete "${title}"?`)) {
+          try {
+            await deleteFinanceAssignmentDB(id);
+            if (financeActiveBlobUrls.has(id)) {
+              URL.revokeObjectURL(financeActiveBlobUrls.get(id));
+              financeActiveBlobUrls.delete(id);
+            }
+            await renderFinanceShelves();
+          } catch (err) {
+            console.error('Failed to delete finance document:', err);
+            alert('Could not delete document: ' + err.message);
+          }
+        }
+      };
+    });
+
+    // Shelf upload buttons & empty buttons
+    document.querySelectorAll('#shelfFinanceAssignments .btn-shelf-upload, #shelfFinanceCaseStudies .btn-shelf-upload, #shelfFinanceAssignments .btn-shelf-upload-empty, #shelfFinanceCaseStudies .btn-shelf-upload-empty').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const shelf = btn.getAttribute('data-shelf') || 'assignments';
+        openUploadModal(shelf);
+      };
+    });
+  }
+
+  // Form Submit Handler (Single or Unlimited Batch)
   if (formUploadFinanceAssignment) {
     formUploadFinanceAssignment.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!financeSelectedFile && (!financePdfInput.files || !financePdfInput.files[0])) {
-        alert('Please select an Assignment PDF file to upload.');
+      const filesToUpload = financeSelectedFiles.length > 0 ? financeSelectedFiles : (financePdfInput && financePdfInput.files ? Array.from(financePdfInput.files) : []);
+
+      if (filesToUpload.length === 0) {
+        alert('Please select at least one PDF file to upload.');
         return;
       }
 
-      const file = financeSelectedFile || financePdfInput.files[0];
-      const title = document.getElementById('financeDocTitle')?.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+      const targetCategory = document.getElementById('financeDocCategory')?.value || 'assignments';
+      const singleTitle = document.getElementById('financeDocTitle')?.value.trim();
       const subject = document.getElementById('financeDocSubject')?.value || 'Corporate Finance';
       const author = document.getElementById('financeDocAuthor')?.value.trim() || 'MBA Finance 2026';
+      const ribbon = document.getElementById('financeDocRibbon')?.value || 'popular';
 
       if (btnSubmitFinanceAssignment) {
         btnSubmitFinanceAssignment.disabled = true;
-        btnSubmitFinanceAssignment.textContent = 'Publishing Assignment...';
       }
-
-      let coverUrl = financeCoverDataUrl;
-      if (!coverUrl) {
-        coverUrl = await generateThumbnail(file);
-      }
-
-      const item = {
-        id: 'fin_asgn_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
-        title: title,
-        subject: subject,
-        author: author,
-        coverDataUrl: coverUrl,
-        pdfBlob: file,
-        fileName: file.name,
-        fileSize: file.size,
-        dateStr: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        timestamp: new Date().toISOString()
-      };
 
       try {
-        await saveFinanceAssignmentDB(item);
-        await renderFinanceAssignments();
+        for (let i = 0; i < filesToUpload.length; i++) {
+          const file = filesToUpload[i];
+          if (btnSubmitFinanceAssignment) {
+            btnSubmitFinanceAssignment.textContent = `Publishing ${i + 1} of ${filesToUpload.length}...`;
+          }
+
+          let fileTitle = '';
+          if (filesToUpload.length === 1 && singleTitle) {
+            fileTitle = singleTitle;
+          } else {
+            fileTitle = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+          }
+
+          let coverUrl = '';
+          if (filesToUpload.length === 1 && financeCoverDataUrl) {
+            coverUrl = financeCoverDataUrl;
+          } else {
+            coverUrl = await generateThumbnail(file);
+          }
+
+          const item = {
+            id: 'fin_doc_' + Date.now() + '_' + i + '_' + Math.random().toString(36).substring(2, 7),
+            category: targetCategory,
+            title: fileTitle,
+            subject: subject,
+            author: author,
+            ribbon: ribbon,
+            coverDataUrl: coverUrl,
+            pdfBlob: file,
+            fileName: file.name,
+            fileSize: file.size,
+            dateStr: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            // Sequential timestamps so items cascade neatly from left to right
+            timestamp: new Date(Date.now() + (filesToUpload.length - i) * 100).toISOString()
+          };
+
+          await saveFinanceAssignmentDB(item);
+        }
+
+        await renderFinanceShelves();
 
         closeUploadModal();
         formUploadFinanceAssignment.reset();
-        financeSelectedFile = null;
+        financeSelectedFiles = [];
         financeCoverDataUrl = '';
         if (financeThumbPreviewBox) financeThumbPreviewBox.style.display = 'none';
-        if (financeDropText) financeDropText.textContent = 'Click to choose Assignment PDF';
-        if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document here';
+        if (financeDropText) financeDropText.textContent = 'Click to choose PDF(s)';
+        if (financeDropSubText) financeDropSubText.textContent = 'or drag and drop your PDF document(s) here';
 
-        const vaultEl = document.getElementById('financePdfVault');
-        if (vaultEl) vaultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const targetShelfEl = document.getElementById(targetCategory === 'casestudies' ? 'shelfFinanceCaseStudies' : 'shelfFinanceAssignments');
+        if (targetShelfEl) {
+          targetShelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const trackContainer = targetShelfEl.querySelector('.lib-shelf-track-container');
+          if (trackContainer) {
+            trackContainer.scrollTo({ left: 0, behavior: 'smooth' });
+          }
+        }
 
       } catch (err) {
-        console.error('Failed to save assignment:', err);
-        alert('Could not save assignment: ' + err.message);
+        console.error('Failed to save finance document:', err);
+        alert('Could not save document: ' + err.message);
       } finally {
         if (btnSubmitFinanceAssignment) {
           btnSubmitFinanceAssignment.disabled = false;
-          btnSubmitFinanceAssignment.textContent = 'Publish Assignment to Vault';
+          btnSubmitFinanceAssignment.textContent = 'Publish Document to Vault';
         }
       }
     });
   }
 
-  // Initial Load
-  renderFinanceAssignments();
+  // Initial Render of both shelves
+  renderFinanceShelves();
 }
 
 // --------------------------------------------------------------------------

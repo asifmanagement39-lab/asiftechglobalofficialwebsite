@@ -107,35 +107,47 @@
        Financial Operations Architecture Grid
        ========================================================================== -->
   <section class="section" style="padding-top: 1rem;">
-    <div class="container">
       <!-- ==========================================================================
-           MBA Finance Assignment PDF Vault & Document Repository (TOP PROMINENT POSITION)
+           Shelf 1: MBA Finance Assignments (Horizontal Left-to-Right Flow)
            ========================================================================== -->
-      <div class="finance-pdf-panel" id="financePdfVault">
-        <div class="pdf-panel-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <div class="suite-badge" style="margin-bottom: 0.5rem;">MBA FINANCE // ASSIGNMENTS &amp; CASE REPOSITORY</div>
-            <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.4rem;">MBA Finance <span class="gradient-gold-text">Assignment Vault</span></h2>
-            <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 680px;">
-              Upload, preview, and download your MBA Finance assignments, case studies, project reports, and financial models with automated Page 1 cover thumbnails.
-            </p>
+      <section class="lib-shelf-section" id="shelfFinanceAssignments" style="padding-top: 1rem; padding-bottom: 2rem;">
+        <div class="lib-shelf-header">
+          <div class="lib-shelf-title-wrap">
+            <span class="lib-shelf-tag">MBA FINANCE // ASSIGNMENTS &amp; PROJECTS</span>
+            <h2 class="lib-shelf-title">Finance <span>Assignments</span></h2>
           </div>
-          <button type="button" class="btn-gold" id="btnOpenFinanceUpload" style="padding: 0.65rem 1.4rem; font-size: 0.85rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            <span>+ Upload Assignment PDF</span>
-          </button>
+          <div class="lib-shelf-controls">
+            <button type="button" class="btn-shelf-upload" data-shelf="assignments">+ Upload Assignment</button>
+            <button type="button" class="btn-shelf-nav prev" data-target="financeAssignmentsTrack" aria-label="Previous Assignment">&lt;</button>
+            <button type="button" class="btn-shelf-nav next" data-target="financeAssignmentsTrack" aria-label="Next Assignment">&gt;</button>
+          </div>
         </div>
 
-        <!-- Active Financial Documents Grid -->
-        <div class="pdf-documents-header" style="margin-top: 1.5rem;">
-          <h4>Active Finance Assignments &amp; Papers</h4>
-          <span class="pdf-count-badge" id="pdfDocCount">0 Assignments Available</span>
+        <div class="lib-shelf-track-container">
+          <div class="lib-shelf-track" id="financeAssignmentsTrack"></div>
+        </div>
+      </section>
+
+      <!-- ==========================================================================
+           Shelf 2: MBA Finance Case Studies (Horizontal Left-to-Right Flow)
+           ========================================================================== -->
+      <section class="lib-shelf-section" id="shelfFinanceCaseStudies" style="padding-top: 1rem; padding-bottom: 3rem;">
+        <div class="lib-shelf-header">
+          <div class="lib-shelf-title-wrap">
+            <span class="lib-shelf-tag">CASE STUDIES // EXECUTIVE SOLUTIONS &amp; VALUATION</span>
+            <h2 class="lib-shelf-title">Finance <span>Case Studies</span></h2>
+          </div>
+          <div class="lib-shelf-controls">
+            <button type="button" class="btn-shelf-upload" data-shelf="casestudies">+ Upload Case Study</button>
+            <button type="button" class="btn-shelf-nav prev" data-target="financeCaseStudiesTrack" aria-label="Previous Case Study">&lt;</button>
+            <button type="button" class="btn-shelf-nav next" data-target="financeCaseStudiesTrack" aria-label="Next Case Study">&gt;</button>
+          </div>
         </div>
 
-        <div class="pdf-documents-grid" id="financePdfGrid" style="margin-bottom: 2.5rem;">
-          <!-- Dynamic Document Cards populated here with live Page 1 thumbnails -->
+        <div class="lib-shelf-track-container">
+          <div class="lib-shelf-track" id="financeCaseStudiesTrack"></div>
         </div>
-      </div>
+      </section>
 
       <!-- ==========================================================================
            Financial Operations Architecture Grid (BELOW PDF SECTION)
@@ -299,25 +311,34 @@
       <div class="pdf-modal-body" style="padding: 1.8rem; overflow-y: auto; background: var(--bg-card, #0f1424);">
         <form id="formUploadFinanceAssignment" style="display: flex; flex-direction: column; gap: 1.1rem;">
           
+          <!-- Target Shelf / Category -->
+          <div class="bot-field-box">
+            <label class="bot-field-label" for="financeDocCategory">Target Finance Shelf *</label>
+            <select id="financeDocCategory" class="bot-select-input" required>
+              <option value="assignments" selected>Finance Assignments &amp; Projects</option>
+              <option value="casestudies">Finance Case Studies &amp; Solutions</option>
+            </select>
+          </div>
+
           <!-- PDF File Dropzone -->
           <div class="bot-field-box">
-            <label class="bot-field-label">Select Assignment PDF *</label>
+            <label class="bot-field-label">Select Document PDF *</label>
             <div class="lib-file-dropzone" id="financeFileDropzone" style="border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
-              <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" required>
+              <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" multiple required>
               <div class="dropzone-content">
                 <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                 </div>
-                <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose Assignment PDF</p>
-                <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop your PDF document here</p>
+                <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose PDF(s)</p>
+                <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop your PDF document(s) here</p>
               </div>
             </div>
           </div>
 
-          <!-- Assignment Title -->
+          <!-- Document Title -->
           <div class="bot-field-box">
-            <label class="bot-field-label" for="financeDocTitle">Assignment Title *</label>
-            <input type="text" id="financeDocTitle" class="bot-text-input" placeholder="e.g. Corporate Valuation &amp; DCF Model Assignment" required>
+            <label class="bot-field-label" for="financeDocTitle">Document Title *</label>
+            <input type="text" id="financeDocTitle" class="bot-text-input" placeholder="e.g. Corporate Valuation &amp; DCF Model Case Study" required>
           </div>
 
           <!-- Subject & Author -->
@@ -342,6 +363,18 @@
             </div>
           </div>
 
+          <!-- Ribbon Tag -->
+          <div class="bot-field-box">
+            <label class="bot-field-label" for="financeDocRibbon">Corner Ribbon Tag</label>
+            <select id="financeDocRibbon" class="bot-select-input">
+              <option value="popular">POPULAR (Orange)</option>
+              <option value="trending">TRENDING (Orange)</option>
+              <option value="featured">FEATURED (Orange)</option>
+              <option value="souvenir">SOUVENIR EDITION (Gold/Navy)</option>
+              <option value="none">No Ribbon</option>
+            </select>
+          </div>
+
           <!-- Live Thumbnail Preview -->
           <div id="financeThumbPreviewBox" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.9rem; text-align: center;">
             <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold); display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
@@ -351,7 +384,7 @@
           </div>
 
           <button type="submit" id="btnSubmitFinanceAssignment" class="btn-gold" style="padding: 0.85rem; font-weight: 800; font-size: 0.95rem; justify-content: center; width: 100%; margin-top: 0.4rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
-            Publish Assignment to Vault
+            Publish Document to Vault
           </button>
         </form>
       </div>
