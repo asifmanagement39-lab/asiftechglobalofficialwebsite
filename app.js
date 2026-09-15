@@ -1105,19 +1105,94 @@ function initBotConsoleModule() {
 
 // --------------------------------------------------------------------------
 // ATG Digital Knowledge Library Module
-// Zero emojis. Interactive category filter, real-time search, and PDF reader.
+// Multi-shelf Carousels, Global Search, Password-Protected Admin Upload & PDF.js Auto Thumbnail
+// Master Admin Password: Asif@#69#@
 // --------------------------------------------------------------------------
 function initLibraryModule() {
-  const booksGrid = document.getElementById('libBooksGrid');
-  if (!booksGrid) return;
+  const MASTER_ADMIN_PASSWORD = 'Asif@#69#@';
 
+  // 1. Shelf Carousel Scrolling
+  document.querySelectorAll('.btn-shelf-nav').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const track = document.getElementById(targetId);
+      if (!track) return;
+      const scrollAmount = btn.classList.contains('prev') ? -320 : 320;
+      track.parentElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  });
+
+  // 2. Global Unified Search
   const searchInput = document.getElementById('libSearchInput');
-  const clearSearchBtn = document.getElementById('btnLibClearSearch');
-  const catCards = document.querySelectorAll('.lib-cat-card');
-  const catPills = document.querySelectorAll('.lib-pill');
-  const resultsCount = document.getElementById('libResultsCount');
-  const activeBadge = document.getElementById('activeCategoryBadge');
+  const searchSubmitBtn = document.getElementById('btnLibSearchSubmit');
+  const searchResultsContainer = document.getElementById('libSearchResultsContainer');
+  const searchResultsGrid = document.getElementById('libSearchResultsGrid');
+  const searchResultsTitle = document.getElementById('libSearchResultsTitle');
+  const resetSearchBtn = document.getElementById('btnResetSearch');
 
+  function performSearch() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    if (!query) {
+      if (searchResultsContainer) searchResultsContainer.style.display = 'none';
+      return;
+    }
+
+    const allCards = document.querySelectorAll('.lib-card-shelf');
+    const matched = [];
+
+    allCards.forEach(card => {
+      const title = (card.getAttribute('data-title') || '').toLowerCase();
+      const author = (card.getAttribute('data-author') || '').toLowerCase();
+      const category = (card.getAttribute('data-category') || '').toLowerCase();
+
+      if (title.includes(query) || author.includes(query) || category.includes(query)) {
+        matched.push(card);
+      }
+    });
+
+    if (searchResultsContainer && searchResultsGrid) {
+      searchResultsGrid.innerHTML = '';
+      if (matched.length > 0) {
+        matched.forEach(card => {
+          const clone = card.cloneNode(true);
+          searchResultsGrid.appendChild(clone);
+        });
+        if (searchResultsTitle) searchResultsTitle.textContent = `Found ${matched.length} Publication${matched.length === 1 ? '' : 's'} matching "${query.toUpperCase()}"`;
+      } else {
+        searchResultsGrid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
+            <p style="font-size: 1.1rem; color: var(--text-main); font-weight: 700; margin-bottom: 0.4rem;">No matching documents found</p>
+            <p style="font-size: 0.85rem;">Try searching for different keywords, topics, or authors.</p>
+          </div>
+        `;
+        if (searchResultsTitle) searchResultsTitle.textContent = `Search results for "${query.toUpperCase()}"`;
+      }
+      searchResultsContainer.style.display = 'block';
+      searchResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      bindReaderButtons();
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', performSearch);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') performSearch();
+    });
+  }
+
+  if (searchSubmitBtn) {
+    searchSubmitBtn.addEventListener('click', performSearch);
+  }
+
+  if (resetSearchBtn && searchInput) {
+    resetSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      if (searchResultsContainer) searchResultsContainer.style.display = 'none';
+      searchInput.focus();
+    });
+  }
+
+  // 3. Interactive Reading Modal
   const readerModal = document.getElementById('libReaderModal');
   const modalBackdrop = document.getElementById('libModalBackdrop');
   const modalClose = document.getElementById('libModalClose');
@@ -1125,116 +1200,6 @@ function initLibraryModule() {
   const modalFrame = document.getElementById('libModalFrame');
   const modalDownload = document.getElementById('libModalDownload');
 
-  let selectedCategory = 'all';
-
-  function filterBooks() {
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const cards = booksGrid.querySelectorAll('.lib-book-card');
-    let visibleCount = 0;
-
-    cards.forEach(card => {
-      const cardCat = (card.getAttribute('data-category') || '').toLowerCase();
-      const cardTitle = (card.getAttribute('data-title') || card.querySelector('.lib-book-title')?.textContent || '').toLowerCase();
-      const cardAuthor = (card.getAttribute('data-author') || card.querySelector('.lib-book-author')?.textContent || '').toLowerCase();
-      const cardSynopsis = (card.querySelector('.lib-book-synopsis')?.textContent || '').toLowerCase();
-
-      const matchCategory = (selectedCategory === 'all' || cardCat === selectedCategory);
-      const matchQuery = (!query || cardTitle.includes(query) || cardAuthor.includes(query) || cardSynopsis.includes(query) || cardCat.includes(query));
-
-      if (matchCategory && matchQuery) {
-        card.style.display = 'flex';
-        visibleCount++;
-      } else {
-        card.style.display = 'none';
-      }
-    });
-
-    if (resultsCount) {
-      resultsCount.textContent = `${visibleCount} Title${visibleCount === 1 ? '' : 's'} Available`;
-    }
-
-    if (activeBadge) {
-      activeBadge.textContent = selectedCategory === 'all' 
-        ? (query ? `SEARCH: "${query.toUpperCase()}"` : 'SHOWING: ALL PUBLICATIONS')
-        : `CATEGORY: ${selectedCategory.toUpperCase()}`;
-    }
-  }
-
-  function setActiveCategory(cat) {
-    selectedCategory = cat;
-
-    catCards.forEach(c => {
-      if (c.getAttribute('data-category') === cat) {
-        c.classList.add('active');
-      } else {
-        c.classList.remove('active');
-      }
-    });
-
-    catPills.forEach(p => {
-      if (p.getAttribute('data-pill') === cat) {
-        p.classList.add('active');
-      } else {
-        p.classList.remove('active');
-      }
-    });
-
-    filterBooks();
-  }
-
-  // Category cards click
-  catCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const cat = card.getAttribute('data-category') || 'all';
-      setActiveCategory(cat);
-      const filterBar = document.querySelector('.lib-filter-bar');
-      if (filterBar) {
-        filterBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-
-  // Category pills click
-  catPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const cat = pill.getAttribute('data-pill') || 'all';
-      setActiveCategory(cat);
-    });
-  });
-
-  // Search Input & Action Button
-  const searchSubmitBtn = document.getElementById('btnLibSearchSubmit');
-
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      filterBooks();
-    });
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        filterBooks();
-        const catalogSection = document.getElementById('libCatalogSection') || document.querySelector('.lib-filter-bar');
-        if (catalogSection) catalogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  }
-
-  if (searchSubmitBtn) {
-    searchSubmitBtn.addEventListener('click', () => {
-      filterBooks();
-      const catalogSection = document.getElementById('libCatalogSection') || document.querySelector('.lib-filter-bar');
-      if (catalogSection) catalogSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-
-  if (clearSearchBtn && searchInput) {
-    clearSearchBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      filterBooks();
-      searchInput.focus();
-    });
-  }
-
-  // Reader Modal logic
   function openReader(pdfPath, title) {
     if (!readerModal || !modalFrame) return;
     if (modalTitle) modalTitle.textContent = `${title} - Reading Mode`;
@@ -1256,14 +1221,16 @@ function initLibraryModule() {
     document.body.style.overflow = '';
   }
 
-  document.querySelectorAll('.btn-lib-read').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const pdfPath = btn.getAttribute('data-pdf-path') || 'documents/money.pdf';
-      const title = btn.getAttribute('data-pdf-title') || 'Book';
-      openReader(pdfPath, title);
+  function bindReaderButtons() {
+    document.querySelectorAll('.btn-read-shelf').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const pdfPath = btn.getAttribute('data-pdf-path') || 'documents/money-by-dadashri.pdf';
+        const title = btn.getAttribute('data-pdf-title') || 'Document';
+        openReader(pdfPath, title);
+      };
     });
-  });
+  }
 
   if (modalClose) modalClose.addEventListener('click', closeReader);
   if (modalBackdrop) modalBackdrop.addEventListener('click', closeReader);
@@ -1274,7 +1241,262 @@ function initLibraryModule() {
     }
   });
 
-  // Initial filter run
-  filterBooks();
+  // 4. Admin Upload Modal & Automatic PDF.js Thumbnail Generator
+  const btnOpenAdminModal = document.getElementById('btnOpenAdminModal');
+  const libAdminModal = document.getElementById('libAdminModal');
+  const adminModalClose = document.getElementById('adminModalClose');
+  const adminModalBackdrop = document.getElementById('adminModalBackdrop');
+  const adminPasswordGate = document.getElementById('adminPasswordGate');
+  const adminUploadFormSection = document.getElementById('adminUploadFormSection');
+  const formAdminAuth = document.getElementById('formAdminAuth');
+  const adminAuthPassword = document.getElementById('adminAuthPassword');
+  const adminAuthError = document.getElementById('adminAuthError');
+  const btnToggleAdminPw = document.getElementById('btnToggleAdminPw');
+  const btnAdminLogout = document.getElementById('btnAdminLogout');
+  const uploadPdfFile = document.getElementById('uploadPdfFile');
+  const thumbPreviewBox = document.getElementById('thumbPreviewBox');
+  const imgAutoThumbnail = document.getElementById('imgAutoThumbnail');
+  const pdfOffscreenCanvas = document.getElementById('pdfOffscreenCanvas');
+  const formUploadBook = document.getElementById('formUploadBook');
+
+  let generatedCoverDataUrl = '';
+  let uploadedPdfBlobUrl = '';
+
+  function openAdminModal() {
+    if (!libAdminModal) return;
+    const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+    if (isUnlocked) {
+      if (adminPasswordGate) adminPasswordGate.style.display = 'none';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
+    } else {
+      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
+      if (adminAuthPassword) adminAuthPassword.value = '';
+      if (adminAuthError) adminAuthError.style.display = 'none';
+    }
+    libAdminModal.classList.add('open');
+    libAdminModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAdminModal() {
+    if (!libAdminModal) return;
+    libAdminModal.classList.remove('open');
+    libAdminModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (btnOpenAdminModal) btnOpenAdminModal.addEventListener('click', openAdminModal);
+  if (adminModalClose) adminModalClose.addEventListener('click', closeAdminModal);
+  if (adminModalBackdrop) adminModalBackdrop.addEventListener('click', closeAdminModal);
+
+  // Toggle password visibility
+  if (btnToggleAdminPw && adminAuthPassword) {
+    btnToggleAdminPw.addEventListener('click', () => {
+      const type = adminAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      adminAuthPassword.setAttribute('type', type);
+    });
+  }
+
+  // Admin Authentication Check
+  if (formAdminAuth) {
+    formAdminAuth.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = adminAuthPassword ? adminAuthPassword.value.trim() : '';
+      if (entered === MASTER_ADMIN_PASSWORD) {
+        sessionStorage.setItem('atg_admin_unlocked', 'true');
+        if (adminAuthError) adminAuthError.style.display = 'none';
+        if (adminPasswordGate) adminPasswordGate.style.display = 'none';
+        if (adminUploadFormSection) adminUploadFormSection.style.display = 'block';
+      } else {
+        if (adminAuthError) adminAuthError.style.display = 'block';
+        if (adminAuthPassword) {
+          adminAuthPassword.value = '';
+          adminAuthPassword.focus();
+        }
+      }
+    });
+  }
+
+  // Admin Logout / Lock
+  if (btnAdminLogout) {
+    btnAdminLogout.addEventListener('click', () => {
+      sessionStorage.removeItem('atg_admin_unlocked');
+      if (adminPasswordGate) adminPasswordGate.style.display = 'block';
+      if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
+      if (adminAuthPassword) adminAuthPassword.value = '';
+    });
+  }
+
+  // PDF Page 1 Automatic Thumbnail Generator
+  if (uploadPdfFile) {
+    uploadPdfFile.addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      uploadedPdfBlobUrl = URL.createObjectURL(file);
+
+      // Auto-extract title if empty
+      const titleInput = document.getElementById('uploadBookTitle');
+      if (titleInput && !titleInput.value) {
+        titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      }
+
+      try {
+        if (typeof window.pdfjsLib === 'undefined') {
+          console.warn('PDF.js not loaded, using fallback thumbnail');
+          return;
+        }
+
+        const arrayBuffer = await file.arrayBuffer();
+        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = pdfOffscreenCanvas || document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+
+        await page.render(renderContext).promise;
+        generatedCoverDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+        if (imgAutoThumbnail && thumbPreviewBox) {
+          imgAutoThumbnail.src = generatedCoverDataUrl;
+          thumbPreviewBox.style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Error generating PDF thumbnail:', err);
+      }
+    });
+  }
+
+  // Add Uploaded Book to DOM & Storage
+  function createShelfCardHtml(item) {
+    let ribbonHtml = '';
+    if (item.ribbon && item.ribbon !== 'none') {
+      const ribbonClass = item.ribbon === 'souvenir' ? 'ribbon-souvenir' : `ribbon-${item.ribbon}`;
+      ribbonHtml = `<div class="card-ribbon ${ribbonClass}">${item.ribbon.toUpperCase()}</div>`;
+    }
+
+    let thumbHtml = '';
+    if (item.coverDataUrl) {
+      thumbHtml = `
+        <div class="lib-shelf-thumb-wrap">
+          <img src="${item.coverDataUrl}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+      `;
+    } else {
+      thumbHtml = `
+        <div class="lib-shelf-thumb-wrap">
+          <div class="shelf-thumb-gradient gold-black-grad">
+            <div class="news-masthead">${item.title}</div>
+            <div class="news-lead">${item.author || 'AsifTechGlobal Edition'}</div>
+            <div class="news-sub-banner">Digital Publication</div>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="lib-card-shelf" data-category="${item.category}" data-title="${item.title}" data-author="${item.author}">
+        ${ribbonHtml}
+        ${thumbHtml}
+        <div class="lib-shelf-card-info">
+          <h3 class="shelf-card-name">${item.title}</h3>
+          <p class="shelf-card-publisher">${item.author}</p>
+          <div class="shelf-card-actions">
+            <button type="button" class="btn-read-shelf" data-pdf-path="${item.pdfPath}" data-pdf-title="${item.title}">Read</button>
+            <a href="${item.pdfPath}" download="${item.title.replace(/\s+/g, '_')}.pdf" class="btn-dl-shelf" title="Download">PDF</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function appendCustomBook(item) {
+    let trackId = 'booksTrack';
+    if (item.category === 'news') trackId = 'newsTrack';
+    else if (item.category === 'magazine') trackId = 'magTrack';
+    else if (item.category === 'study') trackId = 'studyTrack';
+    else if (item.category === 'free') trackId = 'freeTrack';
+
+    const track = document.getElementById(trackId);
+    if (track) {
+      const tempWrapper = document.createElement('div');
+      tempWrapper.innerHTML = createShelfCardHtml(item);
+      const cardEl = tempWrapper.firstElementChild;
+      track.prepend(cardEl);
+      bindReaderButtons();
+    }
+  }
+
+  // Load saved custom uploads
+  function loadCustomUploads() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('atg_custom_library_items') || '[]');
+      saved.forEach(item => appendCustomBook(item));
+    } catch (e) {
+      console.error('Failed to load custom uploads:', e);
+    }
+  }
+
+  // Form Submit: Publish Book
+  if (formUploadBook) {
+    formUploadBook.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const category = document.getElementById('uploadShelfCategory')?.value || 'books';
+      const title = document.getElementById('uploadBookTitle')?.value.trim() || 'Untitled Publication';
+      const author = document.getElementById('uploadBookAuthor')?.value.trim() || 'AsifTechGlobal Author';
+      const ribbon = document.getElementById('uploadBookRibbon')?.value || 'popular';
+
+      const item = {
+        id: 'book_' + Date.now(),
+        category: category,
+        title: title,
+        author: author,
+        ribbon: ribbon,
+        coverDataUrl: generatedCoverDataUrl,
+        pdfPath: uploadedPdfBlobUrl || 'documents/money-by-dadashri.pdf',
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        const existing = JSON.parse(localStorage.getItem('atg_custom_library_items') || '[]');
+        existing.unshift(item);
+        localStorage.setItem('atg_custom_library_items', JSON.stringify(existing));
+      } catch (err) {
+        console.warn('Storage limit reached, displaying in current session:', err);
+      }
+
+      appendCustomBook(item);
+      closeAdminModal();
+      formUploadBook.reset();
+      generatedCoverDataUrl = '';
+      if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+
+      // Scroll to target shelf
+      let targetShelf = 'shelfBooks';
+      if (category === 'news') targetShelf = 'shelfNews';
+      else if (category === 'magazine') targetShelf = 'shelfMagazines';
+      else if (category === 'study') targetShelf = 'shelfStudy';
+      else if (category === 'free') targetShelf = 'shelfFree';
+
+      const shelfEl = document.getElementById(targetShelf);
+      if (shelfEl) shelfEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Initial bindings & load custom uploads
+  bindReaderButtons();
+  loadCustomUploads();
 }
+
 
