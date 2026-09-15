@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASIF TECH GLOBAL | World's Leading Digital Solutions</title>
+  <meta name="description" content="Asif Tech Global is India's premier technology consultancy. We build scalable platforms, high-performance web applications, cloud architectures, and digital systems.">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="home">
+
+  <!-- ==========================================================================
+       Navigation Bar (ONLY "Home" in Menu)
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <!-- Brand Logo -->
+      <a href="#home" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="#home" class="nav-link-item active">Home</a>
+
+        <!-- MBA Menu with separate HR & FINANCE options -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn" id="mbaDropdownBtn" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <!-- Option 1: HR -->
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Human Resources, Payroll & Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <!-- Option 2: FINANCE -->
+            <a href="finance.html" class="dropdown-item" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST & Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="library.html" class="nav-link-item">Library</a>
+        <a href="youtube.html" class="nav-link-item">YouTube</a>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="nav-right">
+        <!-- Theme Toggle (Clean SVG Sun/Moon, Zero Emojis) -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="#pricing" class="btn-gold">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Hero Section
+       ========================================================================== -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-meta-badge">EST. 2026 • INDIA'S #1 TECH FIRM</div>
+      <h1 class="hero-title">Building The <br><span class="gradient-gold-text">Digital Future</span></h1>
+      <p class="hero-subtitle">
+        Bridging the gap between complex engineering and everyday enterprise impact. 
+        From high-throughput platforms to resilient cloud architectures.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#ecosystem" class="btn-gold">Explore Ecosystem</a>
+        <a href="#pricing" class="btn-outline-white">View Plans</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Vision / Why We Exist (4 Pillars)
+       ========================================================================== -->
+  <section class="section section-bg-dark" id="vision">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Our Vision</div>
+        <h2 class="section-h2">Why We Exist</h2>
+        <p style="max-width: 680px; margin: 0.8rem auto 0; color: var(--text-muted);">
+          We engineer digital systems that handle high traffic with absolute reliability and sub-second response times.
+        </p>
+      </div>
+
+      <div class="vision-grid">
+        <div class="vision-card">
+          <div class="vision-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3>Speed</h3>
+          <p>Optimized low-latency delivery and real-time processing pipelines.</p>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>Security</h3>
+          <p>Enterprise-grade infrastructure protection and hardened access controls.</p>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3>Scale</h3>
+          <p>Distributed server clusters engineered to handle millions of requests daily.</p>
+        </div>
+
+        <div class="vision-card">
+          <div class="vision-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>Innovation</h3>
+          <p>Continuous evolution adopting modern architectures and standards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Leadership & Engineering Team
+       ========================================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Our Experts</div>
+        <h2 class="section-h2">Meet The Team</h2>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">A</div>
+          <h4>Asif Khan</h4>
+          <div class="team-role">Founder & CEO</div>
+          <p>Full stack systems engineer with 5+ years experience architecting scalable corporate platforms.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="team-avatar">R</div>
+          <h4>Rahul Dev</h4>
+          <div class="team-role">Lead Developer</div>
+          <p>Python and systems specialist focusing on backend performance, concurrency, and API throughput.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="team-avatar">S</div>
+          <h4>Sara Ali</h4>
+          <div class="team-role">UI/UX Designer</div>
+          <p>Human-centered designer crafting accessible, responsive, and high-conversion web interfaces.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="team-avatar">M</div>
+          <h4>Mohd Zaid</h4>
+          <div class="team-role">Cloud Engineer</div>
+          <p>AWS and GCP certified engineer managing deployment pipelines and 99.9% uptime guarantees.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Core Ecosystem & Capabilities
+       ========================================================================== -->
+  <section class="section section-bg-dark" id="ecosystem">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">What We Do</div>
+        <h2 class="section-h2">Our Core Ecosystem</h2>
+      </div>
+
+      <div class="ecosystem-grid">
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          <h3>Sarkari Job Station</h3>
+          <p>Automated ingestion algorithms fetching verified employment notices and syllabus updates with sub-minute publishing.</p>
+          <a href="#home" class="ecosystem-link">Visit Portal &rarr;</a>
+        </div>
+
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <h3>Affiliate Mega Store</h3>
+          <p>An API-driven commerce platform cataloging products with real-time price indexing, category routing, and inventory feeds.</p>
+          <a href="#home" class="ecosystem-link">Start Shopping &rarr;</a>
+        </div>
+
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <h3>Business Intelligence</h3>
+          <p>Proprietary telemetry dashboards monitoring user retention, conversion funnels, and infrastructure workloads.</p>
+          <a href="#home" class="ecosystem-link">Login Panel &rarr;</a>
+        </div>
+
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+          <h3>Custom Web Dev</h3>
+          <p>High-performance websites and bespoke applications built with pure HTML5, modern JavaScript, Node.js, and Python.</p>
+          <a href="#home" class="ecosystem-link">View Portfolio &rarr;</a>
+        </div>
+
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+          </svg>
+          <h3>Cloud Architecture</h3>
+          <p>Resilient server provisioning on AWS and Google Cloud Platform with automated backups, load balancers, and SSL.</p>
+          <a href="#home" class="ecosystem-link">Learn More &rarr;</a>
+        </div>
+
+        <div class="ecosystem-card">
+          <svg class="ecosystem-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <h3>Digital Growth</h3>
+          <p>Technical search optimization, canonical structural audits, and programmatic marketing pipelines to expand reach.</p>
+          <a href="#home" class="ecosystem-link">Get Strategy &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Dedicated HR & Finance Enterprise Section
+       ========================================================================== -->
+  <section class="section" id="hr-finance">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Enterprise Systems // Workforce & Capital</div>
+        <h2 class="section-h2">HR & Finance Infrastructure</h2>
+        <p style="max-width: 720px; margin: 0.8rem auto 0; color: var(--text-muted);">
+          Purpose-built digital infrastructure unifying automated employee payroll disbursement, 
+          statutory compliance, and real-time corporate financial ledger auditing.
+        </p>
+      </div>
+
+      <!-- Dual Suite Architecture (HR + Finance) -->
+      <div class="hr-finance-grid">
+        <!-- HR Column -->
+        <div class="suite-card" id="mba-hr">
+          <div class="suite-header">
+            <div class="suite-badge">HR & Workforce Suite</div>
+            <h3>Human Capital Management</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              Automating employee life-cycles from talent recruitment to compliant automated payroll runs.
+            </p>
+          </div>
+
+          <ul class="suite-feature-list">
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div>
+                <strong>Automated Payroll Engine</strong>
+                <p>One-click salary disbursement with automated PF, ESI, and TDS calculations.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div>
+                <strong>Biometric & Shift Scheduling</strong>
+                <p>Real-time attendance logs, geofenced clock-ins, and flexible rotational shift rosters.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </div>
+              <div>
+                <strong>Leave & Headcount Governance</strong>
+                <p>Multi-tier approval workflows, department quotas, and attrition telemetry.</p>
+              </div>
+            </li>
+          </ul>
+
+          <div style="margin-top: 2rem;">
+            <a href="hr.html" class="btn-gold">Explore HR Portal &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Finance Column -->
+        <div class="suite-card" id="mba-finance">
+          <div class="suite-header">
+            <div class="suite-badge">Financial Operations Suite</div>
+            <h3>Corporate Treasury & Accounting</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              Full visibility over working capital, cash flow forecasting, and automated ledger balancing.
+            </p>
+          </div>
+
+          <ul class="suite-feature-list">
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div>
+                <strong>Real-Time Ledger & Cash Flow</strong>
+                <p>Instant tracking of inflows, operational expenditures, and revenue runway.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <div>
+                <strong>GST-Compliant Automated Invoicing</strong>
+                <p>Dynamic tax generation, recurring billing pipelines, and client payment links.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+              </div>
+              <div>
+                <strong>Audit Trails & Statutory Filing</strong>
+                <p>Immutable ledger change logs, balance sheets, and exportable financial audit files.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </div>
+              <div>
+                <strong>Financial PDF Vault & E-Library</strong>
+                <p>Upload corporate publications, books & audit reports with real-time automated thumbnail rendering.</p>
+              </div>
+            </li>
+          </ul>
+
+          <div style="margin-top: 2rem;">
+            <a href="finance.html" class="btn-gold">Explore Finance Portal &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Payroll & Net Salary Calculator Widget -->
+      <div class="payroll-calculator-panel">
+        <div class="calc-intro">
+          <div class="suite-badge" style="margin-bottom: 0.5rem;">Interactive Utility</div>
+          <h3>Enterprise Payroll & Net Take-Home Calculator</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Test our automated salary computation engine. Adjust the monthly gross salary to see the live deduction breakdown.
+          </p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- Control Side -->
+          <div class="calc-control-col">
+            <label for="grossSalaryInput" class="calc-label">Monthly Gross CTC (Rs)</label>
+            <div class="salary-input-wrapper">
+              <span class="currency-prefix">Rs</span>
+              <input type="number" id="grossSalaryInput" class="salary-num-input" value="65000" min="15000" max="500000" step="1000">
+            </div>
+
+            <div style="margin-top: 1.2rem;">
+              <input type="range" id="grossSalaryRange" class="calc-slider" min="15000" max="300000" step="1000" value="65000">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.4rem; font-family: var(--font-mono);">
+                <span>Rs 15,000</span>
+                <span>Rs 150,000</span>
+                <span>Rs 300,000+</span>
+              </div>
+            </div>
+
+            <div class="calc-notice">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Calculations strictly follow statutory EPF 12% rules, standard HRA ceilings, and professional tax slabs.</span>
+            </div>
+          </div>
+
+          <!-- Breakdown Side -->
+          <div class="calc-result-col">
+            <div class="net-salary-card">
+              <span class="net-label">Estimated Net In-Hand Salary</span>
+              <div class="net-amount" id="netSalaryDisplay">Rs 58,750</div>
+              <span class="net-sub">per month credited to employee bank account</span>
+            </div>
+
+            <div class="breakdown-table">
+              <div class="breakdown-row">
+                <span>Basic Pay (50%)</span>
+                <span id="basicPayDisplay" class="val-pos">Rs 32,500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>House Rent Allowance / HRA (30%)</span>
+                <span id="hraDisplay" class="val-pos">Rs 19,500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Special Allowance (20%)</span>
+                <span id="specialAllowanceDisplay" class="val-pos">Rs 13,000</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Employee Provident Fund / EPF (12%)</span>
+                <span id="epfDisplay" class="val-neg">-Rs 3,900</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Professional Tax (PT)</span>
+                <span id="ptDisplay" class="val-neg">-Rs 200</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Estimated Tax Deducted at Source (TDS)</span>
+                <span id="tdsDisplay" class="val-neg">-Rs 2,150</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Animated Stats Section
+       ========================================================================== -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-number" data-target="50">50+</div>
+          <div class="stat-label">Global Clients</div>
+        </div>
+        <div>
+          <div class="stat-number" data-target="1.2">1.2M</div>
+          <div class="stat-label">Lines of Code</div>
+        </div>
+        <div>
+          <div class="stat-number" data-target="150">150K</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        <div>
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Engineering Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Client Testimonials (Zero Emojis, Clean SVG Stars)
+       ========================================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Client Reviews</div>
+        <h2 class="section-h2">What They Say</h2>
+      </div>
+
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="stars-row">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p>"ASIF TECH GLOBAL engineered an exceptional platform for our startup. Speed, code quality, and delivery were second to none. Highly recommended."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">V</div>
+            <div class="author-info">
+              <h4>Vikas Sharma</h4>
+              <span>CEO, QuickBiz India</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars-row">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p>"The automated alert feed delivered critical notifications ahead of competitors. The accuracy and stability have been flawless throughout."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">P</div>
+            <div class="author-info">
+              <h4>Priya Verma</h4>
+              <span>Govt. Job Aspirant, UP</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars-row">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p>"Their cloud engineering division migrated our entire server infrastructure to AWS with zero downtime. Reliable, professional, and knowledgeable."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">R</div>
+            <div class="author-info">
+              <h4>Rajesh Mehta</h4>
+              <span>CTO, TechVenture Pvt Ltd</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       The Process (1, 2, 3, 4)
+       ========================================================================== -->
+  <section class="section section-bg-dark">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">How We Work</div>
+        <h2 class="section-h2">The Process</h2>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-step">
+          <div class="step-num">1</div>
+          <h3>Strategy</h3>
+          <p>We analyze technical requirements, database architecture, and performance goals.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">2</div>
+          <h3>Design</h3>
+          <p>Creating intuitive user interfaces and resilient data schema pipelines.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <h3>Develop</h3>
+          <p>Engineering with clean, standards-compliant, modular code practices.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">4</div>
+          <h3>Deploy</h3>
+          <p>Cloud deployment with automated load monitoring and 99.9% uptime validation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Pricing Plans
+       ========================================================================== -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Invest In Growth</div>
+        <h2 class="section-h2">Pricing Plans</h2>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="price">Rs 15k <span>/project</span></div>
+          <ul class="features-list">
+            <li>Standard Corporate Website</li>
+            <li>Technical SEO Foundation</li>
+            <li>Responsive Mobile Layout</li>
+            <li>1 Month Technical Support</li>
+          </ul>
+          <button class="btn-gold" style="font-size: 0.75rem; padding: 0.6rem 1.4rem;" onclick="handleSelectPlan('Starter')">Choose Plan</button>
+        </div>
+
+        <div class="pricing-card highlight">
+          <div class="pricing-badge">BEST VALUE</div>
+          <h3>Business</h3>
+          <div class="price">Rs 45k <span>/project</span></div>
+          <ul class="features-list">
+            <li>Dynamic Full-Stack Web App</li>
+            <li>Administrative Control Panel</li>
+            <li>Payment Gateway Integration</li>
+            <li>6 Months Extended Support</li>
+          </ul>
+          <button class="btn-gold" onclick="handleSelectPlan('Business')">Choose Plan</button>
+        </div>
+
+        <div class="pricing-card">
+          <h3>Enterprise</h3>
+          <div class="price">Rs 1L+ <span>/project</span></div>
+          <ul class="features-list">
+            <li>Full Scale Tailored Architecture</li>
+            <li>Custom Data Processing & APIs</li>
+            <li>Cloud Architecture (AWS / GCP)</li>
+            <li>24/7 Priority Support SLA</li>
+          </ul>
+          <button class="btn-gold" style="font-size: 0.75rem; padding: 0.6rem 1.4rem;" onclick="handleSelectPlan('Enterprise')">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Frequently Asked Questions
+       ========================================================================== -->
+  <section class="section section-bg-dark">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-h2">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-wrap">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>How do I start a project?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Simply send an inquiry via our contact form or email. Our technical team responds with a detailed scope assessment within 2 hours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you provide Managed Hosting?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. We deploy and manage dedicated cloud instances on AWS and Google Cloud Platform with a 99.9% uptime service level agreement.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What technologies do you specialize in?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Our core stack includes Python, Node.js, HTML5, modern vanilla JavaScript, PostgreSQL, MySQL, Redis, Docker, and Linux server environments.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What is the standard turnaround time?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Standard responsive websites take 1 to 2 weeks. Comprehensive full-stack applications take 4 to 8 weeks, while custom enterprise platforms range from 3 to 6 months depending on requirements.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Do you provide post-launch support and warranty?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes. All plans include dedicated post-launch support ranging from 1 to 6 months. Enterprise contracts include 24/7 priority operational coverage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Newsletter (Zero Emojis)
+       ========================================================================== -->
+  <section class="section">
+    <div class="container">
+      <div class="newsletter-section">
+        <h2>Stay Updated</h2>
+        <p>Subscribe for quarterly system architecture briefings and technology releases.</p>
+        <form class="newsletter-form" id="newsletter-form" onsubmit="event.preventDefault(); handleSubscribe();">
+          <input type="email" class="newsletter-input" id="nl-email" placeholder="Enter your email address..." required>
+          <button type="submit" class="btn-gold">Subscribe</button>
+        </form>
+        <div id="nl-msg" style="margin-top: 15px; font-size: 14px; min-height: 20px; color: var(--gold);"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-cols">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 1.2rem;">ASIF TECH <span>GLOBAL</span></div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
+            Asif Tech Global is India's premier technology consultancy. We transform business processes through dependable digital engineering.
+          </p>
+        </div>
+
+        <div>
+          <h3>Navigation</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="hr.html">HR Management</a></li>
+            <li><a href="finance.html">Finance Operations</a></li>
+            <li><a href="youtube.html">YouTube (@AsifTechGlobalOfficial)</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Engineering</h3>
+          <ul>
+            <li><a href="#ecosystem">Custom Web Dev</a></li>
+            <li><a href="#ecosystem">Cloud Architecture</a></li>
+            <li><a href="#ecosystem">Telemetry Dashboards</a></li>
+            <li><a href="#ecosystem">System Optimization</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+            <li><span style="color: var(--text-dim);">Support:</span> Mon - Sat (24/7 Operations)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top button (Clean text arrow, zero emojis) -->
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>

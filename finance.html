@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corporate Finance & Treasury Systems | ASIF TECH GLOBAL</title>
+  <meta name="description" content="Enterprise Corporate Finance and Treasury platform by Asif Tech Global. Real-time ledgers, GST invoicing, cash flow forecasting, and automated PDF document vault.">
+  
+  <link rel="stylesheet" href="style.css">
+  <script src="pdf.min.js"></script>
+</head>
+<body id="finance-portal">
+
+  <!-- ==========================================================================
+       Navigation Bar
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link-item">Home</a>
+
+        <!-- MBA Menu with separate HR & FINANCE options -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn active" id="mbaDropdownBtn" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <!-- Option 1: HR -->
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Human Resources, Payroll & Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <!-- Option 2: FINANCE (Active on this page) -->
+            <a href="finance.html" class="dropdown-item active" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST & Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="library.html" class="nav-link-item">Library</a>
+        <a href="youtube.html" class="nav-link-item">YouTube</a>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="nav-right">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <button type="button" class="btn-gold" id="navUploadPdfBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Upload PDF</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Dedicated Finance Page Hero
+       ========================================================================== -->
+  <header class="page-hero">
+    <div class="container">
+      <div class="hero-meta-badge">CORPORATE FINANCE // TREASURY PORTAL</div>
+      <h1 class="page-hero-title">
+        Corporate Finance & <br><span class="gradient-gold-text">Treasury Operations</span>
+      </h1>
+      <p class="page-hero-subtitle">
+        Institutional financial architecture providing real-time cash flow runway analytics, automated GST compliance invoicing, balance sheet auditing, and an integrated PDF document vault with automated cover thumbnail generation.
+      </p>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Financial Operations Architecture Grid
+       ========================================================================== -->
+  <section class="section" style="padding-top: 1rem;">
+    <div class="container">
+      <!-- ==========================================================================
+           Finance PDF Vault & Automated Thumbnail Generator (TOP PROMINENT POSITION)
+           ========================================================================== -->
+      <div class="finance-pdf-panel" id="financePdfVault">
+        <div class="pdf-panel-header">
+          <div class="suite-badge" style="margin-bottom: 0.5rem;">Document Engine // Automated Thumbnailing</div>
+          <h3>Financial Publications & Document Repository</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 680px;">
+            Upload any financial book, publication, or audit statement. Our integrated client-side engine automatically renders Page 1 into a crisp visual cover thumbnail on the fly.
+          </p>
+        </div>
+
+        <!-- Active Financial Documents Grid (Preloaded Money Book) -->
+        <div class="pdf-documents-header">
+          <h4>Active Financial Documents</h4>
+          <span class="pdf-count-badge" id="pdfDocCount">1 Document Available</span>
+        </div>
+
+        <div class="pdf-documents-grid" id="financePdfGrid" style="margin-bottom: 2.5rem;">
+          <!-- Dynamic Document Cards populated here with live Page 1 thumbnails -->
+        </div>
+
+        <!-- Hidden File Input for Navbar Upload Button -->
+        <input type="file" id="pdfFileInput" accept="application/pdf" style="display: none;">
+
+        <!-- Progress / Status Indicator -->
+        <div class="pdf-process-status" id="pdfProcessStatus" style="display: none;">
+          <div class="status-spinner"></div>
+          <span id="pdfStatusText">Rendering PDF Page 1 into cover thumbnail...</span>
+        </div>
+      </div>
+
+      <!-- ==========================================================================
+           Financial Operations Architecture Grid (BELOW PDF SECTION)
+           ========================================================================== -->
+      <div class="hr-finance-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+        <!-- Module 1: Ledger & Cash Flow -->
+        <div class="suite-card">
+          <div class="suite-header">
+            <div class="suite-badge">Working Capital</div>
+            <h3>Real-Time Ledger & Cash Flow</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              Instant telemetry across multi-currency corporate bank accounts, debt servicing schedules, and runway forecasting.
+            </p>
+          </div>
+          <ul class="suite-feature-list">
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div>
+                <strong>Cash Runway Projections</strong>
+                <p>Dynamic forecasting of monthly operational expenditure burn rate against booked recurring revenue.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              </div>
+              <div>
+                <strong>Automated Bank Reconciliation</strong>
+                <p>Automated matching of bank statement line items with account receivables and payables.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Module 2: GST Invoicing -->
+        <div class="suite-card">
+          <div class="suite-header">
+            <div class="suite-badge">Statutory Taxation</div>
+            <h3>GST-Compliant Automated Invoicing</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              HSN/SAC code validation, multi-tier tax computations (CGST/SGST/IGST), and e-way bill pipeline integration.
+            </p>
+          </div>
+          <ul class="suite-feature-list">
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <div>
+                <strong>Automated Recurring Invoices</strong>
+                <p>Zero-touch customer billing runs with instant PDF tax invoice delivery and UPI payment links.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+              </div>
+              <div>
+                <strong>Receivables Aging Alerts</strong>
+                <p>Automated payment reminders and dunning management for overdue corporate balances.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Module 3: Audit & Balances -->
+        <div class="suite-card">
+          <div class="suite-header">
+            <div class="suite-badge">Audit Governance</div>
+            <h3>Audit Trails & Statutory Balance Sheets</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              Immutable double-entry book-keeping with real-time trial balance calculation and financial export packages.
+            </p>
+          </div>
+          <ul class="suite-feature-list">
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+              </div>
+              <div>
+                <strong>Immutable Audit Logging</strong>
+                <p>Tamper-proof audit logs recording ledger edits, credit notes, and authorization workflows.</p>
+              </div>
+            </li>
+            <li>
+              <div class="suite-feature-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <div>
+                <strong>Statutory Filing Packages</strong>
+                <p>Exportable P&amp;L balance sheets formatted for chartered accountants and statutory auditors.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <div class="brand-logo" style="margin-bottom: 0.8rem;">
+            ASIF TECH <span>GLOBAL</span>
+          </div>
+          <p>
+            World-class digital platform engineering, enterprise cloud infrastructures, and high-throughput systems.
+          </p>
+        </div>
+
+        <div>
+          <h3>Portals</h3>
+          <ul>
+            <li><a href="index.html">Home Platform</a></li>
+            <li><a href="hr.html">HR & Workforce Suite</a></li>
+            <li><a href="finance.html">Finance & Treasury Portal</a></li>
+            <li><a href="youtube.html">YouTube (@AsifTechGlobalOfficial)</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Engineering</h3>
+          <ul>
+            <li><a href="index.html#ecosystem">Custom Web Dev</a></li>
+            <li><a href="index.html#ecosystem">Cloud Architecture</a></li>
+            <li><a href="index.html#ecosystem">System Optimization</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+      </div>
+    </div>
+  </footer>
+
+  <!-- In-Page PDF Reader Modal -->
+  <div class="pdf-modal" id="pdfModal" aria-hidden="true">
+    <div class="pdf-modal-backdrop" id="pdfModalBackdrop"></div>
+    <div class="pdf-modal-container">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title" id="pdfModalTitle">Document Viewer</div>
+        <div class="pdf-modal-actions">
+          <a href="#" id="pdfModalDownload" class="btn-pdf-action" download title="Download PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download</span>
+          </a>
+          <button type="button" class="btn-pdf-close" id="closePdfModal" aria-label="Close Viewer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="pdf-modal-body">
+        <iframe id="pdfModalFrame" src="" title="PDF Document Viewer"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to top button -->
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>

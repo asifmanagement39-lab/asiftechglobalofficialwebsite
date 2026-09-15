@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asif Tech Global Official Channel (@AsifTechGlobalOfficial) | Video Hub</title>
+  <meta name="description" content="Official YouTube Channel of Asif Tech Global (@AsifTechGlobalOfficial). Tutorials on PowerShell, Cybersecurity, Ethical Hacking, MBA business strategies, and tech tips.">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="youtube-portal">
+
+  <!-- ==========================================================================
+       Navigation Bar
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link-item">Home</a>
+
+        <!-- MBA Menu with separate HR & FINANCE options -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn" id="mbaDropdownBtn" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <!-- Option 1: HR -->
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Human Resources, Payroll & Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <!-- Option 2: FINANCE -->
+            <a href="finance.html" class="dropdown-item" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST & Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="library.html" class="nav-link-item">Library</a>
+        <a href="youtube.html" class="nav-link-item active">YouTube</a>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="nav-right">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <!-- Direct Channel Subscribe Button -->
+        <a href="https://www.youtube.com/@AsifTechGlobalOfficial?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="btn-yt-sub" style="padding: 0.55rem 1.15rem; font-size: 0.8rem;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Subscribe @AsifTechGlobalOfficial
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Hero Section
+       ========================================================================== -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="badge" style="display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 1.2rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        OFFICIAL CHANNEL // @ASIFTECHGLOBALOFFICIAL
+      </div>
+      <h1 class="page-hero-title">Asif Tech Global Official Video Hub</h1>
+      <p class="page-hero-subtitle">
+        The official channel repository for @AsifTechGlobalOfficial. Practical guides on PowerShell automation, Cybersecurity, MBA & business management, and high-performance computing.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Official Channel Profile Banner
+       ========================================================================== -->
+  <section class="yt-profile-section">
+    <div class="container">
+      <div class="yt-channel-banner">
+        <!-- Top ATG Graphic Banner -->
+        <div class="yt-channel-cover-wrap">
+          <img src="assets/atg-channel-banner.png" alt="Asif Tech Global Channel Banner" class="yt-channel-cover-img">
+        </div>
+
+        <!-- Channel Info & Actions -->
+        <div class="yt-channel-content-box">
+          <div class="yt-channel-profile">
+            <!-- Asif's Real Photo from Channel Screenshot -->
+            <img src="assets/asif-profile.png" alt="Asif Tech Global" class="yt-channel-avatar-photo">
+            
+            <div class="yt-channel-meta">
+              <div class="yt-channel-name-row">
+                <h2 class="yt-channel-name">@Asif Tech Global</h2>
+                <span class="yt-verified-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  OFFICIAL CREATOR
+                </span>
+              </div>
+
+              <!-- Channel Stats from Real Channel -->
+              <div class="yt-channel-stats-row">
+                <a href="https://www.youtube.com/@AsifTechGlobalOfficial" target="_blank" rel="noopener noreferrer" class="yt-channel-handle">
+                  @AsifTechGlobalOfficial
+                </a>
+                <span class="yt-channel-stat-dot">•</span>
+                <span><strong>817</strong> subscribers</span>
+                <span class="yt-channel-stat-dot">•</span>
+                <span><strong>385</strong> videos</span>
+              </div>
+
+              <p class="yt-channel-bio">
+                Welcome to AsifTechGlobalOfficial! Empowering tech enthusiasts and developers to become Tech-Smart. Covering PowerShell, Cybersecurity, Windows tips, MBA & business automation, and career growth.
+              </p>
+            </div>
+          </div>
+
+          <!-- Channel Action CTAs -->
+          <div class="yt-channel-actions">
+            <a href="https://www.youtube.com/@AsifTechGlobalOfficial?sub_confirmation=1" target="_blank" rel="noopener noreferrer" class="btn-yt-sub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              Subscribed
+            </a>
+            <a href="https://www.youtube.com/@AsifTechGlobalOfficial/community" target="_blank" rel="noopener noreferrer" class="btn-yt-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              Community
+            </a>
+            <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-outline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              Videos
+            </a>
+          </div>
+        </div>
+
+        <!-- YouTube Channel Tabs -->
+        <div class="yt-channel-tabs">
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial" target="_blank" rel="noopener noreferrer" class="yt-tab-link active">Home</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-tab-link">Videos</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/shorts" target="_blank" rel="noopener noreferrer" class="yt-tab-link">Shorts</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer" class="yt-tab-link">Live</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/playlists" target="_blank" rel="noopener noreferrer" class="yt-tab-link">Playlists</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/community" target="_blank" rel="noopener noreferrer" class="yt-tab-link">Posts</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       ATG Live Stream Automation & Chat Bot Console
+       ========================================================================== -->
+  <section class="bot-console-section" id="botConsoleSection">
+    <div class="container">
+      <div class="bot-console-card">
+        <!-- Top Bar with Status and Engine Badge -->
+        <div class="bot-console-top">
+          <div class="bot-title-wrap">
+            <div class="bot-status-indicator" id="botStatusDot"></div>
+            <div>
+              <h2 class="bot-console-title">ATG Live Stream Automation & Chat Bot Console</h2>
+              <span class="bot-console-sub" id="botStatusText">STATUS: CONNECTED // SYSTEM READY</span>
+            </div>
+          </div>
+          <div class="bot-badge-wrap">
+            <span class="badge" style="font-size: 0.72rem; padding: 0.25rem 0.65rem;">SELENIUM 4 ENGINE v3.0</span>
+            <span class="bot-server-status" id="botServerStatusBadge">API SERVER ONLINE (PORT 5000)</span>
+          </div>
+        </div>
+
+        <!-- Quick Setup & Authentication Guide -->
+        <div class="bot-auth-banner" id="botAuthBanner">
+          <div class="bot-auth-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div class="bot-auth-content">
+            <strong>CRITICAL STEP FOR LIVE CHAT:</strong> YouTube strictly requires a signed-in Google/YouTube account to send comments.
+            <span>Step 1: Click <strong>'Sign In (Chrome)'</strong> below &rarr; Step 2: Sign in once in the browser &rarr; Step 3: Close that Chrome window &rarr; Step 4: Click <strong>'Start Live Bot'</strong>.</span>
+          </div>
+        </div>
+
+        <!-- Main Bot Dashboard Layout -->
+        <div class="bot-console-grid">
+          <!-- Left: Controls & Config -->
+          <div class="bot-config-col">
+            <!-- Action Buttons -->
+            <div class="bot-actions-row">
+              <button type="button" id="btnStartBot" class="btn-bot-start">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span>Start Live Bot</span>
+              </button>
+              <button type="button" id="btnStopBot" class="btn-bot-stop" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12"></rect></svg>
+                <span>Stop Bot</span>
+              </button>
+              <button type="button" id="btnLoginBrowser" class="btn-bot-login" title="Open Chrome to sign in to your YouTube account once">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Sign In (Chrome)</span>
+              </button>
+            </div>
+
+            <!-- Target Stream URL Field -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="botTargetUrl">Target YouTube Live Stream URL</label>
+              <div class="bot-input-group">
+                <input type="text" id="botTargetUrl" class="bot-text-input" placeholder="https://www.youtube.com/watch?v=...">
+                <button type="button" id="btnUpdateTargetUrl" class="btn-bot-small">Save Target</button>
+              </div>
+            </div>
+
+            <!-- Mode & Switches -->
+            <div class="bot-switches-row">
+              <div class="bot-switch-group">
+                <label class="bot-field-label" for="botSpeedSelect">Speed Mode</label>
+                <select id="botSpeedSelect" class="bot-select-input">
+                  <option value="fast">Turbo Mode (3s delay)</option>
+                  <option value="normal" selected>Balanced Mode (15s delay)</option>
+                  <option value="slow">Stealth Mode (30s delay)</option>
+                </select>
+              </div>
+
+              <div class="bot-switch-group">
+                <label class="bot-field-label" for="botHeadlessSelect">Browser Display</label>
+                <select id="botHeadlessSelect" class="bot-select-input">
+                  <option value="0" selected>Visible Chrome Window</option>
+                  <option value="1">Headless (Silent Background)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Messages Queue Manager -->
+            <div class="bot-messages-box">
+              <div class="bot-messages-header">
+                <label class="bot-field-label" style="margin: 0;">Automated Chat Message Queue (<span id="botMsgCount">0</span>)</label>
+                <button type="button" id="btnRefreshConfig" class="btn-bot-link" title="Reload messages">Reload</button>
+              </div>
+              <div class="bot-add-msg-row">
+                <input type="text" id="botNewMsgInput" class="bot-text-input" placeholder="Type new live message...">
+                <button type="button" id="btnAddMsg" class="btn-bot-small">+ Add</button>
+              </div>
+              <div class="bot-messages-list" id="botMessagesList">
+                <!-- Populated dynamically via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Live Terminal Console -->
+          <div class="bot-terminal-col">
+            <div class="bot-terminal-header">
+              <div class="bot-terminal-dots">
+                <span class="t-dot red"></span>
+                <span class="t-dot yellow"></span>
+                <span class="t-dot green"></span>
+              </div>
+              <span class="bot-terminal-title">LIVE PROCESS STREAM // LOGS</span>
+              <button type="button" id="btnClearTerminal" class="btn-bot-clear">Clear</button>
+            </div>
+            <div class="bot-terminal-body" id="botTerminalLogs">
+              <div class="t-line dim">[SYSTEM] Connecting to Asif Tech Global Live Automation Server...</div>
+              <div class="t-line green">[SYSTEM] Connected to API server at http://localhost:5000</div>
+              <div class="t-line gold">[STATUS] Engine Ready. Set stream URL and click 'Start Live Bot'.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Stream Loader (Load Video from @AsifTechGlobalOfficial)
+       ========================================================================== -->
+  <section class="yt-input-section">
+    <div class="container">
+      <div class="yt-input-card">
+        <div class="yt-input-header">
+          <div class="yt-input-title-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            <h2 class="yt-input-title">@AsifTechGlobalOfficial Stream Loader</h2>
+          </div>
+          <span class="yt-input-hint">Paste any video URL or ID from @AsifTechGlobalOfficial to play in master cinema</span>
+        </div>
+
+        <form id="ytLoadForm" class="yt-load-form" onsubmit="event.preventDefault();">
+          <div class="yt-field-group">
+            <input 
+              type="text" 
+              id="ytVideoInput" 
+              class="yt-url-input" 
+              placeholder="Paste YouTube link (e.g. https://www.youtube.com/watch?v=... or ID)..." 
+              autocomplete="off"
+            >
+            <button type="submit" id="ytLoadBtn" class="btn-yt-load">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              Load Stream
+            </button>
+          </div>
+          <div id="ytFeedbackMsg" class="yt-feedback-msg" style="display: none;"></div>
+        </form>
+
+        <!-- Quick Channel Topic Chips -->
+        <div class="yt-quick-chips">
+          <span class="yt-chips-label">Channel Topics:</span>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/search?query=PowerShell" target="_blank" rel="noopener noreferrer" class="yt-chip">PowerShell & Automation</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/search?query=Cybersecurity" target="_blank" rel="noopener noreferrer" class="yt-chip">Cybersecurity</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/search?query=MBA" target="_blank" rel="noopener noreferrer" class="yt-chip">MBA & Business</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/search?query=Hacks" target="_blank" rel="noopener noreferrer" class="yt-chip">Tech Hacks</a>
+          <a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer" class="yt-chip">Live Streams</a>
+        </div>
+      </div>
+
+      <!-- Dynamic Player Container (Only appears when user inputs a valid video URL/ID) -->
+      <div id="ytDynamicPlayerWrap" class="yt-dynamic-player-wrap" style="display: none; margin-top: 1.8rem;">
+        <div class="yt-cinema-wrapper">
+          <div class="yt-cinema-topbar">
+            <div class="yt-cinema-status">
+              <span class="yt-live-dot"></span>
+              <span class="yt-cinema-status-text">OFFICIAL CHANNEL STREAM</span>
+              <span class="yt-badge-res">1080P HD</span>
+            </div>
+            <button type="button" id="ytClosePlayerBtn" class="btn-yt-close" title="Close Player">Close</button>
+          </div>
+          <div class="yt-iframe-container">
+            <iframe 
+              id="ytMainIframe"
+              src="" 
+              title="@AsifTechGlobalOfficial Video Stream" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="yt-cinema-details">
+            <div class="yt-cinema-text">
+              <h2 id="ytCurrentTitle" class="yt-cinema-title">@AsifTechGlobalOfficial Stream</h2>
+              <p id="ytCurrentDesc" class="yt-cinema-desc">Loaded directly from @AsifTechGlobalOfficial.</p>
+            </div>
+            <div class="yt-cinema-right-meta">
+              <span class="yt-channel-badge">@AsifTechGlobalOfficial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Curated Stream Catalog from @AsifTechGlobalOfficial
+       ========================================================================== -->
+  <section class="yt-catalog-section">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 2rem;">
+        <div class="badge">OFFICIAL PLAYLIST</div>
+        <h2 class="section-title">@AsifTechGlobalOfficial Video Catalog</h2>
+        <p class="section-subtitle">Official masterclasses, technical guides, and livestreams from Asif Tech Global.</p>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="yt-cards-grid">
+
+        <!-- Card 1: PowerShell Automation -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="PowerShell Automation" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Tutorial</span>
+            <span class="yt-category-tag">PowerShell</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">PowerShell & Windows System Automation Guide</h3>
+            <p class="yt-card-desc">Scripting, pipeline cmdlets, administrative scheduled tasks, and deep Windows system automation.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Cybersecurity & Ethical Hacking -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80" alt="Cybersecurity & Ethical Hacking" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Tutorial</span>
+            <span class="yt-category-tag">Cybersecurity</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">Cybersecurity Essentials & Ethical Hacking Concepts</h3>
+            <p class="yt-card-desc">Defensive measures, packet analysis, firewall configuration, and digital protection fundamentals.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: MBA & Business Automation -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" alt="MBA & Business Automation" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Lecture</span>
+            <span class="yt-category-tag">MBA & Business</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">MBA & Business Management Strategy for Tech Leaders</h3>
+            <p class="yt-card-desc">Business decision frameworks, operational workflows, and executive leadership for tech founders.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Tech Hacks & System Optimization -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=80" alt="Tech Hacks & Optimization" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Hacks</span>
+            <span class="yt-category-tag">Tech Hacks</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">Advanced Tech Hacks & Computer Optimization Mastery</h3>
+            <p class="yt-card-desc">Hardware benchmarking, speed boosts, system diagnostic tools, and daily productivity shortcuts.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Live Streams & Q&A -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="Live Streams & Career" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Live</span>
+            <span class="yt-category-tag">Live Stream</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">Live Stream: Global Tech Career Roadmap & Q&A</h3>
+            <p class="yt-card-desc">Direct interactive session covering skills development, interview readiness, and global tech opportunities.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch Live on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Professional Motivation & Mindset -->
+        <div class="yt-card">
+          <div class="yt-card-thumb-wrap">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Growth & Mindset" class="yt-card-thumb" loading="lazy">
+            <div class="yt-card-overlay">
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="yt-play-icon" title="Watch on Channel">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </a>
+            </div>
+            <span class="yt-duration">Mindset</span>
+            <span class="yt-category-tag">Motivation</span>
+          </div>
+          <div class="yt-card-body">
+            <h3 class="yt-card-title">Professional Growth, Leadership & Success Mindset</h3>
+            <p class="yt-card-desc">Developing continuous learning habits, managing complexity, and achieving professional excellence.</p>
+            <div class="yt-card-footer">
+              <span class="yt-views">@AsifTechGlobalOfficial</span>
+              <a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer" class="btn-yt-watch">Watch on YouTube</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>ASIF TECH GLOBAL</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+            World-class web solutions, corporate systems, and engineering masterclasses.
+          </p>
+        </div>
+
+        <div>
+          <h3>Enterprise Portals</h3>
+          <ul>
+            <li><a href="index.html">Main Ecosystem</a></li>
+            <li><a href="hr.html">HR & Workforce</a></li>
+            <li><a href="finance.html">Finance & Ledger</a></li>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial" target="_blank" rel="noopener noreferrer">YouTube: @AsifTechGlobalOfficial</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Channel Links</h3>
+          <ul>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial?sub_confirmation=1" target="_blank" rel="noopener noreferrer">Subscribe Channel</a></li>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer">Video Uploads</a></li>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer">Live Streams</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">YouTube:</span> <a href="https://www.youtube.com/@AsifTechGlobalOfficial" target="_blank" rel="noopener noreferrer">@AsifTechGlobalOfficial</a></li>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top button -->
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Knowledge Library & Book Repository | Asif Tech Global</title>
+  <meta name="description" content="Explore curated executive books, software architecture manuals, finance guides, and technical literature at Asif Tech Global Knowledge Library.">
+  <meta name="theme-color" content="#07070a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Master Top Navigation
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link-item">Home</a>
+
+        <!-- MBA Dropdown Menu -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn" id="mbaDropdownBtn" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Human Resources, Payroll & Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="finance.html" class="dropdown-item" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST & Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Library Link (Right next to MBA) -->
+        <a href="library.html" class="nav-link-item active">Library</a>
+
+        <a href="youtube.html" class="nav-link-item">YouTube</a>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="nav-right">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="youtube.html" class="btn-gold" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>Live Bot</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Library Hero Section with Search
+       ========================================================================== -->
+  <header class="page-hero" style="padding-bottom: 2.5rem;">
+    <div class="container">
+      <div class="hero-meta-badge">EXECUTIVE KNOWLEDGE REPOSITORY // DIGITAL ARCHIVE</div>
+      <h1 class="page-hero-title">
+        Knowledge Library & <br><span class="gradient-gold-text">Curated Literature</span>
+      </h1>
+      <p class="page-hero-subtitle">
+        Explore executive handbooks, deep software architectures, financial valuation treatises, global history, scientific methodologies, and tech culture insights.
+      </p>
+
+      <!-- Instant Live Search Bar -->
+      <div class="lib-hero-search">
+        <div class="lib-search-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" style="margin-right: 0.6rem;">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="libSearchInput" 
+            class="lib-search-input" 
+            placeholder="Search books by title, author, category, or keyword..."
+            autocomplete="off"
+          >
+          <button type="button" id="btnLibClearSearch" class="btn-lib-search" style="padding: 0.45rem 1rem;">Clear</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       8 Mozo Hunt-Inspired Categories Grid
+       ========================================================================== -->
+  <section class="lib-categories-section">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 1.5rem;">
+        <div class="badge">CATEGORY BROWSER</div>
+        <h2 class="section-title">Select A Book Category</h2>
+        <p class="section-subtitle">Click any topic card to filter the digital repository instantly.</p>
+      </div>
+
+      <div class="lib-categories-grid">
+
+        <!-- Cat 1: All -->
+        <div class="lib-cat-card active" data-category="all" id="catCardAll">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">All Categories</h3>
+          <p class="lib-cat-desc">Complete archive across engineering, capital markets and leadership.</p>
+          <span class="lib-cat-count">ALL BOOKS</span>
+        </div>
+
+        <!-- Cat 2: Coding & Programming -->
+        <div class="lib-cat-card" data-category="coding">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Coding & Programming</h3>
+          <p class="lib-cat-desc">System design, algorithms, backend pipelines, and Python frameworks.</p>
+          <span class="lib-cat-count">4 BOOKS</span>
+        </div>
+
+        <!-- Cat 3: Personal Finance & Investment -->
+        <div class="lib-cat-card" data-category="finance">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Personal Finance & Investment</h3>
+          <p class="lib-cat-desc">Wealth preservation, cash flow runway, portfolio mechanics and audit.</p>
+          <span class="lib-cat-count">3 BOOKS</span>
+        </div>
+
+        <!-- Cat 4: Social Science & Environmental -->
+        <div class="lib-cat-card" data-category="social">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Social Science & Environmental</h3>
+          <p class="lib-cat-desc">Macroeconomics, corporate ethics, renewable infrastructure and society.</p>
+          <span class="lib-cat-count">2 BOOKS</span>
+        </div>
+
+        <!-- Cat 5: Entertainment & Media -->
+        <div class="lib-cat-card" data-category="media">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Entertainment & Media</h3>
+          <p class="lib-cat-desc">Digital production, YouTube growth mechanics, and brand storytelling.</p>
+          <span class="lib-cat-count">2 BOOKS</span>
+        </div>
+
+        <!-- Cat 6: Reference & Informational -->
+        <div class="lib-cat-card" data-category="reference">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Reference & Informational</h3>
+          <p class="lib-cat-desc">Standard operating procedures, system cheat-sheets, and manual indexes.</p>
+          <span class="lib-cat-count">3 BOOKS</span>
+        </div>
+
+        <!-- Cat 7: History & World Events -->
+        <div class="lib-cat-card" data-category="history">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">History & World Events</h3>
+          <p class="lib-cat-desc">Computing history, the silicon revolution, industrial paradigms and trade.</p>
+          <span class="lib-cat-count">2 BOOKS</span>
+        </div>
+
+        <!-- Cat 8: Technical & Scientific -->
+        <div class="lib-cat-card" data-category="technical">
+          <div class="lib-cat-icon-wrap">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3 class="lib-cat-title">Technical & Scientific</h3>
+          <p class="lib-cat-desc">Distributed consensus, neural compute, cryptography and network theory.</p>
+          <span class="lib-cat-count">3 BOOKS</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Curated Books Repository Grid
+       ========================================================================== -->
+  <section class="section" style="padding-top: 1rem;">
+    <div class="container">
+      
+      <!-- Filter Bar & Active Category Status -->
+      <div class="lib-filter-bar">
+        <div>
+          <span class="badge" id="activeCategoryBadge">SHOWING: ALL PUBLICATIONS</span>
+          <span style="font-size: 0.82rem; color: var(--text-muted); margin-left: 0.6rem;" id="libResultsCount">8 Titles Available</span>
+        </div>
+
+        <div class="lib-pills-wrap">
+          <button type="button" class="lib-pill active" data-pill="all">All</button>
+          <button type="button" class="lib-pill" data-pill="coding">Coding</button>
+          <button type="button" class="lib-pill" data-pill="finance">Finance</button>
+          <button type="button" class="lib-pill" data-pill="social">Social</button>
+          <button type="button" class="lib-pill" data-pill="media">Media</button>
+          <button type="button" class="lib-pill" data-pill="reference">Reference</button>
+          <button type="button" class="lib-pill" data-pill="history">History</button>
+          <button type="button" class="lib-pill" data-pill="technical">Technical</button>
+        </div>
+      </div>
+
+      <!-- Books Grid -->
+      <div class="lib-books-grid" id="libBooksGrid">
+
+        <!-- Book 1: Psychology of Money -->
+        <div class="lib-book-card" data-category="finance" data-title="The Psychology and Architecture of Money" data-author="Morgan Housel & ATG Analysis">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80" alt="Money and Wealth" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Personal Finance</span>
+            <span class="lib-book-format">Full PDF</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">The Psychology & Architecture of Money</h3>
+            <span class="lib-book-author">By Morgan Housel & ATG Finance Division</span>
+            <p class="lib-book-synopsis">
+              Timeless lessons on wealth, greed, and happiness. How personal behavior governs financial runway far more than technical mathematics.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 256</span>
+              <span>Year: 2026</span>
+              <span>Format: Verified PDF</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="The Psychology & Architecture of Money">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="The_Psychology_Of_Money.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 2: Clean Code & High-Throughput Systems -->
+        <div class="lib-book-card" data-category="coding" data-title="High-Throughput Python & Clean Architecture" data-author="Asif Tech Global Engineering Team">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Coding Architecture" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Coding & Dev</span>
+            <span class="lib-book-format">Handbook</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">High-Throughput Python & Clean Architecture</h3>
+            <span class="lib-book-author">By Asif Tech Global Engineering Team</span>
+            <p class="lib-book-synopsis">
+              Production guidelines for concurrent multi-threading, asynchronous pipelines, Selenium 4 integration, and memory optimization.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 340</span>
+              <span>Year: 2026</span>
+              <span>Format: Digital Manual</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="High-Throughput Python & Clean Architecture">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="High_Throughput_Python.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 3: Distributed Systems & Cryptography -->
+        <div class="lib-book-card" data-category="technical" data-title="Applied Cryptography & Zero-Knowledge Architecture" data-author="Dr. Bruce Schneier & ATG Research">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Technical Science" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Technical</span>
+            <span class="lib-book-format">Research</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">Applied Cryptography & Zero-Knowledge Architecture</h3>
+            <span class="lib-book-author">By Dr. Bruce Schneier & ATG Research</span>
+            <p class="lib-book-synopsis">
+              Mathematical foundations of modern ciphers, public-key verification, token hashing, and quantum-resistant algorithms.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 480</span>
+              <span>Year: 2026</span>
+              <span>Format: Treatise</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="Applied Cryptography & Zero-Knowledge Architecture">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="Applied_Cryptography.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 4: The Innovators & Silicon Genesis -->
+        <div class="lib-book-card" data-category="history" data-title="The Innovators: Silicon Genesis and Computer History" data-author="Walter Isaacson">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80" alt="History and World Events" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">History</span>
+            <span class="lib-book-format">Classic</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">The Innovators: Silicon Genesis & Computing History</h3>
+            <span class="lib-book-author">By Walter Isaacson</span>
+            <p class="lib-book-synopsis">
+              The saga of the collaborative geniuses, hackers, and inventors who created the microchip, Internet, and digital civilization.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 560</span>
+              <span>Year: 2025</span>
+              <span>Format: Master Edition</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="The Innovators: Silicon Genesis">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="The_Innovators.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 5: Modern YouTube & Media Architecture -->
+        <div class="lib-book-card" data-category="media" data-title="YouTube Media Distribution & Community Strategy" data-author="Asif Tech Global Media Lab">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80" alt="Media & Streaming" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Media</span>
+            <span class="lib-book-format">Playbook</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">YouTube Media Distribution & Streaming Strategy</h3>
+            <span class="lib-book-author">By Asif Tech Global Media Lab</span>
+            <p class="lib-book-synopsis">
+              End-to-end framework for audience retention, real-time live interaction bots, SEO metadata architecture, and community scaling.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 210</span>
+              <span>Year: 2026</span>
+              <span>Format: Executive Guide</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="YouTube Media Distribution Strategy">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="YouTube_Media_Strategy.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 6: Enterprise Reference Architecture Handbook -->
+        <div class="lib-book-card" data-category="reference" data-title="Enterprise Cloud Reference & ISO Standards Manual" data-author="ATG Standards Commission">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80" alt="Reference Handbook" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Reference</span>
+            <span class="lib-book-format">Standard</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">Enterprise Cloud Reference & Standards Manual</h3>
+            <span class="lib-book-author">By ATG Standards Commission</span>
+            <p class="lib-book-synopsis">
+              Comprehensive protocol specifications, SLA templates, database replication models, and zero-trust perimeter implementations.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 420</span>
+              <span>Year: 2026</span>
+              <span>Format: Official Index</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="Enterprise Cloud Reference Manual">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="Enterprise_Standards_Manual.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 7: Ecological Economics & Global Sustainability -->
+        <div class="lib-book-card" data-category="social" data-title="Ecological Economics & Global Energy Transition" data-author="Herman Daly & ATG Policy Institute">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80" alt="Environmental Science" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Social Science</span>
+            <span class="lib-book-format">Policy</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">Ecological Economics & Global Energy Transition</h3>
+            <span class="lib-book-author">By Herman Daly & ATG Policy Institute</span>
+            <p class="lib-book-synopsis">
+              Aligning corporate GDP growth models with finite physical resources, planetary boundaries, and next-generation power matrices.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 310</span>
+              <span>Year: 2025</span>
+              <span>Format: Policy Review</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="Ecological Economics & Energy Transition">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="Ecological_Economics.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Book 8: The Intelligent Investor & Balance Sheet Valuation -->
+        <div class="lib-book-card" data-category="finance" data-title="The Intelligent Investor & Modern Balance Sheet Analysis" data-author="Benjamin Graham & ATG Ledger">
+          <div class="lib-book-cover-wrap">
+            <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80" alt="Investments" class="lib-book-cover-img" loading="lazy">
+            <span class="lib-book-tag">Personal Finance</span>
+            <span class="lib-book-format">Classic</span>
+          </div>
+          <div class="lib-book-body">
+            <h3 class="lib-book-title">The Intelligent Investor & Balance Sheet Analysis</h3>
+            <span class="lib-book-author">By Benjamin Graham & ATG Ledger</span>
+            <p class="lib-book-synopsis">
+              Foundational value investing principles, margin of safety, evaluating corporate debt ratios, and long-term equity compounding.
+            </p>
+            <div class="lib-book-footer-meta">
+              <span>Pages: 640</span>
+              <span>Year: 2026</span>
+              <span>Format: Master Edition</span>
+            </div>
+            <div class="lib-book-actions">
+              <button type="button" class="btn-lib-read" data-pdf-path="documents/money.pdf" data-pdf-title="The Intelligent Investor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <span>Read Book</span>
+              </button>
+              <a href="documents/money.pdf" download="Intelligent_Investor.pdf" class="btn-lib-download" title="Download Book">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Interactive Reading Modal
+       ========================================================================== -->
+  <div class="pdf-reader-modal" id="libReaderModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="pdf-modal-backdrop" id="libModalBackdrop"></div>
+    <div class="pdf-modal-content">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title" id="libModalTitle">Reading Mode</div>
+        <div class="pdf-modal-tools">
+          <a href="#" id="libModalDownload" download class="btn-pdf-download" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Save Offline</span>
+          </a>
+          <button type="button" class="btn-pdf-close" id="libModalClose" aria-label="Close Reader">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pdf-modal-body">
+        <iframe id="libModalFrame" src="" title="Book Reader"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>ASIF TECH GLOBAL</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+            World-class corporate systems, executive digital libraries, and engineering masterclasses.
+          </p>
+        </div>
+
+        <div>
+          <h3>Enterprise Portals</h3>
+          <ul>
+            <li><a href="index.html">Main Ecosystem</a></li>
+            <li><a href="hr.html">HR & Workforce</a></li>
+            <li><a href="finance.html">Finance & Ledger</a></li>
+            <li><a href="library.html">Digital Library</a></li>
+            <li><a href="youtube.html">YouTube Live Bot</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Channel Links</h3>
+          <ul>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial?sub_confirmation=1" target="_blank" rel="noopener noreferrer">Subscribe Channel</a></li>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial/videos" target="_blank" rel="noopener noreferrer">Video Uploads</a></li>
+            <li><a href="https://www.youtube.com/@AsifTechGlobalOfficial/streams" target="_blank" rel="noopener noreferrer">Live Streams</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">YouTube:</span> <a href="https://www.youtube.com/@AsifTechGlobalOfficial" target="_blank" rel="noopener noreferrer">@AsifTechGlobalOfficial</a></li>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Standards-compliant code. Zero emojis.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top button -->
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <script src="app.js"></script>
+</body>
+</html>

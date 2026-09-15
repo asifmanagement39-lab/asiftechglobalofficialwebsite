@@ -1,0 +1,43 @@
+# Chrome Profiles & Local Session Caches
+yt_bot/Saved_YT_Session/
+**/Saved_YT_Session/
+**/Default/
+*.lock
+lockfile
+Singleton*
+
+# User Data & SQLite DBs
+yt_bot/user_data/
+**/user_data/
+*.db
+*.sqlite3
+
+# Python virtual environments & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Build artifacts & Executables
+yt_bot/build/
+yt_bot/dist/
+build/
+dist/
+*.exe
+
+# Node dependencies
+node_modules/
+**/node_modules/
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.tmp
