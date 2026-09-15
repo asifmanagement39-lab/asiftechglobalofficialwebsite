@@ -333,11 +333,17 @@
 
             <!-- PDF Upload & Auto-Thumbnail -->
             <div class="bot-field-box">
-              <label class="bot-field-label" for="uploadPdfFile">Select PDF File *</label>
-              <input type="file" id="uploadPdfFile" accept="application/pdf" class="bot-text-input" required style="padding: 0.5rem;">
-              <span style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem;">
-                Select any PDF file from your device. The first page is automatically captured as the cover thumbnail.
-              </span>
+              <label class="bot-field-label">Select PDF Document *</label>
+              <div class="lib-file-dropzone" id="libFileDropzone">
+                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" required>
+                <div class="dropzone-content">
+                  <div class="dropzone-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  </div>
+                  <p class="dropzone-title" id="dropzoneSelectedText">Click to choose PDF from device</p>
+                  <p class="dropzone-subtitle" id="dropzoneSubText">or Drag &amp; Drop your PDF file here</p>
+                </div>
+              </div>
             </div>
 
             <!-- Title & Author -->

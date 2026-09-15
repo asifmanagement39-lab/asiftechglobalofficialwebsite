@@ -1399,56 +1399,103 @@ function initLibraryModule() {
     });
   }
 
-  // PDF Page 1 Automatic Thumbnail Generator
-  if (uploadPdfFile) {
-    uploadPdfFile.addEventListener('change', async (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) {
-        selectedPdfFile = null;
-        generatedCoverDataUrl = '';
-        if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
-        return;
-      }
+  // PDF File Selection & Dropzone Handling
+  const libFileDropzone = document.getElementById('libFileDropzone');
+  const dropzoneSelectedText = document.getElementById('dropzoneSelectedText');
+  const dropzoneSubText = document.getElementById('dropzoneSubText');
 
-      selectedPdfFile = file;
+  function handleFilePicked(file) {
+    if (!file) {
+      selectedPdfFile = null;
+      generatedCoverDataUrl = '';
+      if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+      if (dropzoneSelectedText) dropzoneSelectedText.textContent = 'Click to choose PDF from device';
+      if (dropzoneSubText) dropzoneSubText.textContent = 'or Drag & Drop your PDF file here';
+      return;
+    }
 
-      // Auto-populate document title if empty
-      const titleInput = document.getElementById('uploadBookTitle');
-      const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-      if (titleInput && !titleInput.value.trim()) {
-        titleInput.value = cleanFileName;
-      }
-      applyAutoRouting(cleanFileName);
+    selectedPdfFile = file;
 
-      // Render cover thumbnail using PDF.js
-      try {
-        if (typeof window.pdfjsLib === 'undefined') {
-          console.warn('PDF.js not available for rendering thumbnail');
-          return;
-        }
+    // Update Dropzone UI
+    if (dropzoneSelectedText) {
+      dropzoneSelectedText.innerHTML = `✓ <span style="color: #10b981;">${escapeHtml(file.name)}</span>`;
+    }
+    if (dropzoneSubText) {
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+      dropzoneSubText.textContent = `${sizeMb} MB • File attached & ready`;
+    }
 
-        const arrayBuffer = await file.arrayBuffer();
+    // Auto-populate document title if empty
+    const titleInput = document.getElementById('uploadBookTitle');
+    const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+    if (titleInput && !titleInput.value.trim()) {
+      titleInput.value = cleanFileName;
+    }
+    applyAutoRouting(cleanFileName);
+
+    // Render cover thumbnail using PDF.js
+    if (typeof window.pdfjsLib !== 'undefined') {
+      file.arrayBuffer().then(arrayBuffer => {
         const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-        const pdf = await loadingTask.promise;
-        const page = await pdf.getPage(1);
-
+        return loadingTask.promise;
+      }).then(pdf => {
+        return pdf.getPage(1);
+      }).then(page => {
         const viewport = page.getViewport({ scale: 1.5 });
         const canvas = pdfOffscreenCanvas || document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        await page.render({ canvasContext: context, viewport: viewport }).promise;
-        generatedCoverDataUrl = canvas.toDataURL('image/jpeg', 0.85);
-
-        if (imgAutoThumbnail && thumbPreviewBox) {
-          imgAutoThumbnail.src = generatedCoverDataUrl;
-          thumbPreviewBox.style.display = 'block';
-        }
-      } catch (err) {
-        console.warn('Could not generate PDF thumbnail, using styled cover instead:', err);
+        return page.render({ canvasContext: context, viewport: viewport }).promise.then(() => {
+          generatedCoverDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          if (imgAutoThumbnail && thumbPreviewBox) {
+            imgAutoThumbnail.src = generatedCoverDataUrl;
+            thumbPreviewBox.style.display = 'block';
+          }
+        });
+      }).catch(err => {
+        console.warn('PDF thumbnail generation fallback:', err);
         generatedCoverDataUrl = '';
         if (thumbPreviewBox) thumbPreviewBox.style.display = 'none';
+      });
+    }
+  }
+
+  if (uploadPdfFile) {
+    uploadPdfFile.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      handleFilePicked(file);
+    });
+  }
+
+  if (libFileDropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      libFileDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        libFileDropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      libFileDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        libFileDropzone.classList.remove('dragover');
+      });
+    });
+
+    libFileDropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const file = dt && dt.files && dt.files[0];
+      if (file && (file.type === 'application/pdf' || file.name.endsWith('.pdf'))) {
+        if (uploadPdfFile) {
+          uploadPdfFile.files = dt.files;
+        }
+        handleFilePicked(file);
+      } else {
+        alert('Please drop a valid PDF file.');
       }
     });
   }
