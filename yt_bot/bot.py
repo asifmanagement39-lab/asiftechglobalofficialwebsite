@@ -400,18 +400,41 @@ def emulate_human_behavior(driver, config, logger):
         pass
 
 
+def normalize_youtube_url(url):
+    """Normalize any YouTube live / share URL to standard watch format"""
+    if not url:
+        return ""
+    u = str(url).strip()
+    if "youtu.be/" in u:
+        vid_id = u.split("youtu.be/")[1].split("?")[0].split("&")[0].split("/")[0]
+        return f"https://www.youtube.com/watch?v={vid_id}"
+    if "/live/" in u:
+        vid_id = u.split("/live/")[1].split("?")[0].split("&")[0].split("/")[0]
+        return f"https://www.youtube.com/watch?v={vid_id}"
+    return u
+
+
 def safe_send_text(chat_input, text, driver, logger):
     try:
         chat_input.click()
-        time.sleep(0.5)
+        time.sleep(0.4)
         chat_input.send_keys(Keys.CONTROL, "a")
         chat_input.send_keys(Keys.BACKSPACE)
-        time.sleep(0.3)
+        time.sleep(0.2)
+        
+        # Insert text cleanly
         driver.execute_script(
-            "arguments[0].focus(); document.execCommand('insertText', false, arguments[1]);",
+            "arguments[0].focus(); document.execCommand('selectAll', false, null); document.execCommand('insertText', false, arguments[1]);",
             chat_input, text
         )
-        time.sleep(0.8)
+        # Dispatch input & change events
+        driver.execute_script("""
+            var el = arguments[0];
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+        """, chat_input)
+        time.sleep(0.6)
+        
         chat_input.send_keys(Keys.ENTER)
 
         # Also dispatch Enter keydown via JS
@@ -422,11 +445,13 @@ def safe_send_text(chat_input, text, driver, logger):
 
         time.sleep(0.5)
         send_selectors = [
+            "#send-button yt-button-shape button",
             "#send-button button",
-            "ytd-button-renderer#send-button",
-            "yt-icon-button#send-button",
+            "ytd-button-renderer#send-button button",
+            "yt-icon-button#send-button button",
             "button[aria-label='Send']",
             "button[aria-label*='Send']",
+            "button[aria-label*='भेजें']",
             "#send-button"
         ]
         for sel in send_selectors:
@@ -470,12 +495,16 @@ def is_live_chat_ready(driver, logger=None):
             driver.switch_to.frame(frames[0])
 
             # Check if sign in is required
-            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button")
+            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button")
             if sign_in and any(s.is_displayed() for s in sign_in):
                 if logger:
-                    logger.warning("[LOGIN REQUIRED] Please sign in to your YouTube account in the Chrome window to send messages!")
+                    logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
                 return False
 
+            inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
+            return bool([i for i in inputs if i.is_displayed()])
+        else:
+            # Check if we are directly on a live_chat page
             inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
             return bool([i for i in inputs if i.is_displayed()])
     except Exception as e:
@@ -485,17 +514,12 @@ def is_live_chat_ready(driver, logger=None):
 
 
 def find_chat_input(driver, logger=None):
-    try:
-        frames = driver.find_elements(By.CSS_SELECTOR, "iframe#chatframe, iframe[src*='live_chat']")
-        if frames:
-            driver.switch_to.frame(frames[0])
-    except Exception:
-        pass
-
     for sel in (
         "div#input.yt-live-chat-text-input-field-renderer",
+        "div#input[contenteditable='true']",
         "div#input",
         "div[contenteditable='true']",
+        "textarea#input",
         "textarea",
     ):
         try:
@@ -533,6 +557,7 @@ def start_bot():
     logger = setup_logger("send_log.txt")
 
     tracked_urls = get_data("urls.txt")
+    tracked_urls = [normalize_youtube_url(u) for u in tracked_urls if u.strip()]
     if not tracked_urls:
         logger.error("urls.txt is empty — add YouTube live stream URLs first.")
         return
