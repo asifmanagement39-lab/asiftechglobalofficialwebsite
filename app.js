@@ -1328,6 +1328,61 @@ function initLibraryModule() {
     });
   }
 
+  // Smart Shelf Auto-Routing Engine
+  function detectShelfCategory(text) {
+    const str = (text || '').toLowerCase();
+
+    // 1. News Keywords
+    if (/news|newspaper|times|express|chronicle|standard|dainik|patrika|tribune|daily|edition|editorial|headline|samachar|gazette|journal/i.test(str)) {
+      return { category: 'news', name: 'Latest News & Newspapers', ribbon: 'popular' };
+    }
+
+    // 2. Magazine Keywords
+    if (/magazine|mag|vogue|lifestyle|soccer|sports|fabulous|life|forbes|fortune|cosmopolitan|glamour|cinema|entertainment|monthly|weekly|fashion|reader|digest/i.test(str)) {
+      return { category: 'magazine', name: 'Latest Magazines', ribbon: 'popular' };
+    }
+
+    // 3. Study Material Keywords
+    if (/study|case|syllabus|lecture|notes|analytics|research|paper|assignment|exam|question|banking|hdfc|operations|framework|formula|data science|quantitative|methodology|module|curriculum|treatise|whitepaper|analysis/i.test(str)) {
+      return { category: 'study', name: 'Study Material & Case Studies', ribbon: 'featured' };
+    }
+
+    // 4. Free Content Keywords
+    if (/free|budget|handbook|guide|cheat|tutorial|beginner|basics|manual|open access|handouts|cheatsheet|notes for/i.test(str)) {
+      return { category: 'free', name: 'Free Content & Notes', ribbon: 'trending' };
+    }
+
+    // 5. Default Books
+    return { category: 'books', name: 'Latest Books', ribbon: 'popular' };
+  }
+
+  function applyAutoRouting(text) {
+    const detected = detectShelfCategory(text);
+    const shelfSelect = document.getElementById('uploadShelfCategory');
+    const ribbonSelect = document.getElementById('uploadBookRibbon');
+    const autoDetectHint = document.getElementById('autoDetectHint');
+
+    if (shelfSelect) {
+      shelfSelect.value = detected.category;
+    }
+    if (ribbonSelect && ribbonSelect.value === 'popular') {
+      ribbonSelect.value = detected.ribbon;
+    }
+    if (autoDetectHint) {
+      autoDetectHint.textContent = `✓ Auto-routed to: ${detected.name}`;
+      autoDetectHint.style.display = 'block';
+    }
+  }
+
+  const titleInputEl = document.getElementById('uploadBookTitle');
+  if (titleInputEl) {
+    titleInputEl.addEventListener('input', (e) => {
+      if (e.target.value.trim().length > 3) {
+        applyAutoRouting(e.target.value);
+      }
+    });
+  }
+
   // PDF Page 1 Automatic Thumbnail Generator
   if (uploadPdfFile) {
     uploadPdfFile.addEventListener('change', async (e) => {
@@ -1336,10 +1391,15 @@ function initLibraryModule() {
 
       uploadedPdfBlobUrl = URL.createObjectURL(file);
 
-      // Auto-extract title if empty
+      // Auto-extract title and auto-route category based on filename
       const titleInput = document.getElementById('uploadBookTitle');
-      if (titleInput && !titleInput.value) {
-        titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      const cleanFileName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      
+      if (titleInput) {
+        if (!titleInput.value) {
+          titleInput.value = cleanFileName;
+        }
+        applyAutoRouting(cleanFileName);
       }
 
       try {

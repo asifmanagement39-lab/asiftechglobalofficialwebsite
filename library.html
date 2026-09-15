@@ -739,9 +739,14 @@
 
           <form id="formUploadBook" style="display: flex; flex-direction: column; gap: 1.1rem;">
             
-            <!-- Category / Shelf -->
+            <!-- Category / Shelf with Auto-Route Indicator -->
             <div class="bot-field-box">
-              <label class="bot-field-label" for="uploadShelfCategory">Target Library Shelf *</label>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <label class="bot-field-label" for="uploadShelfCategory">Target Library Shelf *</label>
+                <span id="autoRouteBadge" style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.15rem 0.55rem; border-radius: 9999px;">
+                  ⚡ Auto-Routing Active
+                </span>
+              </div>
               <select id="uploadShelfCategory" class="bot-select-input" required>
                 <option value="news">Latest News &amp; Newspapers</option>
                 <option value="magazine">Latest Magazines</option>
@@ -749,6 +754,9 @@
                 <option value="study">Study Material &amp; Case Studies</option>
                 <option value="free">Free Content &amp; Notes</option>
               </select>
+              <span id="autoDetectHint" style="font-size: 0.74rem; color: #10b981; margin-top: 0.2rem; display: none;">
+                ✓ Document title/file ke hisaab se automatic shelf select ho gaya!
+              </span>
             </div>
 
             <!-- Title & Author -->
