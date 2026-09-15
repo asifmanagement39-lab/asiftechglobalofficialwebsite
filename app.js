@@ -1264,13 +1264,70 @@ function initFinancePdfModule() {
   if (closePdfModal) closePdfModal.addEventListener('click', closeReader);
   if (pdfModalBackdrop) pdfModalBackdrop.addEventListener('click', closeReader);
 
-  // Upload Modal Handlers
+  // Upload Modal Handlers & Password Gate
+  const financePasswordGate = document.getElementById('financePasswordGate');
+  const financeUploadFormSection = document.getElementById('financeUploadFormSection');
+  const formFinanceAdminAuth = document.getElementById('formFinanceAdminAuth');
+  const financeAdminAuthPassword = document.getElementById('financeAdminAuthPassword');
+  const financeAdminAuthError = document.getElementById('financeAdminAuthError');
+  const btnToggleFinanceAdminPw = document.getElementById('btnToggleFinanceAdminPw');
+  const btnFinanceAdminLogout = document.getElementById('btnFinanceAdminLogout');
+
+  if (btnToggleFinanceAdminPw && financeAdminAuthPassword) {
+    btnToggleFinanceAdminPw.addEventListener('click', () => {
+      const type = financeAdminAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      financeAdminAuthPassword.setAttribute('type', type);
+    });
+  }
+
+  if (formFinanceAdminAuth) {
+    formFinanceAdminAuth.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = financeAdminAuthPassword ? financeAdminAuthPassword.value.trim() : '';
+      if (entered === 'Asif@#69#@') {
+        sessionStorage.setItem('atg_admin_unlocked', 'true');
+        if (financeAdminAuthError) financeAdminAuthError.style.display = 'none';
+        if (financePasswordGate) financePasswordGate.style.display = 'none';
+        if (financeUploadFormSection) financeUploadFormSection.style.display = 'block';
+        if (financeAdminAuthPassword) financeAdminAuthPassword.value = '';
+      } else {
+        if (financeAdminAuthError) financeAdminAuthError.style.display = 'block';
+        if (financeAdminAuthPassword) {
+          financeAdminAuthPassword.value = '';
+          financeAdminAuthPassword.focus();
+        }
+      }
+    });
+  }
+
+  if (btnFinanceAdminLogout) {
+    btnFinanceAdminLogout.addEventListener('click', () => {
+      sessionStorage.removeItem('atg_admin_unlocked');
+      if (financePasswordGate) financePasswordGate.style.display = 'block';
+      if (financeUploadFormSection) financeUploadFormSection.style.display = 'none';
+      if (financeAdminAuthPassword) financeAdminAuthPassword.value = '';
+    });
+  }
+
   function openUploadModal(shelfCategory) {
     if (!financeUploadModal) return;
     if (shelfCategory && typeof shelfCategory === 'string') {
       const catSelect = document.getElementById('financeDocCategory');
       if (catSelect) catSelect.value = shelfCategory === 'casestudies' ? 'casestudies' : 'assignments';
     }
+
+    const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
+    if (isUnlocked) {
+      if (financePasswordGate) financePasswordGate.style.display = 'none';
+      if (financeUploadFormSection) financeUploadFormSection.style.display = 'block';
+    } else {
+      if (financePasswordGate) financePasswordGate.style.display = 'block';
+      if (financeUploadFormSection) financeUploadFormSection.style.display = 'none';
+      if (financeAdminAuthPassword) financeAdminAuthPassword.value = '';
+      if (financeAdminAuthError) financeAdminAuthError.style.display = 'none';
+      setTimeout(() => financeAdminAuthPassword && financeAdminAuthPassword.focus(), 150);
+    }
+
     financeUploadModal.classList.add('open');
     financeUploadModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -1370,8 +1427,10 @@ function initFinancePdfModule() {
   }
 
   if (financeFileDropzone) {
-    financeFileDropzone.addEventListener('click', () => {
-      if (financePdfInput) financePdfInput.click();
+    financeFileDropzone.addEventListener('click', (e) => {
+      if (e.target !== financePdfInput && financePdfInput) {
+        financePdfInput.click();
+      }
     });
 
     ['dragenter', 'dragover'].forEach(name => {
@@ -1396,7 +1455,9 @@ function initFinancePdfModule() {
       const dt = e.dataTransfer;
       const files = dt && dt.files;
       if (files && files.length > 0) {
-        if (financePdfInput) financePdfInput.files = files;
+        try {
+          if (financePdfInput) financePdfInput.files = files;
+        } catch (_) {}
         handleFilesSelected(files);
       } else {
         alert('Please drop valid PDF files.');
@@ -2188,6 +2249,12 @@ function initLibraryModule() {
   }
 
   if (libFileDropzone) {
+    libFileDropzone.addEventListener('click', (e) => {
+      if (e.target !== uploadPdfFile && uploadPdfFile) {
+        uploadPdfFile.click();
+      }
+    });
+
     ['dragenter', 'dragover'].forEach(eventName => {
       libFileDropzone.addEventListener(eventName, (e) => {
         e.preventDefault();
@@ -2208,9 +2275,11 @@ function initLibraryModule() {
       const dt = e.dataTransfer;
       const files = dt && dt.files;
       if (files && files.length > 0) {
-        if (uploadPdfFile) {
-          uploadPdfFile.files = files;
-        }
+        try {
+          if (uploadPdfFile) {
+            uploadPdfFile.files = files;
+          }
+        } catch (_) {}
         handleFilesPicked(files);
       } else {
         alert('Please drop valid PDF files.');

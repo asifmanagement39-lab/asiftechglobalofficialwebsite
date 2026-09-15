@@ -309,84 +309,136 @@
       </div>
 
       <div class="pdf-modal-body" style="padding: 1.8rem; overflow-y: auto; background: var(--bg-card, #0f1424);">
-        <form id="formUploadFinanceAssignment" style="display: flex; flex-direction: column; gap: 1.1rem;">
-          
-          <!-- Target Shelf / Category -->
-          <div class="bot-field-box">
-            <label class="bot-field-label" for="financeDocCategory">Target Finance Shelf *</label>
-            <select id="financeDocCategory" class="bot-select-input" required>
-              <option value="assignments" selected>Finance Assignments &amp; Projects</option>
-              <option value="casestudies">Finance Case Studies &amp; Solutions</option>
-            </select>
+        <!-- Screen 1: Master Admin Password Gate -->
+        <div id="financePasswordGate" style="display: block; text-align: center; padding: 1rem 0.5rem;">
+          <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.8rem; border: 1px solid var(--border-gold);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
           </div>
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;">MBA Finance Administrator Portal</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.3rem; max-width: 380px; margin-inline: auto;">
+            Enter your secret master administrator key to upload or manage finance assignments &amp; case studies.
+          </p>
 
-          <!-- PDF File Dropzone -->
-          <div class="bot-field-box">
-            <label class="bot-field-label">Select Document PDF *</label>
-            <div class="lib-file-dropzone" id="financeFileDropzone" style="border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
-              <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" multiple required>
-              <div class="dropzone-content">
-                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                </div>
-                <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose PDF(s)</p>
-                <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop your PDF document(s) here</p>
+          <form id="formFinanceAdminAuth" style="display: flex; flex-direction: column; gap: 0.9rem; max-width: 360px; margin: 0 auto;">
+            <div class="bot-field-box" style="text-align: left;">
+              <label class="bot-field-label" for="financeAdminAuthPassword">Master Password Key *</label>
+              <div style="position: relative;">
+                <input 
+                  type="password" 
+                  id="financeAdminAuthPassword" 
+                  class="bot-text-input" 
+                  placeholder="Enter administrator key..."
+                  required
+                  style="width: 100%; padding-right: 2.5rem;"
+                  autocomplete="current-password"
+                >
+                <button type="button" id="btnToggleFinanceAdminPw" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" title="Show/Hide Password">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
               </div>
             </div>
+
+            <div id="financeAdminAuthError" style="display: none; font-size: 0.82rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.55rem 0.8rem; border-radius: 4px;">
+              Incorrect master password! Access denied.
+            </div>
+
+            <button type="submit" class="btn-gold" style="padding: 0.8rem; border-radius: var(--radius-sm); font-weight: 800; font-size: 0.92rem; justify-content: center;">
+              Verify &amp; Unlock
+            </button>
+          </form>
+        </div>
+
+        <!-- Screen 2: Upload Form (Unlocked) -->
+        <div id="financeUploadFormSection" style="display: none;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border);">
+            <span style="font-size: 0.78rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: 9999px;">
+              &bull; ADMIN AUTHENTICATED
+            </span>
+            <button type="button" id="btnFinanceAdminLogout" class="btn-bot-link" style="color: #ef4444; font-size: 0.8rem; cursor: pointer; background: none; border: none; text-decoration: underline;">Lock Portal</button>
           </div>
 
-          <!-- Document Title -->
-          <div class="bot-field-box">
-            <label class="bot-field-label" for="financeDocTitle">Document Title *</label>
-            <input type="text" id="financeDocTitle" class="bot-text-input" placeholder="e.g. Corporate Valuation &amp; DCF Model Case Study" required>
-          </div>
-
-          <!-- Subject & Author -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <form id="formUploadFinanceAssignment" novalidate style="display: flex; flex-direction: column; gap: 1.1rem;">
+            
+            <!-- Target Shelf / Category -->
             <div class="bot-field-box">
-              <label class="bot-field-label" for="financeDocSubject">Finance Subject / Module *</label>
-              <select id="financeDocSubject" class="bot-select-input" required>
-                <option value="Corporate Finance" selected>Corporate Finance</option>
-                <option value="Valuation &amp; DCF">Valuation &amp; DCF Models</option>
-                <option value="Portfolio Management">Portfolio &amp; Security Analysis</option>
-                <option value="Financial Markets">Financial Markets &amp; Banking</option>
-                <option value="GST &amp; Taxation">Corporate Tax &amp; GST</option>
-                <option value="Working Capital">Working Capital Management</option>
-                <option value="International Finance">International Finance</option>
-                <option value="Case Study Solution">Case Study Solution</option>
+              <label class="bot-field-label" for="financeDocCategory">Target Finance Shelf *</label>
+              <select id="financeDocCategory" class="bot-select-input">
+                <option value="assignments" selected>Finance Assignments &amp; Projects</option>
+                <option value="casestudies">Finance Case Studies &amp; Solutions</option>
               </select>
             </div>
 
+            <!-- PDF File Dropzone -->
             <div class="bot-field-box">
-              <label class="bot-field-label" for="financeDocAuthor">Author / Student / Batch</label>
-              <input type="text" id="financeDocAuthor" class="bot-text-input" placeholder="e.g. MBA Finance 2026">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label class="bot-field-label">Select Document PDF(s) *</label>
+                <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
+              </div>
+              <div class="lib-file-dropzone" id="financeFileDropzone" style="border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
+                <input type="file" id="financePdfInput" accept="application/pdf" style="display: none;" multiple>
+                <div class="dropzone-content">
+                  <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  </div>
+                  <p id="financeDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose PDF(s)</p>
+                  <p id="financeDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop single or multiple PDF files here</p>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <!-- Ribbon Tag -->
-          <div class="bot-field-box">
-            <label class="bot-field-label" for="financeDocRibbon">Corner Ribbon Tag</label>
-            <select id="financeDocRibbon" class="bot-select-input">
-              <option value="popular">POPULAR (Orange)</option>
-              <option value="trending">TRENDING (Orange)</option>
-              <option value="featured">FEATURED (Orange)</option>
-              <option value="souvenir">SOUVENIR EDITION (Gold/Navy)</option>
-              <option value="none">No Ribbon</option>
-            </select>
-          </div>
+            <!-- Document Title -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="financeDocTitle">Document Title</label>
+              <input type="text" id="financeDocTitle" class="bot-text-input" placeholder="Auto-filled from file name">
+            </div>
 
-          <!-- Live Thumbnail Preview -->
-          <div id="financeThumbPreviewBox" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.9rem; text-align: center;">
-            <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold); display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
-              Auto-Generated Cover Thumbnail
-            </span>
-            <img id="financeImgThumbnail" src="" alt="Thumbnail Preview" style="max-height: 150px; max-width: 100%; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-          </div>
+            <!-- Subject & Author -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="bot-field-box">
+                <label class="bot-field-label" for="financeDocSubject">Finance Subject / Module *</label>
+                <select id="financeDocSubject" class="bot-select-input">
+                  <option value="Corporate Finance" selected>Corporate Finance</option>
+                  <option value="Valuation &amp; DCF">Valuation &amp; DCF Models</option>
+                  <option value="Portfolio Management">Portfolio &amp; Security Analysis</option>
+                  <option value="Financial Markets">Financial Markets &amp; Banking</option>
+                  <option value="GST &amp; Taxation">Corporate Tax &amp; GST</option>
+                  <option value="Working Capital">Working Capital Management</option>
+                  <option value="International Finance">International Finance</option>
+                  <option value="Case Study Solution">Case Study Solution</option>
+                </select>
+              </div>
 
-          <button type="submit" id="btnSubmitFinanceAssignment" class="btn-gold" style="padding: 0.85rem; font-weight: 800; font-size: 0.95rem; justify-content: center; width: 100%; margin-top: 0.4rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
-            Publish Document to Vault
-          </button>
-        </form>
+              <div class="bot-field-box">
+                <label class="bot-field-label" for="financeDocAuthor">Author / Student / Batch</label>
+                <input type="text" id="financeDocAuthor" class="bot-text-input" placeholder="e.g. MBA Finance 2026">
+              </div>
+            </div>
+
+            <!-- Ribbon Tag -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="financeDocRibbon">Corner Ribbon Tag</label>
+              <select id="financeDocRibbon" class="bot-select-input">
+                <option value="popular">POPULAR (Orange)</option>
+                <option value="trending">TRENDING (Orange)</option>
+                <option value="featured">FEATURED (Orange)</option>
+                <option value="souvenir">SOUVENIR EDITION (Gold/Navy)</option>
+                <option value="none">No Ribbon</option>
+              </select>
+            </div>
+
+            <!-- Live Thumbnail Preview -->
+            <div id="financeThumbPreviewBox" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.9rem; text-align: center;">
+              <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold); display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                Auto-Generated Cover Thumbnail
+              </span>
+              <img id="financeImgThumbnail" src="" alt="Thumbnail Preview" style="max-height: 150px; max-width: 100%; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+            </div>
+
+            <button type="submit" id="btnSubmitFinanceAssignment" class="btn-gold" style="padding: 0.85rem; font-weight: 800; font-size: 0.95rem; justify-content: center; width: 100%; margin-top: 0.4rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
+              Publish Document to Vault
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

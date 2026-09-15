@@ -328,7 +328,7 @@
             <button type="button" id="btnAdminLogout" class="btn-bot-link" style="color: #ef4444; font-size: 0.8rem; cursor: pointer; background: none; border: none; text-decoration: underline;">Lock Portal</button>
           </div>
 
-          <form id="formUploadBook" style="display: flex; flex-direction: column; gap: 1.1rem;">
+          <form id="formUploadBook" novalidate style="display: flex; flex-direction: column; gap: 1.1rem;">
             
             <!-- Category / Shelf with Auto-Route Indicator -->
             <div class="bot-field-box">
@@ -338,7 +338,7 @@
                   ⚡ Auto-Routing Active
                 </span>
               </div>
-              <select id="uploadShelfCategory" class="bot-select-input" required>
+              <select id="uploadShelfCategory" class="bot-select-input">
                 <option value="news">Latest News &amp; Newspapers</option>
                 <option value="magazine">Latest Magazines</option>
                 <option value="books" selected>Latest Books</option>
@@ -357,7 +357,7 @@
                 <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
               </div>
               <div class="lib-file-dropzone" id="libFileDropzone">
-                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" multiple required>
+                <input type="file" id="uploadPdfFile" accept="application/pdf" class="lib-file-hidden-input" multiple>
                 <div class="dropzone-content">
                   <div class="dropzone-icon">
                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
