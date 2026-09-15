@@ -6,7 +6,7 @@
   <title>Corporate Finance & Treasury Systems | ASIF TECH GLOBAL</title>
   <meta name="description" content="Enterprise Corporate Finance and Treasury platform by Asif Tech Global. Real-time ledgers, GST invoicing, cash flow forecasting, and automated PDF document vault.">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3.0">
   <script src="pdf.min.js"></script>
 </head>
 <body id="finance-portal">
@@ -124,7 +124,18 @@
         </div>
 
         <div class="lib-shelf-track-container">
-          <div class="lib-shelf-track" id="financeAssignmentsTrack"></div>
+          <div class="lib-shelf-track" id="financeAssignmentsTrack">
+            <div class="lib-shelf-empty" data-shelf="assignments">
+              <div class="empty-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+              </div>
+              <div class="empty-text">
+                <h4>No documents uploaded yet</h4>
+                <p>Upload your own PDF document to this shelf.</p>
+              </div>
+              <button type="button" class="btn-shelf-upload-empty" data-shelf="assignments">+ Upload PDF</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -145,7 +156,18 @@
         </div>
 
         <div class="lib-shelf-track-container">
-          <div class="lib-shelf-track" id="financeCaseStudiesTrack"></div>
+          <div class="lib-shelf-track" id="financeCaseStudiesTrack">
+            <div class="lib-shelf-empty" data-shelf="casestudies">
+              <div class="empty-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+              </div>
+              <div class="empty-text">
+                <h4>No documents uploaded yet</h4>
+                <p>Upload your own PDF document to this shelf.</p>
+              </div>
+              <button type="button" class="btn-shelf-upload-empty" data-shelf="casestudies">+ Upload PDF</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -477,6 +499,6 @@
     &uarr;
   </button>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>

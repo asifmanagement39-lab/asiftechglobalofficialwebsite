@@ -783,7 +783,7 @@ function initFinancePdfModule() {
   if (!shelfAssignments && !shelfCaseStudies) return;
 
   const DB_NAME = 'ATG_Finance_Assignments_DB';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const STORE_NAME = 'finance_assignments';
 
   const financeActiveBlobUrls = new Map();
@@ -870,6 +870,7 @@ function initFinancePdfModule() {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
           store.createIndex('category', 'category', { unique: false });
+          store.createIndex('timestamp', 'timestamp', { unique: false });
         }
       };
       request.onsuccess = () => resolve(request.result);
@@ -1432,7 +1433,7 @@ function initFinancePdfModule() {
 // --------------------------------------------------------------------------
 function initLibraryModule() {
   const DB_NAME = 'ATG_Library_DB';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const STORE_NAME = 'library_documents';
 
   // Active in-memory Object URLs for live reader & downloads
