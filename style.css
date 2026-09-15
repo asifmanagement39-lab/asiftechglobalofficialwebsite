@@ -3099,31 +3099,106 @@ footer {
   transform: translateY(-1px);
 }
 
-/* Quick Shelves Navigation Chips */
+/* Quick Shelves Navigation Chips & Instant Upload Buttons */
 .lib-quick-shelves-nav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 0.75rem;
   margin-top: 1.6rem;
 }
 
-.quick-shelf-chip {
-  background: rgba(255, 255, 255, 0.05);
+.quick-nav-group {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
-  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  padding: 2px 4px 2px 2px;
+  transition: var(--transition);
+}
+
+.quick-nav-group:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(230, 184, 0, 0.15);
+}
+
+.quick-shelf-chip {
+  color: var(--text-main);
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 0.35rem 0.9rem;
-  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.85rem;
   text-decoration: none;
   transition: var(--transition);
 }
 
 .quick-shelf-chip:hover {
-  border-color: var(--gold);
   color: var(--gold);
-  background: rgba(230, 184, 0, 0.1);
+}
+
+.btn-chip-upload {
+  background: rgba(230, 184, 0, 0.15);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-left: 0.2rem;
+}
+
+.btn-chip-upload:hover {
+  background: var(--gold);
+  color: #000000;
+  box-shadow: 0 0 10px rgba(230, 184, 0, 0.4);
+}
+
+/* Prominent Admin Upload Action Dock in Hero */
+.lib-admin-hero-dock {
+  margin-top: 1.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-admin-hero-trigger {
+  background: linear-gradient(135deg, rgba(230, 184, 0, 0.2) 0%, rgba(230, 184, 0, 0.08) 100%);
+  border: 1px solid var(--border-gold);
+  color: #ffffff;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 184, 0, 0.15);
+}
+
+.btn-admin-hero-trigger:hover {
+  background: var(--gold);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(230, 184, 0, 0.4);
+}
+
+.dock-badge {
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--gold);
+  border: 1px solid rgba(230, 184, 0, 0.3);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono, monospace);
+}
+
+.btn-admin-hero-trigger:hover .dock-badge {
+  background: #000000;
+  color: var(--gold);
 }
 
 /* ==========================================================================
@@ -3139,6 +3214,8 @@ footer {
   align-items: flex-end;
   justify-content: space-between;
   margin-bottom: 1.4rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .lib-shelf-title-wrap {
@@ -3158,6 +3235,39 @@ footer {
 
 .lib-shelf-title {
   font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+  font-weight: 900;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.lib-shelf-title span {
+  color: var(--gold);
+}
+
+.lib-shelf-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-shelf-upload {
+  background: rgba(230, 184, 0, 0.12);
+  border: 1px solid var(--border-gold);
+  color: var(--gold);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.btn-shelf-upload:hover {
+  background: var(--gold);
+  color: #000000;
+  box-shadow: 0 0 12px rgba(230, 184, 0, 0.35);
+}
   font-weight: 900;
   color: var(--text-main);
   letter-spacing: -0.5px;

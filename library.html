@@ -123,13 +123,37 @@
         </div>
       </div>
 
-      <!-- Quick Shelf Quick-Jumps -->
+      <!-- Direct Shelf Quick-Jumps & Instant Upload Bar -->
       <div class="lib-quick-shelves-nav">
-        <a href="#shelfNews" class="quick-shelf-chip">Latest News</a>
-        <a href="#shelfMagazines" class="quick-shelf-chip">Latest Magazines</a>
-        <a href="#shelfBooks" class="quick-shelf-chip">Latest Books</a>
-        <a href="#shelfStudy" class="quick-shelf-chip">Study Material</a>
-        <a href="#shelfFree" class="quick-shelf-chip">Free Content</a>
+        <div class="quick-nav-group">
+          <a href="#shelfNews" class="quick-shelf-chip">Latest News</a>
+          <button type="button" class="btn-chip-upload" data-shelf="news" title="Upload Newspaper">+ Upload</button>
+        </div>
+        <div class="quick-nav-group">
+          <a href="#shelfMagazines" class="quick-shelf-chip">Latest Magazines</a>
+          <button type="button" class="btn-chip-upload" data-shelf="magazine" title="Upload Magazine">+ Upload</button>
+        </div>
+        <div class="quick-nav-group">
+          <a href="#shelfBooks" class="quick-shelf-chip">Latest Books</a>
+          <button type="button" class="btn-chip-upload" data-shelf="books" title="Upload Book">+ Upload</button>
+        </div>
+        <div class="quick-nav-group">
+          <a href="#shelfStudy" class="quick-shelf-chip">Study Material</a>
+          <button type="button" class="btn-chip-upload" data-shelf="study" title="Upload Study Material">+ Upload</button>
+        </div>
+        <div class="quick-nav-group">
+          <a href="#shelfFree" class="quick-shelf-chip">Free Content</a>
+          <button type="button" class="btn-chip-upload" data-shelf="free" title="Upload Free Content">+ Upload</button>
+        </div>
+      </div>
+
+      <!-- Prominent Admin Upload Action Dock -->
+      <div class="lib-admin-hero-dock">
+        <button type="button" class="btn-admin-hero-trigger" id="btnHeroAdminUpload">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span>Upload PDF Document (Admin Portal)</span>
+          <span class="dock-badge">Password: Asif@#69#@</span>
+        </button>
       </div>
     </div>
   </header>
@@ -161,6 +185,7 @@
           <h2 class="lib-shelf-title">Latest <span>News</span></h2>
         </div>
         <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="news">+ Upload News</button>
           <button type="button" class="btn-shelf-nav prev" data-target="newsTrack" aria-label="Previous News">&lt;</button>
           <button type="button" class="btn-shelf-nav next" data-target="newsTrack" aria-label="Next News">&gt;</button>
         </div>
@@ -265,6 +290,7 @@
           <h2 class="lib-shelf-title">Latest <span>Magazine</span></h2>
         </div>
         <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="magazine">+ Upload Magazine</button>
           <button type="button" class="btn-shelf-nav prev" data-target="magTrack" aria-label="Previous Magazine">&lt;</button>
           <button type="button" class="btn-shelf-nav next" data-target="magTrack" aria-label="Next Magazine">&gt;</button>
         </div>
@@ -369,6 +395,7 @@
           <h2 class="lib-shelf-title">Latest <span>Books</span></h2>
         </div>
         <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="books">+ Upload Book</button>
           <button type="button" class="btn-shelf-nav prev" data-target="booksTrack" aria-label="Previous Book">&lt;</button>
           <button type="button" class="btn-shelf-nav next" data-target="booksTrack" aria-label="Next Book">&gt;</button>
         </div>
@@ -473,6 +500,7 @@
           <h2 class="lib-shelf-title">Study <span>Material</span></h2>
         </div>
         <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="study">+ Upload Study Material</button>
           <button type="button" class="btn-shelf-nav prev" data-target="studyTrack" aria-label="Previous Material">&lt;</button>
           <button type="button" class="btn-shelf-nav next" data-target="studyTrack" aria-label="Next Material">&gt;</button>
         </div>
@@ -577,6 +605,7 @@
           <h2 class="lib-shelf-title">Free <span>Content</span></h2>
         </div>
         <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="free">+ Upload Free Content</button>
           <button type="button" class="btn-shelf-nav prev" data-target="freeTrack" aria-label="Previous Free Content">&lt;</button>
           <button type="button" class="btn-shelf-nav next" data-target="freeTrack" aria-label="Next Free Content">&gt;</button>
         </div>

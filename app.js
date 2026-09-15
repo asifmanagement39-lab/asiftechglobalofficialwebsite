@@ -1262,8 +1262,15 @@ function initLibraryModule() {
   let generatedCoverDataUrl = '';
   let uploadedPdfBlobUrl = '';
 
-  function openAdminModal() {
+  function openAdminModal(targetShelf) {
     if (!libAdminModal) return;
+    
+    // If target shelf passed, pre-select it
+    if (targetShelf && typeof targetShelf === 'string') {
+      const shelfSelect = document.getElementById('uploadShelfCategory');
+      if (shelfSelect) shelfSelect.value = targetShelf;
+    }
+
     const isUnlocked = sessionStorage.getItem('atg_admin_unlocked') === 'true';
     if (isUnlocked) {
       if (adminPasswordGate) adminPasswordGate.style.display = 'none';
@@ -1271,7 +1278,10 @@ function initLibraryModule() {
     } else {
       if (adminPasswordGate) adminPasswordGate.style.display = 'block';
       if (adminUploadFormSection) adminUploadFormSection.style.display = 'none';
-      if (adminAuthPassword) adminAuthPassword.value = '';
+      if (adminAuthPassword) {
+        adminAuthPassword.value = '';
+        setTimeout(() => adminAuthPassword.focus(), 150);
+      }
       if (adminAuthError) adminAuthError.style.display = 'none';
     }
     libAdminModal.classList.add('open');
@@ -1286,7 +1296,21 @@ function initLibraryModule() {
     document.body.style.overflow = '';
   }
 
-  if (btnOpenAdminModal) btnOpenAdminModal.addEventListener('click', openAdminModal);
+  // Bind all Admin Upload buttons
+  if (btnOpenAdminModal) btnOpenAdminModal.addEventListener('click', () => openAdminModal());
+  
+  const heroAdminUploadBtn = document.getElementById('btnHeroAdminUpload');
+  if (heroAdminUploadBtn) heroAdminUploadBtn.addEventListener('click', () => openAdminModal());
+
+  document.querySelectorAll('.btn-chip-upload, .btn-shelf-upload').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const shelf = btn.getAttribute('data-shelf') || 'books';
+      openAdminModal(shelf);
+    });
+  });
+
   if (adminModalClose) adminModalClose.addEventListener('click', closeAdminModal);
   if (adminModalBackdrop) adminModalBackdrop.addEventListener('click', closeAdminModal);
 
