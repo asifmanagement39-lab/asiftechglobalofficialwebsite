@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HR & Workforce Systems | ASIF TECH GLOBAL</title>
-  <meta name="description" content="Enterprise Human Resources and Workforce Management platform by Asif Tech Global. Automated payroll, statutory compliance, biometric rosters, and headcount analytics.">
+  <meta name="description" content="Enterprise Human Resources and Workforce Management platform by Asif Tech Global. Automated payroll, statutory compliance, biometric rosters, and integrated HR PDF document vault.">
   
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4.0">
+  <script src="pdf.min.js"></script>
 </head>
 <body id="hr-portal">
 
@@ -75,7 +76,14 @@
           </svg>
         </button>
 
-        <a href="index.html#pricing" class="btn-gold">Get Started</a>
+        <button type="button" class="btn-gold" id="navUploadPdfBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <span>Upload PDF</span>
+        </button>
       </div>
     </div>
   </nav>
@@ -90,10 +98,161 @@
         Human Resources & <br><span class="gradient-gold-text">Workforce Infrastructure</span>
       </h1>
       <p class="page-hero-subtitle">
-        Centralized human capital architecture connecting biometric clock-ins, rotational shift rosters, statutory compliance reporting, and one-click salary disbursement.
+        Centralized human capital architecture connecting biometric clock-ins, rotational shift rosters, statutory compliance reporting, and an integrated PDF document repository for Case Studies, Assignments, and Project Reports.
       </p>
     </div>
   </header>
+
+  <!-- ==========================================================================
+       Choose Topic Interactive Cards (Case Study, Assignment, Project Report)
+       ========================================================================== -->
+  <section class="choose-topic-section">
+    <div class="container">
+      <div class="choose-topic-header">
+        <span class="choose-topic-tag">C H O O S E &nbsp; T O P I C</span>
+      </div>
+      <div class="choose-topic-grid">
+        <!-- Topic 1: Case Study -->
+        <a href="#shelfHrCaseStudies" class="topic-card" data-shelf="casestudies" id="topicCardCaseStudy">
+          <div class="topic-card-icon">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <span class="topic-card-title">Case Study</span>
+          <span class="topic-card-badge">HR SOLUTIONS</span>
+        </a>
+
+        <!-- Topic 2: Assignment -->
+        <a href="#shelfHrAssignments" class="topic-card" data-shelf="assignments" id="topicCardAssignment">
+          <div class="topic-card-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" stroke-dasharray="3 3" opacity="0.4"></circle>
+              <path d="M12 4L6 19h12L12 4z"></path>
+              <line x1="8.5" y1="14" x2="15.5" y2="14"></line>
+            </svg>
+          </div>
+          <span class="topic-card-title">Assignment</span>
+          <span class="topic-card-badge">MBA CURRICULUM</span>
+        </a>
+
+        <!-- Topic 3: Project Report -->
+        <a href="#shelfHrProjectReports" class="topic-card" data-shelf="projectreports" id="topicCardProjectReport">
+          <div class="topic-card-icon">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 12 12 17 22 12"></polyline>
+              <polyline points="2 17 12 22 22 17"></polyline>
+            </svg>
+          </div>
+          <span class="topic-card-title">Project Report</span>
+          <span class="topic-card-badge">CAPSTONE & RESEARCH</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Shelf 1: HR Case Studies (Horizontal Left-to-Right Flow)
+       ========================================================================== -->
+  <section class="lib-shelf-section" id="shelfHrCaseStudies" style="padding-top: 1.5rem; padding-bottom: 2rem;">
+    <div class="container">
+      <div class="lib-shelf-header">
+        <div class="lib-shelf-title-wrap">
+          <span class="lib-shelf-tag">MBA HR // EXECUTIVE CASE STUDIES</span>
+          <h2 class="lib-shelf-title">HR <span>Case Studies</span></h2>
+        </div>
+        <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="casestudies">+ Upload Case Study</button>
+          <button type="button" class="btn-shelf-nav prev" data-target="hrCaseStudiesTrack" aria-label="Previous Case Study">&lt;</button>
+          <button type="button" class="btn-shelf-nav next" data-target="hrCaseStudiesTrack" aria-label="Next Case Study">&gt;</button>
+        </div>
+      </div>
+
+      <div class="lib-shelf-track-container">
+        <div class="lib-shelf-track" id="hrCaseStudiesTrack">
+          <div class="lib-shelf-empty" data-shelf="casestudies">
+            <div class="empty-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="empty-text">
+              <h4>No case studies uploaded yet</h4>
+              <p>Upload your own PDF document to this shelf.</p>
+            </div>
+            <button type="button" class="btn-shelf-upload-empty" data-shelf="casestudies">+ Upload PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Shelf 2: HR Assignments (Horizontal Left-to-Right Flow)
+       ========================================================================== -->
+  <section class="lib-shelf-section" id="shelfHrAssignments" style="padding-top: 1rem; padding-bottom: 2rem;">
+    <div class="container">
+      <div class="lib-shelf-header">
+        <div class="lib-shelf-title-wrap">
+          <span class="lib-shelf-tag">MBA HR // ACADEMIC ASSIGNMENTS</span>
+          <h2 class="lib-shelf-title">HR <span>Assignments</span></h2>
+        </div>
+        <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="assignments">+ Upload Assignment</button>
+          <button type="button" class="btn-shelf-nav prev" data-target="hrAssignmentsTrack" aria-label="Previous Assignment">&lt;</button>
+          <button type="button" class="btn-shelf-nav next" data-target="hrAssignmentsTrack" aria-label="Next Assignment">&gt;</button>
+        </div>
+      </div>
+
+      <div class="lib-shelf-track-container">
+        <div class="lib-shelf-track" id="hrAssignmentsTrack">
+          <div class="lib-shelf-empty" data-shelf="assignments">
+            <div class="empty-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="empty-text">
+              <h4>No assignments uploaded yet</h4>
+              <p>Upload your own PDF document to this shelf.</p>
+            </div>
+            <button type="button" class="btn-shelf-upload-empty" data-shelf="assignments">+ Upload PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Shelf 3: HR Project Reports (Horizontal Left-to-Right Flow)
+       ========================================================================== -->
+  <section class="lib-shelf-section" id="shelfHrProjectReports" style="padding-top: 1rem; padding-bottom: 3rem;">
+    <div class="container">
+      <div class="lib-shelf-header">
+        <div class="lib-shelf-title-wrap">
+          <span class="lib-shelf-tag">MBA HR // CAPSTONE &amp; RESEARCH</span>
+          <h2 class="lib-shelf-title">HR <span>Project Reports</span></h2>
+        </div>
+        <div class="lib-shelf-controls">
+          <button type="button" class="btn-shelf-upload" data-shelf="projectreports">+ Upload Project Report</button>
+          <button type="button" class="btn-shelf-nav prev" data-target="hrProjectReportsTrack" aria-label="Previous Project Report">&lt;</button>
+          <button type="button" class="btn-shelf-nav next" data-target="hrProjectReportsTrack" aria-label="Next Project Report">&gt;</button>
+        </div>
+      </div>
+
+      <div class="lib-shelf-track-container">
+        <div class="lib-shelf-track" id="hrProjectReportsTrack">
+          <div class="lib-shelf-empty" data-shelf="projectreports">
+            <div class="empty-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="empty-text">
+              <h4>No project reports uploaded yet</h4>
+              <p>Upload your own PDF document to this shelf.</p>
+            </div>
+            <button type="button" class="btn-shelf-upload-empty" data-shelf="projectreports">+ Upload PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ==========================================================================
        HR Management Suite Modules
@@ -318,11 +477,192 @@
     </div>
   </footer>
 
+  <!-- ==========================================================================
+       MBA HR Upload Modal (Case Study / Assignment / Project Report)
+       ========================================================================== -->
+  <div class="pdf-modal" id="hrUploadModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="pdf-modal-backdrop" id="hrUploadModalBackdrop"></div>
+    <div class="pdf-modal-container" style="max-width: 620px; height: auto; max-height: 90vh;">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title" style="display: flex; align-items: center; gap: 0.6rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <span id="hrUploadModalHeading">Upload MBA HR Document</span>
+        </div>
+        <button type="button" class="btn-pdf-close" id="hrUploadModalClose" aria-label="Close Modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="pdf-modal-body" style="padding: 1.8rem; overflow-y: auto; background: var(--bg-card, #0f1424);">
+        <!-- Screen 1: Master Admin Password Gate -->
+        <div id="hrPasswordGate" style="display: block; text-align: center; padding: 1rem 0.5rem;">
+          <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.8rem; border: 1px solid var(--border-gold);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;">MBA HR Administrator Portal</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.3rem; max-width: 380px; margin-inline: auto;">
+            Enter your secret master administrator key to upload or manage HR case studies, assignments &amp; project reports.
+          </p>
+
+          <form id="formHrAdminAuth" style="display: flex; flex-direction: column; gap: 0.9rem; max-width: 360px; margin: 0 auto;">
+            <div class="bot-field-box" style="text-align: left;">
+              <label class="bot-field-label" for="hrAdminAuthPassword">Master Password Key *</label>
+              <div style="position: relative;">
+                <input 
+                  type="password" 
+                  id="hrAdminAuthPassword" 
+                  class="bot-text-input" 
+                  placeholder="Enter administrator key..."
+                  required
+                  style="width: 100%; padding-right: 2.5rem;"
+                  autocomplete="current-password"
+                >
+                <button type="button" id="btnToggleHrAdminPw" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer;" title="Show/Hide Password">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <div id="hrAdminAuthError" style="display: none; font-size: 0.82rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.55rem 0.8rem; border-radius: 4px;">
+              Incorrect master password! Access denied.
+            </div>
+
+            <button type="submit" class="btn-gold" style="padding: 0.8rem; border-radius: var(--radius-sm); font-weight: 800; font-size: 0.92rem; justify-content: center;">
+              Verify &amp; Unlock
+            </button>
+          </form>
+        </div>
+
+        <!-- Screen 2: Upload Form (Unlocked) -->
+        <div id="hrUploadFormSection" style="display: none;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border);">
+            <span style="font-size: 0.78rem; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: 9999px;">
+              &bull; ADMIN AUTHENTICATED
+            </span>
+            <button type="button" id="btnHrAdminLogout" class="btn-bot-link" style="color: #ef4444; font-size: 0.8rem; cursor: pointer; background: none; border: none; text-decoration: underline;">Lock Portal</button>
+          </div>
+
+          <form id="formUploadHrDoc" novalidate style="display: flex; flex-direction: column; gap: 1.1rem;">
+            
+            <!-- Target Shelf / Category -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="hrDocCategory">Target HR Topic / Shelf *</label>
+              <select id="hrDocCategory" class="bot-select-input">
+                <option value="casestudies" selected>Case Study (Executive Solutions)</option>
+                <option value="assignments">Assignment (Core Curriculum)</option>
+                <option value="projectreports">Project Report (Capstone &amp; Research)</option>
+              </select>
+            </div>
+
+            <!-- PDF File Dropzone (Native Label Trigger) -->
+            <div class="bot-field-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label class="bot-field-label">Select Document PDF(s) *</label>
+                <span style="font-size: 0.72rem; color: var(--gold); font-weight: 700;">Unlimited Batch Upload Supported</span>
+              </div>
+              <label class="lib-file-dropzone" id="hrFileDropzone" for="hrPdfInput" style="display: block; border: 2px dashed rgba(230, 184, 0, 0.4); border-radius: 8px; padding: 1.8rem; text-align: center; cursor: pointer; background: rgba(0,0,0,0.25); transition: all 0.3s ease;">
+                <input type="file" id="hrPdfInput" accept="application/pdf" style="display: none;" multiple>
+                <div class="dropzone-content">
+                  <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(230, 184, 0, 0.12); color: var(--gold); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.6rem;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  </div>
+                  <p id="hrDropText" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem;">Click to choose PDF(s)</p>
+                  <p id="hrDropSubText" style="font-size: 0.78rem; color: var(--text-muted);">or drag and drop single or multiple PDF files here</p>
+                </div>
+              </label>
+            </div>
+
+            <!-- Document Title -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="hrDocTitle">Document Title</label>
+              <input type="text" id="hrDocTitle" class="bot-text-input" placeholder="Auto-filled from file name">
+            </div>
+
+            <!-- Subject & Author -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="bot-field-box">
+                <label class="bot-field-label" for="hrDocSubject">HR Subject / Module *</label>
+                <select id="hrDocSubject" class="bot-select-input">
+                  <option value="Human Resource Management" selected>Human Resource Management</option>
+                  <option value="Talent Acquisition &amp; Recruitment">Talent Acquisition &amp; Hiring</option>
+                  <option value="Performance &amp; Appraisal">Performance &amp; Appraisals</option>
+                  <option value="Labor Laws &amp; Industrial Relations">Labor Laws &amp; Compliance</option>
+                  <option value="Training &amp; Development">Training &amp; Org Development</option>
+                  <option value="HR Analytics &amp; Metrics">HR Analytics &amp; Telemetry</option>
+                  <option value="Strategic HRM">Strategic HRM</option>
+                  <option value="Compensation &amp; Benefits">Compensation &amp; Benefits</option>
+                </select>
+              </div>
+
+              <div class="bot-field-box">
+                <label class="bot-field-label" for="hrDocAuthor">Author / Student / Batch</label>
+                <input type="text" id="hrDocAuthor" class="bot-text-input" placeholder="e.g. MBA HR 2026">
+              </div>
+            </div>
+
+            <!-- Ribbon Tag -->
+            <div class="bot-field-box">
+              <label class="bot-field-label" for="hrDocRibbon">Corner Ribbon Tag</label>
+              <select id="hrDocRibbon" class="bot-select-input">
+                <option value="popular">POPULAR (Orange)</option>
+                <option value="trending">TRENDING (Orange)</option>
+                <option value="featured">FEATURED (Orange)</option>
+                <option value="souvenir">SOUVENIR EDITION (Gold/Navy)</option>
+                <option value="none">No Ribbon</option>
+              </select>
+            </div>
+
+            <!-- Live Thumbnail Preview -->
+            <div id="hrThumbPreviewBox" style="display: none; background: rgba(0,0,0,0.4); border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.9rem; text-align: center;">
+              <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold); display: block; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                Auto-Generated Cover Thumbnail
+              </span>
+              <img id="hrImgThumbnail" src="" alt="Thumbnail Preview" style="max-height: 150px; max-width: 100%; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+            </div>
+
+            <button type="submit" id="btnSubmitHrDoc" class="btn-gold" style="padding: 0.85rem; font-weight: 800; font-size: 0.95rem; justify-content: center; width: 100%; margin-top: 0.4rem; box-shadow: 0 4px 15px rgba(230, 184, 0, 0.3);">
+              Publish Document to Vault
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-Page PDF Reader Modal -->
+  <div class="pdf-modal" id="pdfModal" aria-hidden="true">
+    <div class="pdf-modal-backdrop" id="pdfModalBackdrop"></div>
+    <div class="pdf-modal-container">
+      <div class="pdf-modal-header">
+        <div class="pdf-modal-title" id="pdfModalTitle">Document Viewer</div>
+        <div class="pdf-modal-actions">
+          <a href="#" id="pdfModalDownload" class="btn-pdf-action" download title="Download PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download</span>
+          </a>
+          <button type="button" class="btn-pdf-close" id="closePdfModal" aria-label="Close Viewer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="pdf-modal-body">
+        <iframe id="pdfModalFrame" src="" title="PDF Document Viewer"></iframe>
+      </div>
+    </div>
+  </div>
+
   <!-- Scroll to top button -->
   <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
     &uarr;
   </button>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>
