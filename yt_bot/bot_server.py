@@ -12,9 +12,10 @@ import time
 import subprocess
 import threading
 from pathlib import Path
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_from_directory
 
 BASE_DIR = Path(__file__).parent.resolve()
+PARENT_DIR = BASE_DIR.parent
 CONFIG_FILE = BASE_DIR / "config.json"
 URLS_FILE = BASE_DIR / "urls.txt"
 MESSAGES_FILE = BASE_DIR / "messages.txt"
@@ -34,6 +35,16 @@ def add_cors_headers(response):
     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
     return response
+
+@app.route("/", methods=["GET"])
+@app.route("/<path:filename>", methods=["GET"])
+def serve_static(filename="index.html"):
+    if filename.startswith("api/"):
+        return jsonify({"error": "Endpoint not found"}), 404
+    file_path = PARENT_DIR / filename
+    if file_path.exists() and file_path.is_file():
+        return send_from_directory(str(PARENT_DIR), filename)
+    return send_from_directory(str(PARENT_DIR), "index.html")
 
 def _is_running():
     global _bot_process
@@ -149,7 +160,7 @@ def start_bot_process():
         env = os.environ.copy()
         env["BOT_DATA_DIR"] = str(BASE_DIR)
         
-        cmd = [sys.executable, str(BASE_DIR / "bot.py")]
+        cmd = [sys.executable, "-u", str(BASE_DIR / "bot.py")]
         
         creationflags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
         
@@ -246,13 +257,39 @@ def stream_logs():
 def open_login_browser():
     with _lock:
         if _is_running():
-            return jsonify({"ok": False, "msg": "Please stop the running bot first before opening sign-in window."})
+            try:
+                pid = _bot_process.pid
+                if os.name == "nt":
+                    subprocess.run(["taskkill", "/F", "/T", "/PID", str(pid)], capture_output=True, timeout=5)
+                else:
+                    _bot_process.terminate()
+            except Exception:
+                pass
+            _bot_process = None
+            _bot_start_time = None
+            time.sleep(1)
             
         profile_path = os.path.join(BASE_DIR, "Saved_YT_Session")
+        try:
+            import psutil
+            for p in psutil.process_iter(['pid', 'name', 'cmdline']):
+                try:
+                    cmd_str = ' '.join(p.info['cmdline'] or [])
+                    pname = (p.info['name'] or '').lower()
+                    if 'Saved_YT_Session' in cmd_str and 'chrome' in pname:
+                        p.kill()
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
         if os.path.exists(profile_path):
             for root, dirs, files in os.walk(profile_path):
                 for f in files:
-                    if f.lower() in ("lock", "lockfile", "singletonlock", "singletoncookie", "singletonsocket"):
+                    f_lower = f.lower()
+                    if (f_lower in ("lock", "lockfile", "singletonlock", "singletoncookie", "singletonsocket", "devtoolsactiveport")
+                        or f_lower.endswith("-journal")
+                        or f_lower.endswith(".lock")):
                         try:
                             os.remove(os.path.join(root, f))
                         except Exception:
@@ -276,6 +313,10 @@ def open_login_browser():
             chosen,
             f"--user-data-dir={profile_path}",
             "--profile-directory=Default",
+            "--new-window",
+            "--disable-blink-features=AutomationControlled",
+            "--no-first-run",
+            "--no-default-browser-check",
             "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
         ]
         try:

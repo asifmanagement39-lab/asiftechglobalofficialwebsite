@@ -15,7 +15,7 @@
         "ALLOW_DUPLICATE_MESSAGES": false
     },
     "SYSTEM_SETTINGS": {
-        "HEADLESS_MODE": true,
+        "HEADLESS_MODE": false,
         "TERMINAL_COLOR": "cyan"
     },
     "PREMIUM": {

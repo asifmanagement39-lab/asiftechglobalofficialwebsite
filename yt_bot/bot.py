@@ -366,7 +366,8 @@ def cleanup_chrome_locks(profile_path):
         for p in psutil.process_iter(['pid', 'name', 'cmdline']):
             try:
                 cmd = ' '.join(p.info['cmdline'] or [])
-                if 'Saved_YT_Session' in cmd and p.info['name'] == 'chrome.exe':
+                name = (p.info['name'] or '').lower()
+                if 'Saved_YT_Session' in cmd and 'chrome' in name:
                     p.kill()
             except Exception:
                 pass
@@ -376,7 +377,10 @@ def cleanup_chrome_locks(profile_path):
     if os.path.exists(profile_path):
         for root, dirs, files in os.walk(profile_path):
             for f in files:
-                if f.lower() in ("lock", "lockfile", "singletonlock", "singletoncookie", "singletonsocket"):
+                f_lower = f.lower()
+                if (f_lower in ("lock", "lockfile", "singletonlock", "singletoncookie", "singletonsocket", "devtoolsactiveport")
+                    or f_lower.endswith("-journal")
+                    or f_lower.endswith(".lock")):
                     fp = os.path.join(root, f)
                     try:
                         os.remove(fp)
@@ -416,34 +420,38 @@ def normalize_youtube_url(url):
 
 def safe_send_text(chat_input, text, driver, logger):
     try:
+        # Focus and click chat box
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", chat_input)
         chat_input.click()
-        time.sleep(0.4)
+        time.sleep(0.3)
+
+        # Clear existing text
         chat_input.send_keys(Keys.CONTROL, "a")
         chat_input.send_keys(Keys.BACKSPACE)
         time.sleep(0.2)
         
-        # Insert text cleanly
-        driver.execute_script(
-            "arguments[0].focus(); document.execCommand('selectAll', false, null); document.execCommand('insertText', false, arguments[1]);",
-            chat_input, text
-        )
-        # Dispatch input & change events
-        driver.execute_script("""
-            var el = arguments[0];
-            el.dispatchEvent(new Event('input', { bubbles: true }));
-            el.dispatchEvent(new Event('change', { bubbles: true }));
-        """, chat_input)
-        time.sleep(0.6)
-        
-        chat_input.send_keys(Keys.ENTER)
+        # Method 1: Direct send_keys (triggers all browser keystroke events)
+        try:
+            chat_input.send_keys(str(text))
+            time.sleep(0.4)
+        except Exception:
+            pass
 
-        # Also dispatch Enter keydown via JS
-        driver.execute_script("""
-            var ev = new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13, which: 13, key: 'Enter'});
-            arguments[0].dispatchEvent(ev);
-        """, chat_input)
+        # Method 2: JS insertText fallback if send_keys was blocked
+        current_val = driver.execute_script("return arguments[0].innerText || arguments[0].textContent || arguments[0].value || '';", chat_input)
+        if not current_val.strip():
+            driver.execute_script("""
+                var el = arguments[0];
+                var val = arguments[1];
+                el.focus();
+                document.execCommand('selectAll', false, null);
+                document.execCommand('insertText', false, val);
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            """, chat_input, text)
+            time.sleep(0.4)
 
-        time.sleep(0.5)
+        # Method 3: Try clicking Send Button
         send_selectors = [
             "#send-button yt-button-shape button",
             "#send-button button",
@@ -452,30 +460,48 @@ def safe_send_text(chat_input, text, driver, logger):
             "button[aria-label='Send']",
             "button[aria-label*='Send']",
             "button[aria-label*='भेजें']",
-            "#send-button"
+            "#send-button",
+            "yt-live-chat-message-input-renderer #send-button",
         ]
+        sent = False
         for sel in send_selectors:
             try:
                 for btn in driver.find_elements(By.CSS_SELECTOR, sel):
                     if btn.is_displayed() and btn.is_enabled():
                         driver.execute_script("arguments[0].click();", btn)
-                        return True
+                        sent = True
+                        break
             except Exception:
                 pass
+            if sent:
+                break
 
+        # If send button wasn't clicked, press Enter
+        if not sent:
+            chat_input.send_keys(Keys.ENTER)
+            driver.execute_script("""
+                var ev = new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13, which: 13, key: 'Enter'});
+                arguments[0].dispatchEvent(ev);
+            """, chat_input)
+
+        time.sleep(0.5)
         return True
     except Exception as e:
-        logger.error(f"Send failed: {e}")
+        if logger:
+            logger.error(f"Send failed: {e}")
         return False
 
 
 def is_live_chat_ready(driver, logger=None):
     try:
         driver.switch_to.default_content()
+        time.sleep(1)
+
         # 1. Expand chat if collapsed with Open or Show chat button
         open_selectors = [
             "//button[contains(., 'Open')]",
             "//button[contains(., 'Show chat')]",
+            "//button[contains(., 'Live chat')]",
             "//ytd-button-renderer[contains(., 'Open')]",
             "//ytd-button-renderer[contains(., 'Show chat')]"
         ]
@@ -493,18 +519,28 @@ def is_live_chat_ready(driver, logger=None):
         frames = driver.find_elements(By.CSS_SELECTOR, "iframe#chatframe, iframe[src*='live_chat']")
         if frames:
             driver.switch_to.frame(frames[0])
+            time.sleep(1)
 
             # Check if sign in is required
-            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button")
+            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button, #sign-in-button")
             if sign_in and any(s.is_displayed() for s in sign_in):
                 if logger:
                     logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
                 return False
 
             inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
-            return bool([i for i in inputs if i.is_displayed()])
+            active_inputs = [i for i in inputs if i.is_displayed()]
+            if not active_inputs and logger:
+                logger.warning("[STREAM RESTRICTION] Live chat is visible, but input box is inactive (subscribers-only mode or restricted by stream host).")
+            return bool(active_inputs)
         else:
-            # Check if we are directly on a live_chat page
+            # Direct live_chat page view
+            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button, #sign-in-button")
+            if sign_in and any(s.is_displayed() for s in sign_in):
+                if logger:
+                    logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
+                return False
+
             inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
             return bool([i for i in inputs if i.is_displayed()])
     except Exception as e:
@@ -533,9 +569,20 @@ def find_chat_input(driver, logger=None):
 
 def get_driver(options, logger):
     """Start ChromeDriver with Selenium 4 native manager and graceful fallback"""
+    # 1. First attempt: Use SeleniumManager binary paths
+    try:
+        from selenium.webdriver.common.selenium_manager import SeleniumManager
+        paths = SeleniumManager().binary_paths(["--browser", "chrome"])
+        driver_path = paths.get("driver_path")
+        if driver_path and os.path.exists(driver_path):
+            service = Service(executable_path=driver_path)
+            return webdriver.Chrome(service=service, options=options)
+    except Exception as sm_err:
+        logger.warning(f"Direct SeleniumManager lookup failed: {sm_err}")
+
+    # 2. Second attempt: Native webdriver.Chrome
     for attempt in range(1, 4):
         try:
-            # Primary: Selenium 4 built-in Selenium Manager
             return webdriver.Chrome(options=options)
         except Exception as e1:
             logger.warning(f"Native Chrome start attempt {attempt} failed: {e1}")
@@ -545,8 +592,8 @@ def get_driver(options, logger):
             except Exception as e2:
                 logger.warning(f"ChromeDriverManager attempt {attempt}/3 failed: {e2}")
                 if attempt < 3:
-                    time.sleep(3)
-    raise RuntimeError("Could not start ChromeDriver after 3 attempts")
+                    time.sleep(2)
+    raise RuntimeError("Could not start ChromeDriver after multiple attempts")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -574,6 +621,8 @@ def start_bot():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-allow-origins=*")
     options.add_argument("--window-size=1600,900")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -617,21 +666,33 @@ def start_bot():
 
         # ── MAIN LOOP ──────────────────────────────────────────────────────────
         while True:
-            current_urls = get_data("urls.txt")
+            current_urls = [normalize_youtube_url(u) for u in get_data("urls.txt") if u.strip()]
             live_config  = load_live_config(logger)
             max_tabs     = live_config.get("MAX_TABS", 10)
 
-            # Close tabs whose URLs were removed from file
+            # Close tabs whose URLs were removed from file (only if more than 1 tab)
             for url in list(active_tabs):
                 if url not in current_urls:
-                    logger.info(f"Closing removed URL tab: {url}")
-                    try:
-                        driver.switch_to.window(active_tabs[url])
-                        driver.close()
-                    except Exception:
-                        pass
-                    del active_tabs[url]
-                    time.sleep(0.5)
+                    if len(active_tabs) > 1:
+                        logger.info(f"Closing removed URL tab: {url}")
+                        try:
+                            driver.switch_to.window(active_tabs[url])
+                            driver.close()
+                        except Exception:
+                            pass
+                        del active_tabs[url]
+                        time.sleep(0.5)
+                    elif current_urls:
+                        # Only 1 tab exists, navigate it to new URL instead of closing
+                        new_target = current_urls[0]
+                        if new_target != url:
+                            logger.info(f"Navigating single tab to new URL: {new_target}")
+                            try:
+                                driver.switch_to.window(active_tabs[url])
+                                driver.get(new_target)
+                                active_tabs[new_target] = active_tabs.pop(url)
+                            except Exception:
+                                pass
 
             # Open tabs for newly added URLs
             for url in current_urls:
@@ -645,10 +706,32 @@ def start_bot():
                     except StopIteration:
                         pass
 
-            if not active_tabs:
-                logger.warning("No active tabs — waiting 10s...")
-                time.sleep(10)
-                continue
+            # Re-sync active_tabs with current browser window handles
+            try:
+                real_handles = set(driver.window_handles)
+            except Exception:
+                real_handles = set()
+
+            if not real_handles:
+                logger.info("Re-opening primary browser tab...")
+                try:
+                    primary_url = current_urls[0] if current_urls else "https://www.youtube.com"
+                    driver.get(primary_url)
+                    active_tabs = {primary_url: driver.current_window_handle}
+                except Exception as e:
+                    logger.error(f"Browser recovery failed: {e}")
+                    raise
+            else:
+                # Remove stale handles that no longer exist in browser
+                for u, h in list(active_tabs.items()):
+                    if h not in real_handles:
+                        active_tabs.pop(u, None)
+
+                if not active_tabs and real_handles:
+                    first_handle = list(real_handles)[0]
+                    driver.switch_to.window(first_handle)
+                    primary_url = current_urls[0] if current_urls else driver.current_url
+                    active_tabs[primary_url] = first_handle
 
             # Process each tab
             for idx, (url, tab_handle) in enumerate(list(active_tabs.items())):
@@ -659,7 +742,6 @@ def start_bot():
                 try:
                     driver.switch_to.window(tab_handle)
                 except Exception:
-                    active_tabs.pop(url, None)
                     continue
 
                 time.sleep(2)
