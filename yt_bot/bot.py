@@ -370,15 +370,21 @@ def cleanup_chrome_locks(profile_path):
 
     try:
         import psutil
-        for p in psutil.process_iter(['pid', 'name']):
+        prof_base = os.path.basename(profile_path).lower() if profile_path else "saved_yt_session"
+        for p in psutil.process_iter(['pid', 'name', 'cmdline']):
             try:
                 name = (p.info['name'] or '').lower()
+                cmd = " ".join(p.info.get('cmdline') or []).lower()
                 if 'chromedriver' in name:
+                    p.kill()
+                elif 'chrome' in name and (prof_base in cmd or 'saved_yt_session' in cmd):
                     p.kill()
             except Exception:
                 pass
     except Exception:
         pass
+
+    time.sleep(1)
 
     if os.path.exists(profile_path):
         for root, dirs, files in os.walk(profile_path):
@@ -731,7 +737,7 @@ def is_live_chat_ready(driver, logger=None):
         return False
 
 
-def get_driver(options, logger):
+def get_driver(options, logger, profile_path=None):
     """Start ChromeDriver with Selenium 4 native manager and graceful fallback"""
     # 1. First attempt: Use SeleniumManager binary paths
     try:
@@ -750,6 +756,9 @@ def get_driver(options, logger):
             return webdriver.Chrome(options=options)
         except Exception as e1:
             logger.warning(f"Native Chrome start attempt {attempt} failed: {e1}")
+            if profile_path:
+                cleanup_chrome_locks(profile_path)
+                time.sleep(1.5)
             try:
                 driver_path = ChromeDriverManager().install()
                 return webdriver.Chrome(service=Service(driver_path), options=options)
@@ -799,7 +808,7 @@ def start_bot():
     logger.info("Visible Foreground Mode — Opening Chrome Window in front of screen...")
 
     logger.info("Starting Chrome...")
-    driver = get_driver(options, logger)
+    driver = get_driver(options, logger, profile_path)
     try:
         driver.maximize_window()
     except Exception:
