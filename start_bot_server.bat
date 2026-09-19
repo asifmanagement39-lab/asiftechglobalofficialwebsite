@@ -23,7 +23,7 @@ echo Open youtube.html in your browser to control the bot console.
 echo Keep this window open while using the YouTube Bot.
 echo.
 
-start "" "http://localhost:5000/youtube.html"
+start "" cmd /c "timeout /t 2 >nul & start http://localhost:5000/youtube.html"
 
 cd /d "%~dp0yt_bot"
 python bot_server.py

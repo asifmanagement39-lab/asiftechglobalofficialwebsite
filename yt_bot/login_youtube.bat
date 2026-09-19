@@ -18,11 +18,11 @@ echo Opening Chrome to log in to your YouTube / Google account...
 echo.
 
 if exist "C:\Program Files\Google\Chrome\Application\chrome.exe" (
-    start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default --disable-blink-features=AutomationControlled --no-first-run --no-default-browser-check "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
+    start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
 ) else if exist "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" (
-    start "" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default --disable-blink-features=AutomationControlled --no-first-run --no-default-browser-check "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
+    start "" "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
 ) else if exist "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe" (
-    start "" "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default --disable-blink-features=AutomationControlled --no-first-run --no-default-browser-check "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
+    start "" "%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe" --user-data-dir="%PROFILE_DIR%" --profile-directory=Default "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
 )
 
 echo Chrome khul chuka hai! Login complete karke Chrome ko band kar dein.

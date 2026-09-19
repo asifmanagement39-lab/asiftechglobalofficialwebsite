@@ -388,18 +388,18 @@ def cleanup_chrome_locks(profile_path):
                         pass
 
 
-def emulate_human_behavior(driver, config, logger):
+def emulate_human_behavior(driver, config, logger=None):
     try:
         anti_ban = config.get("ANTI_BAN_SETTINGS", {})
         if anti_ban.get("MOUSE_MOVE_EMULATION", True):
             ActionChains(driver).move_by_offset(
-                random.randint(10, 50), random.randint(10, 50)
+                random.randint(5, 25), random.randint(5, 25)
             ).perform()
-            time.sleep(0.5)
+            time.sleep(0.3)
         if anti_ban.get("HUMAN_SCROLL", True):
-            driver.execute_script(f"window.scrollBy(0, {random.randint(100, 300)});")
-            time.sleep(1)
-            driver.execute_script(f"window.scrollBy(0, -{random.randint(50, 150)});")
+            driver.execute_script(f"window.scrollBy(0, {random.randint(50, 150)});")
+            time.sleep(0.5)
+            driver.execute_script(f"window.scrollBy(0, -{random.randint(30, 80)});")
     except Exception:
         pass
 
@@ -415,59 +415,197 @@ def normalize_youtube_url(url):
     if "/live/" in u:
         vid_id = u.split("/live/")[1].split("?")[0].split("&")[0].split("/")[0]
         return f"https://www.youtube.com/watch?v={vid_id}"
+    if "/shorts/" in u:
+        vid_id = u.split("/shorts/")[1].split("?")[0].split("&")[0].split("/")[0]
+        return f"https://www.youtube.com/watch?v={vid_id}"
+    if "/embed/" in u:
+        vid_id = u.split("/embed/")[1].split("?")[0].split("&")[0].split("/")[0]
+        return f"https://www.youtube.com/watch?v={vid_id}"
     return u
+
+
+def force_chrome_to_front(driver):
+    """Forcibly bring Chrome window to the absolute front/top of the screen on Windows"""
+    try:
+        driver.switch_to.window(driver.current_window_handle)
+        driver.execute_script("window.focus();")
+    except Exception:
+        pass
+
+    if os.name == 'nt':
+        try:
+            import ctypes
+            from ctypes import wintypes
+            user32 = ctypes.windll.user32
+            
+            def enum_proc(hwnd, lparam):
+                if user32.IsWindowVisible(hwnd):
+                    length = user32.GetWindowTextLengthW(hwnd)
+                    if length > 0:
+                        buff = ctypes.create_unicode_buffer(length + 1)
+                        user32.GetWindowTextW(hwnd, buff, length + 1)
+                        title = buff.value
+                        if any(kw in title for kw in ["YouTube", "Chrome", "Google Chrome", "bot"]):
+                            user32.ShowWindow(hwnd, 9)  # SW_RESTORE
+                            user32.ShowWindow(hwnd, 3)  # SW_MAXIMIZE
+                            user32.SetForegroundWindow(hwnd)
+                            user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_TOPMOST
+                            user32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_NOTOPMOST
+                return True
+
+            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+            user32.EnumWindows(WNDENUMPROC(enum_proc), 0)
+        except Exception:
+            pass
+
+
+def get_speed_delays(live_config):
+    premium = live_config.get("PREMIUM", {})
+    speed_mode = str(premium.get("SPEED_MODE", "normal")).lower()
+    speed_settings = premium.get("SPEED_SETTINGS", {}).get(speed_mode, {})
+    
+    interval = speed_settings.get("INTERVAL", live_config.get("INTERVAL", 15))
+    min_delay = speed_settings.get("MIN_DELAY", live_config.get("MIN_DELAY", 10))
+    max_delay = speed_settings.get("MAX_DELAY", live_config.get("MAX_DELAY", 25))
+    batch_delay = speed_settings.get("BATCH_SLEEP_DELAY", live_config.get("LOOP_SETTINGS", {}).get("BATCH_SLEEP_DELAY", 30))
+    random_delay = live_config.get("RANDOM_DELAY", True)
+    
+    if random_delay:
+        low = min(int(min_delay), int(max_delay))
+        high = max(int(min_delay), int(max_delay))
+        delay = random.randint(low, high)
+    else:
+        delay = int(interval)
+    return max(1, delay), max(1, int(batch_delay))
+
+
+def find_and_activate_chat_input(driver, logger=None):
+    """Locate and ensure the YouTube chat text input is focused/activated"""
+    # 1. Try finding visible contenteditable input
+    input_selectors = [
+        "div#input.yt-live-chat-text-input-field-renderer[contenteditable='true']",
+        "div#input[contenteditable='true']",
+        "div[contenteditable='true']",
+        "#input.yt-live-chat-text-input-field-renderer",
+        "div#input",
+        "textarea#input",
+        "textarea"
+    ]
+    
+    for sel in input_selectors:
+        try:
+            for el in driver.find_elements(By.CSS_SELECTOR, sel):
+                if el.is_displayed():
+                    return el
+        except Exception:
+            continue
+
+    # 2. If not found or collapsed, click the placeholder container / input button
+    placeholder_selectors = [
+        "#input-button",
+        "ytd-button-renderer#input-button",
+        "yt-live-chat-message-input-renderer #input-button",
+        "tp-yt-paper-input-container",
+        "yt-live-chat-message-input-renderer",
+        "#chat-messages #input"
+    ]
+    for p_sel in placeholder_selectors:
+        try:
+            for btn in driver.find_elements(By.CSS_SELECTOR, p_sel):
+                if btn.is_displayed():
+                    driver.execute_script("arguments[0].click();", btn)
+                    time.sleep(0.5)
+                    break
+        except Exception:
+            pass
+
+    # 3. Re-check for activated input
+    for sel in input_selectors:
+        try:
+            for el in driver.find_elements(By.CSS_SELECTOR, sel):
+                if el.is_displayed():
+                    return el
+        except Exception:
+            continue
+
+    return None
 
 
 def safe_send_text(chat_input, text, driver, logger):
     try:
-        # Focus and click chat box
+        # Focus and scroll into view
         driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", chat_input)
-        chat_input.click()
+        time.sleep(0.2)
+        try:
+            chat_input.click()
+        except Exception:
+            driver.execute_script("arguments[0].click(); arguments[0].focus();", chat_input)
         time.sleep(0.3)
 
         # Clear existing text
-        chat_input.send_keys(Keys.CONTROL, "a")
-        chat_input.send_keys(Keys.BACKSPACE)
+        try:
+            chat_input.send_keys(Keys.CONTROL, "a")
+            chat_input.send_keys(Keys.BACKSPACE)
+        except Exception:
+            pass
+        driver.execute_script("""
+            var el = arguments[0];
+            el.innerText = '';
+            el.textContent = '';
+        """, chat_input)
         time.sleep(0.2)
         
-        # Method 1: Direct send_keys (triggers all browser keystroke events)
+        # Method 1: Selenium send_keys
+        sent_keys_ok = False
         try:
             chat_input.send_keys(str(text))
-            time.sleep(0.4)
+            sent_keys_ok = True
+            time.sleep(0.3)
         except Exception:
             pass
 
-        # Method 2: JS insertText fallback if send_keys was blocked
-        current_val = driver.execute_script("return arguments[0].innerText || arguments[0].textContent || arguments[0].value || '';", chat_input)
-        if not current_val.strip():
+        # Method 2: JS execCommand & Input Event fallback if not populated
+        val = driver.execute_script("return (arguments[0].innerText || arguments[0].textContent || arguments[0].value || '').trim();", chat_input)
+        if not val:
             driver.execute_script("""
                 var el = arguments[0];
                 var val = arguments[1];
                 el.focus();
-                document.execCommand('selectAll', false, null);
-                document.execCommand('insertText', false, val);
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-                el.dispatchEvent(new Event('change', { bubbles: true }));
-            """, chat_input, text)
+                try {
+                    document.execCommand('selectAll', false, null);
+                    document.execCommand('insertText', false, val);
+                } catch(e) {}
+                if (!(el.innerText || el.textContent || '').trim()) {
+                    el.innerText = val;
+                    el.textContent = val;
+                }
+                el.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+                el.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: ' ' }));
+            """, chat_input, str(text))
             time.sleep(0.4)
 
-        # Method 3: Try clicking Send Button
+        # Method 3: Click Send Button
         send_selectors = [
             "#send-button yt-button-shape button",
             "#send-button button",
+            "yt-button-shape#send-button button",
             "ytd-button-renderer#send-button button",
             "yt-icon-button#send-button button",
-            "button[aria-label='Send']",
             "button[aria-label*='Send']",
             "button[aria-label*='भेजें']",
+            "button[aria-label*='Enviar']",
+            "button[aria-label*='Envoyer']",
             "#send-button",
-            "yt-live-chat-message-input-renderer #send-button",
+            "yt-live-chat-message-input-renderer #send-button button",
+            "yt-live-chat-message-input-renderer #send-button"
         ]
+        
         sent = False
         for sel in send_selectors:
             try:
                 for btn in driver.find_elements(By.CSS_SELECTOR, sel):
-                    if btn.is_displayed() and btn.is_enabled():
+                    if btn.is_displayed():
                         driver.execute_script("arguments[0].click();", btn)
                         sent = True
                         break
@@ -476,15 +614,18 @@ def safe_send_text(chat_input, text, driver, logger):
             if sent:
                 break
 
-        # If send button wasn't clicked, press Enter
+        # Method 4: Press Enter
         if not sent:
-            chat_input.send_keys(Keys.ENTER)
+            try:
+                chat_input.send_keys(Keys.ENTER)
+            except Exception:
+                pass
             driver.execute_script("""
                 var ev = new KeyboardEvent('keydown', {bubbles: true, cancelable: true, keyCode: 13, which: 13, key: 'Enter'});
                 arguments[0].dispatchEvent(ev);
             """, chat_input)
 
-        time.sleep(0.5)
+        time.sleep(0.6)
         return True
     except Exception as e:
         if logger:
@@ -495,7 +636,7 @@ def safe_send_text(chat_input, text, driver, logger):
 def is_live_chat_ready(driver, logger=None):
     try:
         driver.switch_to.default_content()
-        time.sleep(1)
+        time.sleep(0.8)
 
         # 1. Expand chat if collapsed with Open or Show chat button
         open_selectors = [
@@ -510,61 +651,58 @@ def is_live_chat_ready(driver, logger=None):
                 for b in driver.find_elements(By.XPATH, xpath):
                     if b.is_displayed():
                         driver.execute_script("arguments[0].click();", b)
-                        time.sleep(2)
+                        time.sleep(1.5)
                         break
             except Exception:
                 pass
 
-        # 2. Look for chat frame
+        # 2. Switch to chat frame if present
         frames = driver.find_elements(By.CSS_SELECTOR, "iframe#chatframe, iframe[src*='live_chat']")
         if frames:
             driver.switch_to.frame(frames[0])
-            time.sleep(1)
+            time.sleep(0.8)
 
-            # Check if sign in is required
-            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button, #sign-in-button")
-            if sign_in and any(s.is_displayed() for s in sign_in):
-                if logger:
-                    logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
-                return False
+        # 3. Check for genuine sign-in button (Strict check: do NOT treat #input-button as sign-in)
+        sign_in_selectors = [
+            "ytd-button-renderer#sign-in-button a",
+            "#sign-in-button a",
+            "a[href*='accounts.google.com/ServiceLogin']",
+            "a[href*='ServiceLogin?service=youtube']"
+        ]
+        
+        # Check if any genuine sign-in prompt is visible
+        for s_sel in sign_in_selectors:
+            try:
+                for s in driver.find_elements(By.CSS_SELECTOR, s_sel):
+                    if s.is_displayed():
+                        # Verify whether chat input also exists (if input exists, sign-in is not required)
+                        existing_inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea#input")
+                        if not any(i.is_displayed() for i in existing_inputs):
+                            if logger:
+                                logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
+                            return False
+            except Exception:
+                pass
 
-            inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
-            active_inputs = [i for i in inputs if i.is_displayed()]
-            if not active_inputs and logger:
-                logger.warning("[STREAM RESTRICTION] Live chat is visible, but input box is inactive (subscribers-only mode or restricted by stream host).")
-            return bool(active_inputs)
-        else:
-            # Direct live_chat page view
-            sign_in = driver.find_elements(By.CSS_SELECTOR, "a[href*='signin'], ytd-button-renderer#sign-in-button, ytd-button-renderer#input-button, #sign-in-button")
-            if sign_in and any(s.is_displayed() for s in sign_in):
-                if logger:
-                    logger.warning("[LOGIN REQUIRED] Google/YouTube account sign-in required! In Web Console, click 'Sign In (Chrome)' to log in.")
-                return False
+        # 4. Check for chat input or placeholder
+        chat_box = find_and_activate_chat_input(driver, logger)
+        if chat_box:
+            return True
 
-            inputs = driver.find_elements(By.CSS_SELECTOR, "div#input, div[contenteditable='true'], textarea")
-            return bool([i for i in inputs if i.is_displayed()])
+        # Check for stream restrictions (members only, slow mode, subscriber only)
+        sub_only = driver.find_elements(By.CSS_SELECTOR, "#input-subscribers-only, yt-live-chat-restricted-participation-renderer")
+        if sub_only and any(so.is_displayed() for so in sub_only):
+            if logger:
+                logger.warning("[STREAM RESTRICTION] Live chat is restricted to subscribers or channel members by stream host.")
+            return False
+
+        if logger:
+            logger.debug("Chat input not ready yet on this tab.")
+        return False
     except Exception as e:
         if logger:
             logger.debug(f"is_live_chat_ready check: {e}")
-    return False
-
-
-def find_chat_input(driver, logger=None):
-    for sel in (
-        "div#input.yt-live-chat-text-input-field-renderer",
-        "div#input[contenteditable='true']",
-        "div#input",
-        "div[contenteditable='true']",
-        "textarea#input",
-        "textarea",
-    ):
-        try:
-            for el in driver.find_elements(By.CSS_SELECTOR, sel):
-                if el.is_displayed():
-                    return el
-        except Exception:
-            continue
-    return None
+        return False
 
 
 def get_driver(options, logger):
@@ -618,30 +756,44 @@ def start_bot():
     options = webdriver.ChromeOptions()
     options.add_argument(f"--user-data-dir={profile_path}")
     options.add_argument("--profile-directory=Default")
+    options.add_argument("--new-window")
+    options.add_argument("--no-first-run")
+    options.add_argument("--no-default-browser-check")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--remote-allow-origins=*")
-    options.add_argument("--window-size=1600,900")
+    options.add_argument("--start-maximized")
+    options.add_argument("--window-position=0,0")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("useAutomationExtension", False)
+    options.page_load_strategy = "eager"
 
     if sys_settings.get("HEADLESS_MODE", False):
         options.add_argument("--headless=new")
         logger.info("Headless Mode ON — running in background.")
+    else:
+        logger.info("Visible Foreground Mode ON — Opening Chrome Window in front...")
 
     logger.info("Starting Chrome...")
     driver = get_driver(options, logger)
+    try:
+        driver.maximize_window()
+    except Exception:
+        pass
 
     # Remove navigator.webdriver fingerprint
-    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": """
-            Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
-            window.navigator.chrome = { runtime: {} };
-        """
-    })
+    try:
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            "source": """
+                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                window.navigator.chrome = { runtime: {} };
+            """
+        })
+    except Exception:
+        pass
 
     sent_history = set()
     active_tabs  = {}
@@ -653,7 +805,8 @@ def start_bot():
         logger.info(f"Opening {len(urls_to_open)} URL(s)...")
         driver.get(urls_to_open[0])
         active_tabs[urls_to_open[0]] = driver.current_window_handle
-        time.sleep(4)
+        force_chrome_to_front(driver)
+        time.sleep(3)
 
         for url in urls_to_open[1:]:
             driver.execute_script(f"window.open('{url}', '_blank');")
@@ -678,6 +831,10 @@ def start_bot():
                         try:
                             driver.switch_to.window(active_tabs[url])
                             driver.close()
+                            # Immediately switch to a remaining valid window handle
+                            remaining = [h for h in driver.window_handles if h != active_tabs[url]]
+                            if remaining:
+                                driver.switch_to.window(remaining[0])
                         except Exception:
                             pass
                         del active_tabs[url]
@@ -698,12 +855,12 @@ def start_bot():
             for url in current_urls:
                 if url not in active_tabs and len(active_tabs) < max_tabs:
                     logger.info(f"New URL — opening tab: {url}")
-                    driver.execute_script(f"window.open('{url}', '_blank');")
-                    time.sleep(1)
                     try:
+                        driver.execute_script(f"window.open('{url}', '_blank');")
+                        time.sleep(1)
                         new_handle = next(h for h in driver.window_handles if h not in active_tabs.values())
                         active_tabs[url] = new_handle
-                    except StopIteration:
+                    except Exception:
                         pass
 
             # Re-sync active_tabs with current browser window handles
@@ -738,19 +895,20 @@ def start_bot():
                 live_config   = load_live_config(logger)
                 loop_settings = live_config.get("LOOP_SETTINGS", {})
 
-                logger.info(f"Tab [{idx + 1}/{len(active_tabs)}] Processing...")
+                logger.info(f"Tab [{idx + 1}/{len(active_tabs)}] Processing: {url}")
                 try:
                     driver.switch_to.window(tab_handle)
+                    force_chrome_to_front(driver)
                 except Exception:
                     continue
 
-                time.sleep(2)
+                time.sleep(1.5)
                 emulate_human_behavior(driver, live_config, logger)
 
                 messages = get_data("messages.txt")
                 if not messages:
-                    logger.warning("messages.txt is empty — add some comments!")
-                    time.sleep(5)
+                    logger.warning("messages.txt is empty — add some comments in Web Console!")
+                    time.sleep(4)
                     continue
 
                 if is_live_chat_ready(driver, logger):
@@ -759,28 +917,28 @@ def start_bot():
                         loop_settings.get("ALLOW_DUPLICATE_MESSAGES", False)
                     )
                     if msg:
-                        chat_box = find_chat_input(driver, logger)
+                        chat_box = find_and_activate_chat_input(driver, logger)
                         if chat_box:
                             if safe_send_text(chat_box, msg, driver, logger):
-                                logger.info(f"Sent on Tab {idx + 1}: {msg}")
+                                logger.info(f"[LIVE SENT] Tab {idx + 1}: {msg}")
                                 sent_history.add(msg)
+                            else:
+                                logger.warning(f"Could not dispatch message text to chat box on Tab {idx + 1}")
+                        else:
+                            logger.warning(f"Chat box element not found on Tab {idx + 1}")
                 else:
-                    logger.warning(f"Live chat not ready on Tab {idx + 1}")
+                    logger.warning(f"Live chat not ready on Tab {idx + 1} (checking stream/chat state)")
 
-                driver.switch_to.default_content()
+                try:
+                    driver.switch_to.default_content()
+                except Exception:
+                    pass
 
-                delay = (
-                    random.randint(
-                        live_config.get("MIN_DELAY", 10),
-                        live_config.get("MAX_DELAY", 25),
-                    )
-                    if live_config.get("RANDOM_DELAY", True)
-                    else live_config.get("INTERVAL", 15)
-                )
+                delay, _ = get_speed_delays(live_config)
                 logger.info(f"Waiting {delay}s...")
                 time.sleep(delay)
 
-            batch_delay = live_config.get("LOOP_SETTINGS", {}).get("BATCH_SLEEP_DELAY", 30)
+            _, batch_delay = get_speed_delays(live_config)
             logger.info(f"Round done | Active tabs: {len(active_tabs)} | Sleeping {batch_delay}s...")
             time.sleep(batch_delay)
 
@@ -799,7 +957,7 @@ def start_bot():
 # ══════════════════════════════════════════════════════════════════════════════
 
 def main():
-    is_tty = sys.stdout.isatty() and not os.environ.get("BOT_DATA_DIR")
+    is_tty = sys.stdout.isatty()
     if is_tty:
         show_rain_animation()
         show_banner()

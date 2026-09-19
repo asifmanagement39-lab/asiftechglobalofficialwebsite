@@ -12,7 +12,7 @@
     },
     "LOOP_SETTINGS": {
         "BATCH_SLEEP_DELAY": 6,
-        "ALLOW_DUPLICATE_MESSAGES": false
+        "ALLOW_DUPLICATE_MESSAGES": true
     },
     "SYSTEM_SETTINGS": {
         "HEADLESS_MODE": false,
@@ -20,7 +20,7 @@
     },
     "PREMIUM": {
         "ENABLED": true,
-        "SPEED_MODE": "fast",
+        "SPEED_MODE": "normal",
         "SPEED_SETTINGS": {
             "fast": {
                 "INTERVAL": 3,

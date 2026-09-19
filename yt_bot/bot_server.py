@@ -162,22 +162,20 @@ def start_bot_process():
         
         cmd = [sys.executable, "-u", str(BASE_DIR / "bot.py")]
         
-        creationflags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == "nt" else 0
+        creationflags = subprocess.CREATE_NEW_CONSOLE if os.name == "nt" else 0
         
         try:
             _bot_process = subprocess.Popen(
                 cmd,
                 cwd=str(BASE_DIR),
                 env=env,
-                stdout=log_fh,
-                stderr=subprocess.STDOUT,
                 creationflags=creationflags
             )
             _bot_start_time = time.time()
             return jsonify({
                 "ok": True,
                 "status": "started",
-                "msg": "Bot started successfully", 
+                "msg": "Bot started in visible front console window", 
                 "pid": _bot_process.pid
             })
         except Exception as e:
@@ -314,7 +312,6 @@ def open_login_browser():
             f"--user-data-dir={profile_path}",
             "--profile-directory=Default",
             "--new-window",
-            "--disable-blink-features=AutomationControlled",
             "--no-first-run",
             "--no-default-browser-check",
             "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com"
