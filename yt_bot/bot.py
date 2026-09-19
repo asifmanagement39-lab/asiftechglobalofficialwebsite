@@ -362,12 +362,18 @@ def choose_message(messages, sent_history, allow_duplicates):
 def cleanup_chrome_locks(profile_path):
     """Delete stale Chrome lock files and terminate orphaned processes so profile can always be reused"""
     try:
+        import subprocess
+        if os.name == 'nt':
+            subprocess.run(["taskkill", "/F", "/IM", "chromedriver.exe"], capture_output=True, timeout=3)
+    except Exception:
+        pass
+
+    try:
         import psutil
-        for p in psutil.process_iter(['pid', 'name', 'cmdline']):
+        for p in psutil.process_iter(['pid', 'name']):
             try:
-                cmd = ' '.join(p.info['cmdline'] or [])
                 name = (p.info['name'] or '').lower()
-                if 'Saved_YT_Session' in cmd and 'chrome' in name:
+                if 'chromedriver' in name:
                     p.kill()
             except Exception:
                 pass
@@ -378,7 +384,9 @@ def cleanup_chrome_locks(profile_path):
         for root, dirs, files in os.walk(profile_path):
             for f in files:
                 f_lower = f.lower()
-                if (f_lower in ("lock", "lockfile", "singletonlock", "singletoncookie", "singletonsocket", "devtoolsactiveport")
+                if (f_lower == "lock" or f_lower == "lockfile" 
+                    or "singleton" in f_lower 
+                    or "devtoolsactiveport" in f_lower
                     or f_lower.endswith("-journal")
                     or f_lower.endswith(".lock")):
                     fp = os.path.join(root, f)

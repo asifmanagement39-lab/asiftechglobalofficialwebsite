@@ -20,7 +20,7 @@
     },
     "PREMIUM": {
         "ENABLED": true,
-        "SPEED_MODE": "normal",
+        "SPEED_MODE": "fast",
         "SPEED_SETTINGS": {
             "fast": {
                 "INTERVAL": 3,
