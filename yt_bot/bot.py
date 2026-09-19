@@ -443,35 +443,44 @@ def force_chrome_to_front(driver):
     if os.name == 'nt':
         try:
             import ctypes
-            from ctypes import wintypes
             user32 = ctypes.windll.user32
             
-            # Unlock Windows foreground restrictions
+            tag = f"ATG_ACTIVE_BOT_{int(time.time() * 1000)}"
             try:
-                user32.AllowSetForegroundWindow(-1)
-                user32.keybd_event(0x12, 0, 0, 0) # VK_MENU (Alt) down
-                user32.keybd_event(0x12, 0, 2, 0) # VK_MENU (Alt) up
+                driver.execute_script(f'document.title = "{tag}";')
+                time.sleep(0.15)
             except Exception:
                 pass
 
+            found_hwnds = []
             def enum_proc(hwnd, lparam):
                 if user32.IsWindowVisible(hwnd):
                     length = user32.GetWindowTextLengthW(hwnd)
                     if length > 0:
                         buff = ctypes.create_unicode_buffer(length + 1)
                         user32.GetWindowTextW(hwnd, buff, length + 1)
-                        title = buff.value
-                        if any(kw in title for kw in ["YouTube", "Chrome", "Google Chrome", "bot"]):
-                            user32.ShowWindow(hwnd, 9)  # SW_RESTORE
-                            user32.ShowWindow(hwnd, 3)  # SW_MAXIMIZE
-                            user32.BringWindowToTop(hwnd)
-                            user32.SetForegroundWindow(hwnd)
-                            user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_TOPMOST
-                            user32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_NOTOPMOST
+                        if tag in buff.value or "YouTube" in buff.value:
+                            found_hwnds.append(hwnd)
                 return True
 
-            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
+            WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)
             user32.EnumWindows(WNDENUMPROC(enum_proc), 0)
+
+            try:
+                user32.AllowSetForegroundWindow(-1)
+                user32.keybd_event(0x12, 0, 0, 0) # Alt down
+                user32.keybd_event(0x12, 0, 2, 0) # Alt up
+            except Exception:
+                pass
+
+            for hwnd in found_hwnds:
+                user32.ShowWindow(hwnd, 9)  # SW_RESTORE
+                user32.ShowWindow(hwnd, 3)  # SW_MAXIMIZE
+                user32.BringWindowToTop(hwnd)
+                user32.SetForegroundWindow(hwnd)
+                user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002) # HWND_TOPMOST
+                time.sleep(0.05)
+                user32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, 0x0001 | 0x0002) # HWND_NOTOPMOST
         except Exception:
             pass
 
