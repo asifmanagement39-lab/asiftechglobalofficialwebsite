@@ -438,6 +438,14 @@ def force_chrome_to_front(driver):
             from ctypes import wintypes
             user32 = ctypes.windll.user32
             
+            # Unlock Windows foreground restrictions
+            try:
+                user32.AllowSetForegroundWindow(-1)
+                user32.keybd_event(0x12, 0, 0, 0) # VK_MENU (Alt) down
+                user32.keybd_event(0x12, 0, 2, 0) # VK_MENU (Alt) up
+            except Exception:
+                pass
+
             def enum_proc(hwnd, lparam):
                 if user32.IsWindowVisible(hwnd):
                     length = user32.GetWindowTextLengthW(hwnd)
@@ -448,6 +456,7 @@ def force_chrome_to_front(driver):
                         if any(kw in title for kw in ["YouTube", "Chrome", "Google Chrome", "bot"]):
                             user32.ShowWindow(hwnd, 9)  # SW_RESTORE
                             user32.ShowWindow(hwnd, 3)  # SW_MAXIMIZE
+                            user32.BringWindowToTop(hwnd)
                             user32.SetForegroundWindow(hwnd)
                             user32.SetWindowPos(hwnd, -1, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_TOPMOST
                             user32.SetWindowPos(hwnd, -2, 0, 0, 0, 0, 0x0001 | 0x0002)  # HWND_NOTOPMOST
@@ -762,7 +771,6 @@ def start_bot():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
     options.add_argument("--remote-allow-origins=*")
     options.add_argument("--start-maximized")
     options.add_argument("--window-position=0,0")
@@ -771,11 +779,7 @@ def start_bot():
     options.add_experimental_option("useAutomationExtension", False)
     options.page_load_strategy = "eager"
 
-    if sys_settings.get("HEADLESS_MODE", False):
-        options.add_argument("--headless=new")
-        logger.info("Headless Mode ON — running in background.")
-    else:
-        logger.info("Visible Foreground Mode ON — Opening Chrome Window in front...")
+    logger.info("Visible Foreground Mode — Opening Chrome Window in front of screen...")
 
     logger.info("Starting Chrome...")
     driver = get_driver(options, logger)
