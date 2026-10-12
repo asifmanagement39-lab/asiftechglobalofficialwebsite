@@ -1,0 +1,196 @@
+/* ==========================================================================
+   ASIF TECH GLOBAL — Section Styles (sections.css)
+   Dedicated styles for Hero, About, Skills, Timeline, Services, and Contact
+   ========================================================================== */
+
+/* Hero Section Enhancements */
+.hero-executive-wrapper {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 1.5rem 4rem;
+  overflow: hidden;
+}
+
+.hero-background-mesh {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 50% 20%, rgba(230, 184, 0, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(0, 229, 255, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* About Section */
+.about-section-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.about-portrait-card {
+  position: relative;
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  border: 1px solid var(--border-color, rgba(230, 184, 0, 0.25));
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 184, 0, 0.1);
+  background: var(--bg-card, #0f1424);
+}
+
+.about-portrait-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-normal, 0.3s ease);
+}
+
+.about-portrait-card:hover .about-portrait-img {
+  transform: scale(1.03);
+}
+
+/* Skills Matrix */
+.skills-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.skill-category-card {
+  background: var(--bg-card, #0f1424);
+  border: 1px solid var(--border-color, rgba(230, 184, 0, 0.2));
+  border-radius: var(--radius-md, 10px);
+  padding: 1.75rem;
+  transition: transform var(--transition-fast, 0.2s ease), border-color var(--transition-fast, 0.2s ease), box-shadow var(--transition-fast, 0.2s ease);
+}
+
+.skill-category-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold-primary, #e6b800);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(230, 184, 0, 0.15);
+}
+
+.skill-tags-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Experience Timeline */
+.timeline-track-container {
+  position: relative;
+  max-width: 860px;
+  margin: 3rem auto 0;
+  padding-left: 2rem;
+}
+
+.timeline-track-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold-primary, #e6b800), rgba(230, 184, 0, 0.1));
+}
+
+.timeline-event-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+}
+
+.timeline-event-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold-primary, #e6b800);
+  border: 3px solid var(--bg-main, #090a0f);
+  box-shadow: 0 0 10px rgba(230, 184, 0, 0.6);
+}
+
+.timeline-card-box {
+  background: var(--bg-card, #0f1424);
+  border: 1px solid var(--border-color, rgba(230, 184, 0, 0.2));
+  border-radius: var(--radius-md, 10px);
+  padding: 1.5rem;
+  transition: transform var(--transition-fast, 0.2s ease);
+}
+
+.timeline-card-box:hover {
+  transform: translateX(4px);
+  border-color: var(--gold-primary, #e6b800);
+}
+
+/* Services & Pricing Grid */
+.services-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.service-pricing-card {
+  background: var(--bg-card, #0f1424);
+  border: 1px solid var(--border-color, rgba(230, 184, 0, 0.2));
+  border-radius: var(--radius-md, 12px);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-fast, 0.2s ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-pricing-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold-primary, #e6b800);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 184, 0, 0.18);
+}
+
+.service-pricing-card.featured-plan {
+  border-color: var(--gold-primary, #e6b800);
+  background: linear-gradient(180deg, rgba(230, 184, 0, 0.08) 0%, var(--bg-card, #0f1424) 100%);
+}
+
+.price-tag-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--gold-hover, #ffcf33);
+  margin: 1rem 0;
+  font-family: var(--font-heading, inherit);
+}
+
+/* Work Together CTA Callout */
+.cta-work-together-banner {
+  background: radial-gradient(circle at 50% 50%, rgba(230, 184, 0, 0.14) 0%, rgba(15, 20, 36, 0.95) 100%);
+  border: 1px solid var(--gold-primary, #e6b800);
+  border-radius: var(--radius-lg, 16px);
+  padding: 3.5rem 2rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 960px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 25px rgba(230, 184, 0, 0.2);
+}

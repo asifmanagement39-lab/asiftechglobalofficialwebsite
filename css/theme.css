@@ -1,0 +1,57 @@
+/* ==========================================================================
+   ASIF TECH GLOBAL — Theme & Design Tokens
+   Colors, Luxury 24K Gold Gradients & Dark/Light Mode Variables
+   ========================================================================== */
+
+/* ==========================================================================
+   ASIF TECH GLOBAL — Ultra-Luxury Black & Gold IT Engineering Firm
+   Benchmark: asiftechglobal.xyz (Elevated & Refined, Zero Emojis)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --gold: #FFD700;
+  --gold-light: #FFE55C;
+  --gold-dark: #B8860B;
+  --gold-gradient: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
+  --gold-glow: 0 0 25px rgba(255, 215, 0, 0.35);
+
+  --black: #000000;
+  --dark-void: #050505;
+  --dark-card: #0c0c0c;
+  --dark-surface: #141414;
+  --border-subtle: #222222;
+  --border-gold: rgba(255, 215, 0, 0.3);
+
+  --text-main: #f0f0f0;
+  --text-muted: #999999;
+  --text-dim: #666666;
+
+  --font-main: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-pill: 50px;
+
+  --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="light"] {
+  --black: #ffffff;
+  --dark-void: #f5f5f7;
+  --dark-card: #ffffff;
+  --dark-surface: #e9e9ee;
+  --border-subtle: #d8d8e0;
+  --border-gold: rgba(184, 134, 11, 0.4);
+
+  --text-main: #111111;
+  --text-muted: #555555;
+  --text-dim: #888888;
+  --gold-glow: 0 0 20px rgba(184, 134, 11, 0.25);
+}
+
+/* Reset & Base */

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Asif Khan | Founder & Full-Stack Systems Architect</title>
+  <meta name="description" content="Learn about Asif Khan, Founder and Full-Stack Systems Architect at Asif Tech Global. Background, technical expertise, career milestones, and engineering philosophy.">
+  <meta name="author" content="Asif Khan">
+
+  <!-- Universal Master Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .about-hero-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      margin: 2.5rem 0 4rem;
+    }
+    @media (max-width: 860px) {
+      .about-hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .about-portrait-wrap {
+        margin: 0 auto;
+      }
+      .about-social-links-row {
+        justify-content: center;
+      }
+    }
+    .about-portrait-wrap {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 3px solid var(--border-gold);
+      box-shadow: 0 0 35px rgba(230, 184, 0, 0.25);
+      overflow: hidden;
+      position: relative;
+    }
+    .about-portrait-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .timeline-container {
+      position: relative;
+      margin: 3rem 0;
+      padding-left: 2rem;
+      border-left: 2px solid var(--border-gold);
+    }
+    .timeline-node {
+      position: relative;
+      margin-bottom: 2.8rem;
+    }
+    .timeline-node::before {
+      content: '';
+      position: absolute;
+      left: -2.6rem;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 12px var(--gold);
+      border: 3px solid #090a0f;
+    }
+    .timeline-year {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .creds-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+    .cred-box {
+      background: var(--dark-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.8rem;
+      transition: var(--transition);
+    }
+    .cred-box:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body id="about-page">
+
+  <!-- ==========================================================================
+       Master Top Navigation
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link-item">Home</a>
+        <a href="about.html" class="nav-link-item active">About</a>
+        <a href="index.html#skills" class="nav-link-item">Skills</a>
+        <a href="projects.html" class="nav-link-item">Projects</a>
+
+        <!-- MBA Dropdown Menu -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn" id="mbaDropdownBtn" type="button" aria-expanded="false" aria-haspopup="true">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Human Resources, Payroll &amp; Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="finance.html" class="dropdown-item" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST &amp; Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="library.html" class="nav-link-item">Library</a>
+        <a href="contact.html" class="nav-link-item">Contact</a>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="nav-right">
+        <!-- Social Icons -->
+        <div class="nav-social-icons">
+          <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener" class="nav-social-btn" title="GitHub (@asifmanagement39-lab)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" class="nav-social-btn" title="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener" class="nav-social-btn" title="Facebook (@RealAsifUniverse)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener" class="nav-social-btn" title="Instagram (@asiftechglobalofficial)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <a href="contact.html" class="btn-gold" style="font-size: 0.82rem; padding: 0.6rem 1.2rem;">Hire Architect</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Header / Profile Hero
+       ========================================================================== -->
+  <header class="hero" style="min-height: auto; padding-top: 150px; padding-bottom: 3rem;">
+    <div class="hero-overlay"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="about-hero-grid">
+        <div class="about-portrait-wrap">
+          <img src="assets/asif_khan.jpg" alt="Asif Khan - Founder & Systems Architect" class="about-portrait-img">
+        </div>
+
+        <div>
+          <div class="suite-badge" style="margin-bottom: 0.8rem;">FOUNDER &amp; SYSTEMS ARCHITECT</div>
+          <h1 style="font-size: 2.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+            Asif Khan
+          </h1>
+          <p style="color: var(--gold); font-size: 1.15rem; font-weight: 600; margin-bottom: 1.2rem;">
+            Full-Stack Software Engineer • Enterprise Platforms • Cloud Solutions
+          </p>
+          <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 1.5rem; max-width: 680px;">
+            I design and construct mission-critical digital systems that bridge computational complexity with everyday business efficiency. Over the past 5+ years, I have architected high-performance corporate platforms, real-time ledgers, telemetry streams, and zero-latency web applications.
+          </p>
+
+          <div class="about-social-links-row" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener" class="btn-outline-gold" style="padding: 0.55rem 1.1rem; font-size: 0.85rem;">
+              GitHub Profile
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="btn-outline-gold" style="padding: 0.55rem 1.1rem; font-size: 0.85rem;">
+              LinkedIn Network
+            </a>
+            <button type="button" onclick="handleDownloadCv()" class="btn-gold" style="padding: 0.55rem 1.2rem; font-size: 0.85rem; cursor: pointer;">
+              Download CV &darr;
+            </button>
+            <a href="projects.html" class="btn-secondary" style="padding: 0.55rem 1.2rem; font-size: 0.85rem;">
+              View Portfolio &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       Engineering Philosophy & Core Beliefs
+       ========================================================================== -->
+  <section class="section section-bg-dark">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">The Discipline</div>
+        <h2 class="section-h2">Engineering Philosophy</h2>
+        <p style="max-width: 680px; margin: 12px auto 0; color: var(--text-dim); font-size: 0.95rem;">
+          Guiding principles that define every line of code, database schema, and architectural decision.
+        </p>
+      </div>
+
+      <div class="creds-card-grid">
+        <div class="cred-box">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">01</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Vanilla Standards First</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            Mastery over native web APIs (HTML5, modern CSS3, vanilla ES6+ JavaScript). Avoiding framework bloat guarantees sub-second rendering, zero breaking dependencies, and 10+ year maintainability.
+          </p>
+        </div>
+
+        <div class="cred-box">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">02</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Zero-Trust Credential Security</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            Secrets never belong in client-side code. Parameterized authentication routines, sanitized inputs, and cryptographic isolation protect mission-critical workflows against intrusion.
+          </p>
+        </div>
+
+        <div class="cred-box">
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--gold); margin-bottom: 0.5rem;">03</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 8px;">Empirical Performance</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+            Every millisecond counts. Memory allocations are profiled, CSS is modularized, and computational logic utilizes Web Workers or canvas hardware acceleration for 60 FPS fluidity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Career & Evolution Timeline
+       ========================================================================== -->
+  <section class="section">
+    <div class="container" style="max-width: 860px;">
+      <div class="section-header">
+        <div class="section-pretitle">The Journey</div>
+        <h2 class="section-h2">Career Milestones</h2>
+        <p style="max-width: 650px; margin: 12px auto 0; color: var(--text-dim); font-size: 0.95rem;">
+          How years of continuous experimentation, engineering discipline, and system design evolved.
+        </p>
+      </div>
+
+      <div class="timeline-container">
+        <!-- Milestone 1 -->
+        <div class="timeline-node">
+          <div class="timeline-year">2021 — 2022</div>
+          <div class="timeline-title">Foundations in Systems & Automation</div>
+          <p class="timeline-desc">
+            Began extensive development in Python programming, low-latency system scripts, and developer automation. Mastered DOM architecture and web standards while constructing data scrapers and telemetry monitors.
+          </p>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="timeline-node">
+          <div class="timeline-year">2022 — 2023</div>
+          <div class="timeline-title">Full-Stack Application Engineering</div>
+          <p class="timeline-desc">
+            Engineered full-stack responsive web platforms, dynamic RESTful API backends, and multi-user databases. Designed client-side dynamic search routines and responsive UI systems.
+          </p>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="timeline-node">
+          <div class="timeline-year">2023 — 2024</div>
+          <div class="timeline-title">Cloud Infrastructure & Microservices</div>
+          <p class="timeline-desc">
+            Expanded into distributed deployments on AWS and Google Cloud Platform. Implemented Docker containerization, automated Nginx reverse proxies, load balancing, and SSL security hardening.
+          </p>
+        </div>
+
+        <!-- Milestone 4 -->
+        <div class="timeline-node">
+          <div class="timeline-year">2024 — 2025</div>
+          <div class="timeline-title">Enterprise Business Platforms (HR & Finance)</div>
+          <p class="timeline-desc">
+            Architected enterprise suites for corporate workforce governance (automated payroll, biometric attendance, tax compliance) and treasury management (double-entry ledgers, GST invoicing, PDF vaults).
+          </p>
+        </div>
+
+        <!-- Milestone 5 -->
+        <div class="timeline-node">
+          <div class="timeline-year">2025 — 2026+</div>
+          <div class="timeline-title">Asif Tech Global Platform & Media Architecture</div>
+          <p class="timeline-desc">
+            Founded Asif Tech Global as an integrated enterprise consultancy. Unified business applications, client-side PDF.js knowledge vaults, and resilient enterprise cloud architectures under a single luxury design system.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Credentials & Education (MBA & Technology)
+       ========================================================================== -->
+  <section class="section section-bg-dark">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Business &amp; Technical Acumen</div>
+        <h2 class="section-h2">Education &amp; Credentials</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <div style="background: var(--dark-card); border: 1px solid var(--border-gold); border-radius: var(--radius-md); padding: 2rem;">
+          <div class="suite-badge" style="margin-bottom: 0.6rem;">Business &amp; Executive Leadership</div>
+          <h3 style="font-size: 1.3rem; color: var(--gold); margin-bottom: 0.5rem;">MBA Studies in HR &amp; Corporate Finance</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1rem;">
+            Specialized curriculum in Organizational Behavior, Workforce Compliance, Treasury Operations, Capital Budgeting, and Strategic Enterprise Scaling.
+          </p>
+          <ul style="font-size: 0.85rem; color: var(--text-main); line-height: 1.8;">
+            <li>&bull; Human Resource Information Systems (HRIS)</li>
+            <li>&bull; Working Capital Optimization &amp; GST Invoicing</li>
+            <li>&bull; Statutory Labor Laws &amp; Compliance Audits</li>
+          </ul>
+        </div>
+
+        <div style="background: var(--dark-card); border: 1px solid var(--border-gold); border-radius: var(--radius-md); padding: 2rem;">
+          <div class="suite-badge" style="margin-bottom: 0.6rem;">Computer Science &amp; Systems</div>
+          <h3 style="font-size: 1.3rem; color: var(--gold); margin-bottom: 0.5rem;">Full-Stack Software Architecture</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1rem;">
+            Deep technical grounding across operating system fundamentals, data structures, cloud architectures, network protocols, and cryptographic web security.
+          </p>
+          <ul style="font-size: 0.85rem; color: var(--text-main); line-height: 1.8;">
+            <li>&bull; Modern Web Standards (HTML5 / CSS3 / ES6+)</li>
+            <li>&bull; AWS &amp; Google Cloud Platform Deployment</li>
+            <li>&bull; High-Throughput Media Transcoding (FFmpeg / RTMP)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Direct Call to Action
+       ========================================================================== -->
+  <section class="section" style="text-align: center;">
+    <div class="container">
+      <div style="background: linear-gradient(135deg, rgba(230, 184, 0, 0.08), rgba(15, 20, 36, 0.7)); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); padding: 3.5rem 2rem; max-width: 860px; margin: 0 auto;">
+        <h2 style="font-size: 2.2rem; color: var(--text-main); margin-bottom: 0.8rem;">Ready to Architect Your Digital Vision?</h2>
+        <p style="color: var(--text-muted); max-width: 580px; margin: 0 auto 2rem; font-size: 1rem; line-height: 1.7;">
+          Whether you need a custom enterprise platform, a corporate website, or high-performance cloud infrastructure, let's discuss your project scope.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="contact.html" class="btn-gold" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Initiate Consultation &rarr;</a>
+          <a href="projects.html" class="btn-outline-gold" style="padding: 0.85rem 2rem; font-size: 0.95rem;">Browse Technical Works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-cols">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 1.2rem;">ASIF TECH <span>GLOBAL</span></div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
+            Asif Tech Global is India's premier technology consultancy led by Asif Khan. High-throughput digital platforms, cloud engineering, and media systems.
+          </p>
+          <div class="footer-social-bar" style="margin-top: 1.2rem; display: flex; gap: 10px;">
+            <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener" class="nav-social-btn" title="GitHub (@asifmanagement39-lab)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="nav-social-btn" title="LinkedIn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener" class="nav-social-btn" title="Facebook (@RealAsifUniverse)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener" class="nav-social-btn" title="Instagram (@asiftechglobalofficial)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3>Navigation</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Founder</a></li>
+            <li><a href="projects.html">Projects Showcase</a></li>
+            <li><a href="hr.html">HR Management</a></li>
+            <li><a href="finance.html">Finance Operations</a></li>
+            <li><a href="library.html">Digital Library</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Official Channels</h3>
+          <ul class="social-channel-list">
+            <li>
+              <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>GitHub: @asifmanagement39-lab</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://linkedin.com" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <span>LinkedIn: Professional Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span>Facebook: @RealAsifUniverse</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span>Instagram: @asiftechglobalofficial</span>
+              </a>
+            </li>
+
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">Founder:</span> Asif Khan</li>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+            <li><span style="color: var(--text-dim);">Operations:</span> Mon - Sat (24/7 Transmissions)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to top button -->
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <!-- Modular Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/ui-common.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function handleDownloadCv() {
+      if (window.ATGUtils) {
+        window.ATGUtils.showToast('Generating Executive Curriculum Vitae...', 'info', 2500);
+      }
+      setTimeout(() => {
+        // Open print view of about page or download portfolio document
+        window.print();
+      }, 600);
+    }
+  </script>
+</body>
+</html>

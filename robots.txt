@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://asifmanagement39-lab.github.io/asiftechglobalofficialwebsite/sitemap.xml

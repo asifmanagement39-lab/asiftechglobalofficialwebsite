@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Projects & Architectural Case Studies | Asif Tech Global</title>
+  <meta name="description" content="Explore signature full-stack software projects, enterprise systems, and case studies engineered by Asif Khan, Founder & Systems Architect at Asif Tech Global.">
+  <meta name="author" content="Asif Khan">
+  
+  <!-- Universal Master Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    .projects-filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 2rem 0 3rem;
+    }
+    .filter-btn {
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      background: var(--dark-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: var(--gold);
+      box-shadow: var(--gold-glow);
+    }
+    .case-study-section {
+      background: var(--dark-void);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 5rem 0;
+      margin-top: 4rem;
+    }
+    .case-study-card {
+      background: var(--dark-card);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .case-study-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1.2rem;
+    }
+    .case-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin: 1.8rem 0;
+    }
+    .case-metric-box {
+      background: var(--dark-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .case-metric-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--gold);
+      font-family: var(--font-serif);
+    }
+    .case-metric-lbl {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Navigation Bar
+       ========================================================================== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        ASIF TECH <span>GLOBAL</span>
+      </a>
+
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link-item">Home</a>
+        <a href="about.html" class="nav-link-item">About</a>
+        <a href="index.html#skills" class="nav-link-item">Skills</a>
+        <a href="projects.html" class="nav-link-item active">Projects</a>
+
+        <!-- MBA Menu -->
+        <div class="nav-dropdown" id="mbaDropdown">
+          <button class="nav-dropdown-btn" id="mbaDropdownBtn" type="button" aria-expanded="false">
+            <span>MBA</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          
+          <div class="dropdown-menu-box" id="mbaDropdownMenu">
+            <a href="hr.html" class="dropdown-item" id="navItemHr">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">HR</span>
+                <span class="dropdown-desc">Personnel, Payroll & Workforce</span>
+              </div>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a href="finance.html" class="dropdown-item" id="navItemFinance">
+              <div class="dropdown-item-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="dropdown-item-info">
+                <span class="dropdown-title">FINANCE</span>
+                <span class="dropdown-desc">Corporate Treasury, GST & Ledgers</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="library.html" class="nav-link-item">Library</a>
+        <a href="contact.html" class="nav-link-item">Contact</a>
+      </div>
+
+      <div class="nav-right">
+        <!-- Social Icons -->
+        <div class="nav-social-icons">
+          <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener" class="nav-social-btn" title="GitHub (@asifmanagement39-lab)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" class="nav-social-btn" title="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener" class="nav-social-btn" title="Facebook (@RealAsifUniverse)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener" class="nav-social-btn" title="Instagram (@asiftechglobalofficial)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+        </div>
+
+        <!-- Mode Toggle -->
+        <button class="theme-toggle-btn" id="mode-toggle" type="button" aria-label="Toggle Dark and Light Mode" title="Toggle Mode">
+          <svg id="sun-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="moon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       Hero Section
+       ========================================================================== -->
+  <section class="section" style="padding-top: 140px; text-align: center;">
+    <div class="container">
+      <div class="section-pretitle">Signature Engineering</div>
+      <h1 class="hero-h1" style="font-size: 2.8rem; margin: 0.6rem 0;">Projects & Case Studies</h1>
+      <p style="max-width: 720px; margin: 0 auto; color: var(--text-muted); font-size: 1.05rem;">
+        A showcase of dependable corporate platforms, low-latency telemetry pipelines, and interactive digital libraries built by Asif Khan.
+      </p>
+
+      <!-- Filter Pills -->
+      <div class="projects-filter-bar">
+        <button class="filter-btn active" data-category="all">All Projects</button>
+        <button class="filter-btn" data-category="enterprise">Enterprise Portals</button>
+        <button class="filter-btn" data-category="knowledge">Knowledge & Documents</button>
+        <button class="filter-btn" data-category="motion">Motion & Computing</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Projects Grid
+       ========================================================================== -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="portfolio-works-grid" id="projectsContainer">
+        <!-- Rendered dynamically by script or static fallback -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Deep-Dive Case Studies
+       ========================================================================== -->
+  <section class="case-study-section" id="case-studies">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-pretitle">Engineering Analysis</div>
+        <h2 class="section-h2">Architectural Case Studies</h2>
+        <p style="max-width: 650px; margin: 12px auto 0; color: var(--text-dim); font-size: 0.95rem;">
+          In-depth technical breakdown of architectural challenges, implementation decisions, and production outcomes.
+        </p>
+      </div>
+
+      <!-- Case Study 1: HR -->
+      <div class="case-study-card" id="case-hr">
+        <div class="case-study-header">
+          <div>
+            <div class="portfolio-badge" style="margin-bottom: 8px;">Enterprise Architecture</div>
+            <h3 style="font-size: 1.5rem; color: var(--text-main);">HR Workforce & Automated Payroll Suite</h3>
+          </div>
+          <a href="hr.html" class="btn-gold" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">View Live Portal &rarr;</a>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Challenge:</strong> Modern corporate HR platforms frequently rely on heavyweight backend frameworks that introduce high cloud infrastructure costs and significant mobile latency when managers review workforce contracts or compute net salaries in the field.
+        </p>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Solution:</strong> Developed a static-first, zero-dependency suite leveraging client-side mathematical logic for dynamic gross-to-net tax and EPF deductions, alongside an in-browser PDF.js document viewer isolated within a sandboxed iframe.
+        </p>
+        <div class="case-metrics-grid">
+          <div class="case-metric-box">
+            <div class="case-metric-val">98/100</div>
+            <div class="case-metric-lbl">Lighthouse Score</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">&lt; 1.2s</div>
+            <div class="case-metric-lbl">First Contentful Paint</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">100%</div>
+            <div class="case-metric-lbl">Client Determinism</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">0 kB</div>
+            <div class="case-metric-lbl">External Framework Bloat</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case Study 2: Finance -->
+      <div class="case-study-card" id="case-finance">
+        <div class="case-study-header">
+          <div>
+            <div class="portfolio-badge" style="margin-bottom: 8px;">FinTech Analytics</div>
+            <h3 style="font-size: 1.5rem; color: var(--text-main);">Corporate Treasury & Fiscal Ledger Hub</h3>
+          </div>
+          <a href="finance.html" class="btn-gold" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">View Live Portal &rarr;</a>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Challenge:</strong> Finance directors needed sub-second spreadsheet computations and ledger state tracking without exposing confidential financial variables over unsecured third-party APIs.
+        </p>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Solution:</strong> Architected a pure JavaScript reactive ledger calculation engine with accessible dark-mode data tables, automated GST categorization, and local state caching with zero data exfiltration risks.
+        </p>
+        <div class="case-metrics-grid">
+          <div class="case-metric-box">
+            <div class="case-metric-val">100%</div>
+            <div class="case-metric-lbl">Data Privacy Guaranteed</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">&lt; 10ms</div>
+            <div class="case-metric-lbl">Calculation Latency</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">Zero</div>
+            <div class="case-metric-lbl">API Subscription Cost</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case Study 3: Digital Library -->
+      <div class="case-study-card" id="case-library">
+        <div class="case-study-header">
+          <div>
+            <div class="portfolio-badge" style="margin-bottom: 8px;">Information Retrieval</div>
+            <h3 style="font-size: 1.5rem; color: var(--text-main);">8-Category Executive Digital Research Library</h3>
+          </div>
+          <a href="library.html" class="btn-gold" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">View Live Portal &rarr;</a>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Challenge:</strong> Centralizing research literature, legal whitepapers, and programming manuals across 8 different disciplines while enabling instant search without page refreshes.
+        </p>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+          <strong>Solution:</strong> Deployed a high-density client search algorithm indexing titles, summaries, and tags in memory, coupled with Mozilla PDF.js v2.16 for embedded reading on both mobile and desktop screens.
+        </p>
+        <div class="case-metrics-grid">
+          <div class="case-metric-box">
+            <div class="case-metric-val">8</div>
+            <div class="case-metric-lbl">Curated Domains</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">&lt; 15ms</div>
+            <div class="case-metric-lbl">Search Index Speed</div>
+          </div>
+          <div class="case-metric-box">
+            <div class="case-metric-val">PDF.js</div>
+            <div class="case-metric-lbl">In-Page Modal Reader</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       Footer
+       ========================================================================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-cols">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 1.2rem;">ASIF TECH <span>GLOBAL</span></div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
+            India's premier technology consultancy led by Asif Khan. Engineering scalable corporate platforms, real-time analytics, and dependable digital systems.
+          </p>
+          <div class="footer-social-bar" style="margin-top: 1.2rem; display: flex; gap: 10px;">
+            <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener" class="nav-social-btn" title="Facebook (@RealAsifUniverse)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener" class="nav-social-btn" title="Instagram (@asiftechglobalofficial)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener" class="nav-social-btn" title="GitHub (@asifmanagement39-lab)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3>Navigation</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Founder</a></li>
+            <li><a href="projects.html">Projects & Case Studies</a></li>
+            <li><a href="hr.html">HR Management</a></li>
+            <li><a href="finance.html">Finance Operations</a></li>
+            <li><a href="library.html">Digital Library</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Official Channels</h3>
+          <ul class="social-channel-list">
+            <li>
+              <a href="https://www.facebook.com/RealAsifUniverse/" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span>Facebook: @RealAsifUniverse</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/asiftechglobalofficial/" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span>Instagram: @asiftechglobalofficial</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="https://github.com/asifmanagement39-lab" target="_blank" rel="noopener">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                <span>GitHub: @asifmanagement39-lab</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Direct Contact</h3>
+          <ul>
+            <li><span style="color: var(--text-dim);">Founder:</span> Asif Khan</li>
+            <li><span style="color: var(--text-dim);">Email:</span> <a href="mailto:contact@asiftechglobal.xyz">contact@asiftechglobal.xyz</a></li>
+            <li><span style="color: var(--text-dim);">HQ:</span> India</li>
+            <li><span style="color: var(--text-dim);">Operations:</span> Mon - Sat (24/7 Operations)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Asif Tech Global Inc. All Rights Reserved. Built with standards-compliant code.
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top" title="Scroll to Top">
+    &uarr;
+  </button>
+
+  <!-- Modular Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/ui-common.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      initNavbarScroll();
+      initMbaDropdown();
+      initScrollTop();
+
+      const container = document.getElementById('projectsContainer');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+
+      function renderProjects(category = 'all') {
+        if (!container || !window.DeveloperData) return;
+        const list = window.DeveloperData.projects.filter(p => category === 'all' || p.category === category);
+        
+        container.innerHTML = list.map(p => `
+          <div class="portfolio-work-card" data-cat="${p.category}">
+            <div class="portfolio-card-content" style="padding-top: 1.5rem;">
+              <div class="portfolio-badge" style="margin-bottom: 10px;">${p.badge}</div>
+              <h3 style="font-size: 1.25rem; margin-bottom: 8px;">${p.title}</h3>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">${p.description}</p>
+              
+              <ul style="margin: 10px 0 15px; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+                ${p.highlights.slice(0, 2).map(h => `<li style="list-style: disc; margin-left: 18px; margin-bottom: 4px;">${h}</li>`).join('')}
+              </ul>
+
+              <div class="portfolio-tech-tags" style="margin-bottom: 1.2rem;">
+                ${p.stack.map(s => `<span>${s}</span>`).join('')}
+              </div>
+
+              <div style="display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 12px; flex-wrap: wrap;">
+                <a href="${p.liveUrl}" class="btn-gold" style="padding: 0.45rem 1rem; font-size: 0.82rem;">View Demo &rarr;</a>
+                <a href="${p.githubUrl || 'https://github.com/asifmanagement39-lab/asiftechglobalofficialwebsite'}" target="_blank" rel="noopener" class="btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">View Source</a>
+                <a href="${p.caseStudyLink}" style="color: var(--gold); font-size: 0.82rem; font-weight: 600; margin-left: auto;">Case Study</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderProjects(btn.getAttribute('data-category'));
+        });
+      });
+
+      renderProjects('all');
+    });
+  </script>
+</body>
+</html>

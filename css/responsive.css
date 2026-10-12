@@ -1,0 +1,95 @@
+/* ==========================================================================
+   ASIF TECH GLOBAL — Responsive Design & Mobile Optimization
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .section-h2 {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 900px) {
+  .pricing-card.highlight {
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .footer-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 550px) {
+  .footer-cols {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 850px) {
+  .calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .page-hero {
+    padding: 7rem 0 2rem 0;
+  }
+  .page-hero-title {
+    font-size: 2.1rem;
+  }
+  .page-hero-subtitle {
+    font-size: 0.92rem;
+  }
+}
+@media (max-width: 768px) {
+  .yt-cinema-details {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .yt-cinema-right-meta {
+    text-align: left;
+  }
+  .yt-field-group {
+    flex-direction: column;
+  }
+  .btn-yt-load {
+    justify-content: center;
+  }
+  .yt-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .yt-channel-content-box {
+    padding: 1.4rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .yt-channel-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .yt-channel-avatar-photo {
+    margin-top: -20px;
+    width: 80px;
+    height: 80px;
+  }
+  .yt-channel-actions {
+    width: 100%;
+  }
+  .btn-yt-sub, .btn-yt-outline {
+    flex: 1;
+    justify-content: center;
+  }
+  .yt-channel-tabs {
+    padding: 0 1rem;
+  }
+}
+@media (max-width: 960px) {
+  .bot-console-grid {
+    grid-template-columns: 1fr;
+  }
+}

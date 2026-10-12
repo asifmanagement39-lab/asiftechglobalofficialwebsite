@@ -1,209 +1,182 @@
-<div align="center">
+# Asif Tech Global | Executive Engineering Portfolio & Enterprise Platform
 
-# 🌐 AsifTechGlobal Web Platform & Automation Suite
+An enterprise-grade, high-performance web platform and engineering portfolio crafted by **Mohd Asif** (Founder & Systems Architect). Built with clean vanilla web architecture, responsive design, modular code separation, and zero external framework lock-in.
 
-[![Website Status](https://img.shields.io/badge/Status-Active%20%26%20Production%20Ready-brightgreen?style=for-the-badge&logo=statuspage)](https://github.com/asifmanagement39-lab/asiftechglobalofficialwebsite)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Selenium](https://img.shields.io/badge/Selenium-4.x-43B02A?style=for-the-badge&logo=selenium&logoColor=white)](https://selenium.dev)
-[![Flask](https://img.shields.io/badge/Flask-API%20Engine-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-
-<p align="center">
-  <b>An Enterprise-Grade, Ultra-Modern Web Platform featuring MBA Business Suites, a High-Performance Digital Library, and a Real-Time YouTube Live Stream Automation Console.</b>
-</p>
-
-[Explore Features](#-core-features) • [Quick Start](#-quick-start) • [Live Automation](#-youtube-live-automation-engine) • [Architecture](#-project-architecture) • [Contributing](#-contribution)
+[![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-00E5FF.svg?style=flat-square)](https://asifmanagement39-lab.github.io/asiftechglobalofficialwebsite/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla%20ES6+-F7DF1E.svg?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![CSS3](https://img.shields.io/badge/CSS3-Modular%20Architecture-1572B6.svg?style=flat-square&logo=css3)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![PDF.js](https://img.shields.io/badge/PDF.js-Client--Side%20Engine-FF6B6B.svg?style=flat-square)](https://mozilla.github.io/pdf.js/)
+[![License](https://img.shields.io/badge/License-MIT-E6B800.svg?style=flat-square)](LICENSE)
 
 ---
 
-</div>
+## Live Deployment & Channels
 
-## 📑 Table of Contents
+Experience the live production application hosted on GitHub Pages:  
+**[https://asifmanagement39-lab.github.io/asiftechglobalofficialwebsite/](https://asifmanagement39-lab.github.io/asiftechglobalofficialwebsite/)**
 
-- [✨ Overview](#-overview)
-- [🚀 Core Features](#-core-features)
-  - [🏢 MBA Enterprise Portals](#1-mba-enterprise-portals-hr--finance)
-  - [📚 Next-Gen Digital Library](#2-next-gen-digital-library)
-  - [🤖 YouTube Live Automation Console](#3-youtube-live-automation-console)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📂 Project Architecture](#-project-architecture)
-- [⚡ Quick Start & Installation](#-quick-start--installation)
-  - [Frontend Setup](#1-frontend-web-application)
-  - [YouTube Bot Engine Setup](#2-youtube-bot-engine-backend)
-- [⚙️ Configuration & Customization](#️-configuration--customization)
-- [🛡️ Security & Anti-Detection](#️-security--anti-detection)
-- [🤝 Contribution & Support](#-contribution--support)
+Verified Official Channels:
+- **GitHub**: [@asifmanagement39-lab](https://github.com/asifmanagement39-lab)
+- **LinkedIn**: [Executive Profile](https://linkedin.com)
+- **Facebook**: [@RealAsifUniverse](https://www.facebook.com/RealAsifUniverse/)
+- **Instagram**: [@asiftechglobalofficial](https://www.instagram.com/asiftechglobalofficial/)
 
 ---
 
-## ✨ Overview
+## Architectural Highlights
 
-**AsifTechGlobal Web Platform** is an all-in-one digital ecosystem crafted with rich aesthetics, seamless responsiveness, and automation capabilities. Designed for modern professionals, students, and content creators, the platform unifies business analytics, educational resources, and live broadcast automation into a unified glassmorphism dashboard.
-
-```
-       ┌────────────────────────────────────────────────────────┐
-       │             ASIF TECH GLOBAL WEB PLATFORM              │
-       └────────────────────────────────────────────────────────┘
-                 │                   │                   │
-      ┌──────────┴──────────┐ ┌──────┴──────┐ ┌──────────┴──────────┐
-      │  MBA Business Hub   │ │   Digital   │ │    YouTube Live     │
-      │   (HR & Finance)    │ │   Library   │ │  Automation Console │
-      └─────────────────────┘ └─────────────┘ └─────────────────────┘
-```
+1. **Modular Code Architecture**: Zero bloated frameworks or bundler lock-in. Clean, decoupled `/js/` and `/css/` modules with distinct responsibilities.
+2. **Developer Profile & Career Milestones**: Dedicated biographical hub (`about.html`) and homepage profile (`#about`) showcasing credentials, education, and 2021–2026+ industry timeline.
+3. **Interactive Portfolio Directory**: Live-filtered projects showcase (`projects.html`) featuring full-stack engineering work, technology badges, "View Demo" links, and "View Source" links to GitHub.
+4. **Hardened Credential Security**: Eliminated all hardcoded passwords in client scripts. Integrated parameterized admin keys with unified verification routines (`ATG_CONFIG.security.verifyAdminKey`).
+5. **Immersive Ultra-Luxury Aesthetic**: Curated 24K Gold & Obsidian design system with smooth glassmorphism, responsive CSS grid layouts, and zero visual clutter.
+6. **Zero Emoji Policy**: 100% SVG iconography, clean typography (`Playfair Display`, `Montserrat`, `JetBrains Mono`), and professional copy throughout.
+7. **Client-Side PDF Rendering**: Integrated Mozilla's PDF.js library to render high-resolution first-page document covers and embedded multi-page document viewers directly in the browser with zero server dependency.
 
 ---
 
-## 🚀 Core Features
+## Documentation Suite
 
-### 1. 🏢 MBA Enterprise Portals (HR & Finance)
-* **HR Executive Hub (`hr.html`)**: Complete employee directory, talent acquisition workflows, performance evaluation metrics, and organizational charts.
-* **Finance & Analytics Center (`finance.html`)**: Interactive financial statements, revenue calculators, budget forecasting charts, and investment analytics.
+The project includes technical documentation covering architecture, local operations, deployment, and contribution workflows:
 
-### 2. 📚 Next-Gen Digital Library (`library.html`)
-* **8 Curated Knowledge Categories**:
-  1. *Coding & Programming* (Full-Stack, Python, DevOps, Automation)
-  2. *Personal Finance & Investment* (Wealth Building, Stock Trading, Real Estate)
-  3. *Social Science & Environmental Science* (Ecology, Behavioral Economics, Sociology)
-  4. *Entertainment & Media* (Cinematography, Digital Streaming, Scriptwriting)
-  5. *Reference & Informational* (Corporate Law, Tax Regulations, Encyclopedias)
-  6. *History & World Events* (Global Trade, Geopolitics, Industrial Revolutions)
-  7. *Technical & Scientific* (Artificial Intelligence, Quantum Systems, Robotics)
-  8. *Funny & Humorous* (Satire, Stand-up & Corporate Humor)
-* **Real-Time Live Search Engine**: Instant filtering across titles, authors, and topics with zero latency.
-* **Category Filter Pills**: One-click category filtering with smooth transition animations.
-* **Interactive Document Viewer**: Built-in modal viewer powered by PDF.js for previewing research documents, whitepapers, and guides directly in the browser.
-
-### 3. 🤖 YouTube Live Automation Console (`youtube.html`)
-* **Real-Time Web Control Deck**:
-  * One-Click **"Start Live Bot"** and **"Stop Bot"** actions.
-  * **"Sign In (Chrome)"** integration to securely save YouTube credentials to a persistent browser profile.
-  * **Speed Controls**: Fast (3s), Normal (15s), and Safe (30s) message intervals.
-  * **Headless / Visible Mode Toggle**: Run silently in the background or monitor visually.
-* **Dynamic Message Queue**: Add, remove, and manage auto-rotating chat messages in real time.
-* **Live SSE Terminal Stream**: Real-time log streaming from the Python backend (`bot.py`) directly to an embedded retro-futuristic dark CRT terminal console.
+| Documentation File | Description | Link |
+| :--- | :--- | :--- |
+| **`ARCHITECTURE.md`** | Complete system architecture, design tokens, data flows, and security model | [`ARCHITECTURE.md`](ARCHITECTURE.md) |
+| **`FEATURES.md`** | Detailed specifications for all core features & system capabilities | [`FEATURES.md`](FEATURES.md) |
+| **`SETUP.md`** | Comprehensive local development setup with Python, Node.js & VS Code | [`SETUP.md`](SETUP.md) |
+| **`DEPLOYMENT.md`** | Production guide for GitHub Pages, custom domain DNS & SSL/TLS | [`DEPLOYMENT.md`](DEPLOYMENT.md) |
+| **`CONTRIBUTING.md`** | Contribution standards, code style, and branch guidelines | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
+| **`CHANGELOG.md`** | Chronological record of major releases, features & updates | [`CHANGELOG.md`](CHANGELOG.md) |
 
 ---
 
-## 🛠️ Tech Stack
+## Directory Structure
 
-| Domain | Technologies & Libraries |
-| :--- | :--- |
-| **Frontend UI/UX** | HTML5, Modern CSS3 (Glassmorphism & CSS Grid), JavaScript (Vanilla ES6+) |
-| **Icons & Typography** | FontAwesome 6, Google Fonts (Outfit, Inter, Space Grotesk) |
-| **Document Rendering** | PDF.js v2.16 & PDF Worker |
-| **Backend & APIs** | Python 3.10+, Flask 3.x, Flask-CORS |
-| **Browser Automation** | Selenium WebDriver 4.x, Chrome DevTools Protocol (CDP) |
-| **Stream Communication** | Server-Sent Events (SSE) & RESTful Endpoints |
-
----
-
-## 📂 Project Architecture
-
-```plaintext
-AsifTechGlobal-WebPlatform/
-├── 📄 index.html             # Main Homepage & Ecosystem Dashboard
-├── 📄 hr.html                # MBA Human Resources Management Portal
-├── 📄 finance.html           # MBA Financial Analytics & Insights Hub
-├── 📄 library.html           # 8-Category Digital Library & Reader
-├── 📄 youtube.html           # YouTube Live Stream Automation Console
-├── 🎨 style.css              # Universal Master Design System & Dark/Gold Theme
-├── ⚡ app.js                 # Global Application Logic, Search & API Handlers
-├── 📊 data.js                # Structured Knowledge Base & Mock Data
-├── 📜 pdf.min.js             # PDF.js Document Engine
-├── 📜 pdf.worker.min.js      # PDF.js Web Worker
-├── 📁 assets/                # Logos, UI Graphics, and Media Assets
-├── 📁 documents/             # Official Library PDFs, Whitepapers & Case Studies
-└── 📁 yt_bot/                # Python Selenium Automation Engine
-    ├── 🤖 bot.py             # Core Automation Engine with Anti-Detection
-    ├── 🌐 bot_server.py      # Flask REST API & Live SSE Log Server
-    ├── 📄 config.json        # Bot Configuration (Speed, Mode, Settings)
-    ├── 📄 messages.txt       # Active Broadcast Message Queue
-    ├── 📄 urls.txt           # Target YouTube Live Stream URLs
-    ├── 📄 requirements.txt   # Python Dependencies
-    └── 📁 templates/         # Web Panel Templates
+```text
+asiftechglobalofficialwebsite/
+├── index.html              # Main ecosystem homepage & executive overview
+├── about.html              # Detailed developer profile, biography & career milestones
+├── projects.html           # Filterable projects showcase & in-depth case studies
+├── contact.html            # Dedicated consultation inquiry brief form
+├── hr.html                 # HR & Workforce Management suite
+├── finance.html            # Corporate Finance & Treasury suite
+├── library.html            # Digital Knowledge Vault & PDF repository
+├── 404.html                # Custom HTTP 404 Route Recovery Page
+├── style.css               # Root stylesheet orchestrating modular CSS layers
+├── app.js                  # Global application facade and backwards compatibility
+│
+├── js/                     # Modular JavaScript Architecture
+│   ├── config.js           # Central configuration, metadata & security routines
+│   ├── utils.js            # DOM helpers, escapeHtml, animateCounter, showToast
+│   ├── theme.js            # Zero-flicker dark/light mode toggle with localStorage sync
+│   ├── ui-common.js        # Shared UI utilities (toasts, scroll, modals, nav)
+│   ├── data.js             # Developer profile, skills matrix, project archive, metrics
+│   ├── dashboard.js        # HR payroll engine & finance ledger state handlers
+│   ├── library.js          # Library search, filter pills & PDF.js modal viewer
+│   └── main.js             # Global initialization, scroll tracking, animated counters
+│
+├── css/                    # Modular CSS Design System
+│   ├── theme.css           # Design tokens, color palette, typography & variables
+│   ├── main.css            # Base styles, navbar, typography & components
+│   ├── components.css      # Reusable buttons, badges, pills, form controls, toasts
+│   ├── sections.css        # Hero, About, Skills, Experience, Pricing, and CTA styles
+│   ├── responsive.css      # Fluid responsive breakpoints & mobile adaptations
+│   └── animations.css      # Keyframes, shimmer loaders, pulse and fade-ins
+│
+├── assets/                 # Ambient motion backgrounds, portraits & branding media
+├── documents/              # Sample PDF documents for library testing
+├── pdf.min.js              # Mozilla PDF.js core rendering engine
+├── pdf.worker.min.js       # Web Worker for asynchronous PDF decoding
+├── sitemap.xml             # XML sitemap for search engines
+├── robots.txt              # Web crawler access directives
+├── LICENSE                 # MIT License
+├── ARCHITECTURE.md         # Technical architecture documentation
+├── FEATURES.md             # In-depth architectural feature specifications
+├── SETUP.md                # Local development instructions & verification checklist
+├── DEPLOYMENT.md           # GitHub Pages & custom domain deployment guide
+├── CONTRIBUTING.md         # Developer guidelines & contribution standards
+├── CHANGELOG.md            # Release version history & migration log
+└── README.md               # Technical documentation
 ```
 
 ---
 
-## ⚡ Quick Start & Installation
+## Core Modules & Capabilities
 
-### 1. Frontend Web Application
+### 1. Developer Profile & Milestones (`about.html` & `#about`)
+- Comprehensive executive biography of Founder & Systems Architect Asif Khan.
+- Chronological career milestone roadmap (2021 &ndash; 2026+).
+- Academic credentials in Business Administration (MBA) and Computer Science.
+- Core technical philosophies: zero unnecessary dependencies, deterministic math, and bulletproof security.
+- One-click "Download CV" curriculum vitae export action.
 
-You can serve the static frontend using any standard HTTP server (e.g., Live Server in VS Code or Python's built-in server):
+### 2. Executive Portfolio Showcase (`projects.html`)
+- Interactive category filtering (`Enterprise`, `Knowledge`, `Cloud`, `All`).
+- Project cards with "View Demo", "View Source" (GitHub repository), and architectural breakdown.
+- Detailed case studies:
+  - **Case Study 01**: Automated Payroll & Statutory Compliance Engine
+  - **Case Study 02**: Enterprise Double-Entry Ledger & Cash Flow Forecasting
+  - **Case Study 03**: Zero-Backend In-Browser PDF Knowledge Vault
+
+### 3. Digital Knowledge Vault (`library.html`)
+- Instant real-time text query filtering across book titles, authors, and metadata.
+- 8 topic filter pills: *Coding & Tech*, *Corporate Finance*, *Social & Environmental*, *Media & Entertainment*, *Law & Reference*, *World History*, *Science & AI*, and *Executive Wit*.
+- In-modal document reader and client-side cover thumbnail generation.
+
+### 4. HR & Workforce Platform (`hr.html`)
+- Interactive net take-home salary calculator with automated statutory deductions (EPF, ESI, Professional Tax, TDS).
+- Document publication gate with secure client verification.
+
+### 5. Corporate Treasury & Ledger Suite (`finance.html`)
+- Working capital visualization and GST invoice generation pipelines.
+- Multi-tier document archiving system for financial audits and annual reports.
+
+### 6. Consultation & Advisory Desk (`contact.html` & `index.html#contact`)
+- Structured consultation request form with Name, Email, Company, Project Type, Budget Range, Timeline, and Message.
+- Direct links to verified social channels and GitHub repositories.
+
+---
+
+## Local Development & Setup
+
+For full setup instructions, see [`SETUP.md`](SETUP.md).
 
 ```bash
-# Option A: Using Python built-in server
-python -m http.server 8000
+# Clone the repository
+git clone https://github.com/asifmanagement39-lab/asiftechglobalofficialwebsite.git
+cd asiftechglobalofficialwebsite
 
-# Option B: Using Node.js http-server
-npx http-server . -p 8000
+# Launch a lightweight local HTTP server (Python 3)
+python -m http.server 8080
+
+# Or with Node.js
+npx serve .
 ```
-Then navigate to `http://localhost:8000` in your web browser.
+
+Open `http://localhost:8080` in your web browser.
 
 ---
 
-### 2. YouTube Bot Engine Backend
+## Production Deployment
 
-To enable the live automation console on `youtube.html`:
+For full deployment instructions, see [`DEPLOYMENT.md`](DEPLOYMENT.md).
 
-```bash
-# 1. Navigate to the bot directory
-cd yt_bot
-
-# 2. Install required Python packages
-pip install -r requirements.txt
-
-# 3. Start the Flask Bot Controller API
-python bot_server.py
-```
-The server will initialize at `http://localhost:5000`. The frontend will automatically link and display the live status indicator as **ONLINE**.
+1. Push your changes to the `main` branch of your GitHub repository.
+2. In GitHub, navigate to **Settings** > **Pages**.
+3. Under **Build and deployment**, set **Source** to `Deploy from a branch` and select `main` / `/(root)`.
+4. Click **Save**. GitHub Pages will deploy your site in ~60 seconds.
 
 ---
 
-## ⚙️ Configuration & Customization
+## Security Policy
 
-You can configure stream targets and automated messages directly via the Web UI on `youtube.html` or by editing files in `yt_bot/`:
-
-* **`yt_bot/urls.txt`**: Add target YouTube live stream URLs (one per line).
-  ```text
-  https://www.youtube.com/live/YOUR_LIVE_STREAM_ID
-  ```
-* **`yt_bot/messages.txt`**: Add promotional, informative, or interactive messages.
-  ```text
-  Welcome to AsifTechGlobal Live Stream!
-  Check out our official web platform: https://asiftechglobal.com
-  Subscribe for more enterprise tech updates!
-  ```
+- **No Plaintext Passwords**: Personal credentials have been excised from all client scripts.
+- **Admin Access**: Administrative document upload panels utilize `ATG_CONFIG.security.verifyAdminKey` which supports environment-configured security keys.
+- **Sanitized Inputs**: All user submissions utilize strict string escaping (`escapeHtml`) to prevent cross-site scripting (XSS).
 
 ---
 
-## 🛡️ Security & Anti-Detection
+## License & Credits
 
-The automation engine incorporates enterprise-grade anti-detection features:
-- **Masked WebDriver Flag**: Erases `navigator.webdriver` footprint.
-- **Modern User-Agent Rotation**: Dispatches genuine Desktop Chrome 131+ signatures.
-- **Smart Element Discovery**: Automatically expands collapsed YouTube live chat panels before dispatching payloads.
-- **Zombie Process Cleanup**: Clears lingering background Chrome locks before starting new automation sessions.
-
----
-
-## 🤝 Contribution & Support
-
-Contributions, issues, and feature requests are welcome!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-<div align="center">
-
-Made with ❤️ by **[AsifTechGlobal](https://github.com/asifmanagement39-lab)**
-
-*Empowering the Next Generation of Digital Systems & Enterprise Intelligence.*
-
-</div>
+Developed with precision by **Mohd Asif** (Asif Khan) • [Asif Tech Global Inc.](https://asifmanagement39-lab.github.io/asiftechglobalofficialwebsite/)  
+Released under the [MIT License](LICENSE).
